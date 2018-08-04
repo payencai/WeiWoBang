@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+     <android.support.v7.widget.RecyclerView
+         android:id="@+id/recy_inform"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content">
+
+     </android.support.v7.widget.RecyclerView>
+    <TextView
+        android:id="@+id/inform_confirm"
+        android:textColor="@color/color_333"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:text="确定举报"
+        android:layout_margin="20dp"
+        android:background="@drawable/wwb_shape_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"/>
+</LinearLayout>

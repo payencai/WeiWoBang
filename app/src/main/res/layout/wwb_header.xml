@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:id="@+id/head"
+                android:background="@color/press_yellow">
+
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="10dp"
+        android:layout_height="16dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:src="@mipmap/wwb_back"/>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="帮我送"
+        android:textColor="#fff"
+        android:textSize="@dimen/text_size_18sp"/>
+
+    <TextView
+        android:id="@+id/header_confirm"
+        android:layout_marginRight="@dimen/margin_20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:text="确定"
+        android:textColor="#fff"
+        android:textSize="@dimen/text_size_16sp"/>
+</RelativeLayout>

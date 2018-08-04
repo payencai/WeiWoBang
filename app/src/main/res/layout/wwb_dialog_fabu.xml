@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@color/white"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+  <include layout="@layout/wwb_forum_content"></include>
+
+    <ImageView
+        android:id="@+id/del"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="@dimen/margin_20dp"
+        android:layout_gravity="center"
+        android:src="@mipmap/wwb_close"
+        android:layout_width="25dp"
+        android:layout_height="30dp"/>
+</LinearLayout>

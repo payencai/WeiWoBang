@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+              <RelativeLayout
+
+                  android:layout_width="match_parent"
+                  android:layout_height="50dp">
+                  <ImageView
+                      android:layout_marginLeft="15dp"
+                      android:layout_centerVertical="true"
+                      android:src="@mipmap/wwb_black_back"
+                      android:layout_width="12dp"
+                      android:layout_height="26dp"/>
+                  <TextView
+                     android:layout_centerInParent="true"
+                     android:gravity="center"
+                      android:textSize="18sp"
+                      android:textColor="@color/color_333"
+                      android:text="提交成功"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"/>
+              </RelativeLayout>
+              <ImageView
+                  android:layout_marginTop="100dp"
+                  android:src="@mipmap/wwb_success"
+                  android:layout_gravity="center"
+                  android:layout_width="160dp"
+                  android:layout_height="160dp"/>
+              <TextView
+                  android:layout_marginTop="100dp"
+                  android:layout_gravity="center"
+                  android:textSize="16sp"
+                  android:textColor="@color/color_333"
+                  android:text="感谢你的宝贵意见，我们会非常重视"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"/>
+</LinearLayout>

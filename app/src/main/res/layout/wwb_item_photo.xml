@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_marginLeft="@dimen/margin_10dp"
+    android:layout_marginRight="@dimen/margin_10dp"
+    android:layout_width="130dp"
+    android:layout_height="130dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+     <ImageView
+         android:id="@+id/photo_del"
+         android:layout_marginRight="5dp"
+         android:layout_marginTop="@dimen/margin_5dp"
+         android:elevation="@dimen/margin_5dp"
+         android:src="@mipmap/wwb_white_close"
+         android:layout_alignParentRight="true"
+         android:layout_width="20dp"
+         android:layout_height="20dp"/>
+    <com.lqm.roundview.RoundImageView
+        app:leftTop_corner_radius="@dimen/margin_10dp"
+        app:leftBottom_corner_radius="@dimen/margin_10dp"
+        app:rightBottom_corner_radius="10dp"
+        app:rightTop_corner_radius="10dp"
+        android:id="@+id/photo"
+        android:src="@mipmap/ic_launcher"
+        android:radius="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>

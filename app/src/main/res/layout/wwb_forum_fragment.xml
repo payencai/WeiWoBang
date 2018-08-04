@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context=".fragment.ForumFragment">
+             <LinearLayout
+                 android:orientation="vertical"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent">
+                 <include layout="@layout/wwb_header"></include>
+                 <include layout="@layout/wwb_forum_content"></include>
+                 <LinearLayout
+                     android:orientation="vertical"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent">
+                     <TextView
+                         android:layout_marginBottom="10dp"
+                         android:layout_marginLeft="15dp"
+                         android:textSize="20sp"
+                         android:textColor="@color/color_333"
+                         android:text="本日信息"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"/>
+                     <android.support.v4.widget.SwipeRefreshLayout
+                         android:id="@+id/refresh_new"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content">
+                         <android.support.v7.widget.RecyclerView
+                             android:id="@+id/recycleview_new"
+                             android:layout_width="match_parent"
+                             android:layout_height="match_parent">
+
+                         </android.support.v7.widget.RecyclerView>
+                     </android.support.v4.widget.SwipeRefreshLayout>
+                 </LinearLayout>
+             </LinearLayout>
+
+
+</FrameLayout>

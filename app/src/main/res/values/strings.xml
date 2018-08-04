@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">唯我帮</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sans_serif" translatable="false">sans-serif</string>
+    <string name="wait_dialog_title"></string>
+    <string name="know">I know</string>
+    <!--sweetAlert-->
+    <string name="dialog_default_title">Here\'s a message!</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="LOADING">Loading...</string>
+    <string name="success">提交成功！</string>
+    <string name="send_location_succeed">当前位置[%1$s]已提交至服务端.</string>
+    <string name="cannot_empty">[%1$s]不能为空！</string>
+
+    <string name="task_year_month_str">%1$d年%2$d月</string>
+    <string name="task_year_month_day_str">%1$d年%2$d月%3$d日</string>
+    <string name="task_month_day_str">%1$d月%2$d日</string>
+    <string name="spent_time_str">用时%1$s分</string>
+    <string name="distance_str">%1$s km</string>
+    <string name="commission_str">%1$s元</string>
+    <string name="balance_str">余额：%1$s</string>
+    <string name="snatching_str">%1$d+</string>
+    <string name="operation_type_str">[%1$s]</string>
+</resources>

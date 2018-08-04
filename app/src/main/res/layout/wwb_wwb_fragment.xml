@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="-5dp"
+                android:layout_height="match_parent" >
+
+    <com.amap.api.maps.TextureMapView
+
+        android:id="@+id/gaomap"
+        android:clickable="false"
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:elevation="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="185dp"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="80dip"
+        android:background="@drawable/wwb_shape_bottom"
+        android:minWidth="100dip"
+        android:orientation="vertical"
+        android:padding="2dp" >
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="44dp">
+            <TextView
+                android:id="@+id/wwb_send_tv"
+                android:textSize="14sp"
+                android:layout_marginLeft="@dimen/margin_20dp"
+                android:text="帮我送"
+                android:textColor="@color/press_yellow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/wwb_get_tv"
+                android:textColor="@color/color_333"
+                android:textSize="14sp"
+                android:layout_marginLeft="32dp"
+                android:text="帮我取"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+
+            android:id="@+id/wwb_send_layout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <View
+                android:alpha="0.5"
+                android:background="#cfcfcf"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"></View>
+            <RelativeLayout
+                android:id="@+id/wwb_shou_re"
+                android:layout_width="match_parent"
+                android:layout_height="65dp">
+
+                <ImageView
+                    android:layout_marginLeft="8dp"
+                    android:layout_width="10dp"
+                    android:layout_height="17dp"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/wwb_location_choose"/>
+                <TextView
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:id="@+id/wwb_address_first"
+                    android:textSize="@dimen/text_size_16sp"
+                    android:textColor="@color/color_333"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginLeft="26dp"
+                    android:text="广州大学"
+                    android:layout_marginRight="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_marginRight="30dp"
+                    android:id="@+id/wwb_sec_address"
+                    android:layout_marginLeft="26dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="5dp"
+                    android:text="南区教学楼6栋305"
+                    android:textColor="#888"
+                    android:textSize="@dimen/text_size_14sp"/>
+
+                <ImageView
+                    android:layout_marginRight="@dimen/margin_10dp"
+                    android:layout_width="10dp"
+                    android:layout_height="14dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+
+                    android:src="@mipmap/wwb_next"/>
+            </RelativeLayout>
+            <View
+                android:alpha="0.5"
+                android:background="#cfcfcf"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"></View>
+            <RelativeLayout
+                android:id="@+id/wwb_shou_fa"
+                android:layout_width="match_parent"
+                android:layout_height="65dp">
+
+                <ImageView
+                    android:layout_marginLeft="8dp"
+                    android:layout_width="10dp"
+                    android:layout_height="17dp"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/wwb_location_choose"/>
+                <TextView
+                    android:id="@+id/wwb_mude_address"
+                    android:textColor="#cecece"
+                    android:text="请输入目的地址"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="26dp"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:layout_marginRight="@dimen/margin_10dp"
+                    android:layout_width="10dp"
+                    android:layout_height="14dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+
+                    android:src="@mipmap/wwb_next"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/wwb_getforme_layout"
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <View
+                android:alpha="0.5"
+                android:background="#cfcfcf"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"></View>
+            <RelativeLayout
+                android:id="@+id/wwb_qu_layout"
+                android:layout_width="match_parent"
+                android:layout_height="65dp">
+
+                <ImageView
+                    android:layout_marginLeft="8dp"
+                    android:layout_width="10dp"
+                    android:layout_height="17dp"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/wwb_location_choose"/>
+                <TextView
+                    android:id="@+id/wwb_shou_address"
+                    android:textColor="#cecece"
+                    android:text="请输入收货地址"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="26dp"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:layout_marginRight="@dimen/margin_10dp"
+                    android:layout_width="10dp"
+                    android:layout_height="14dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+
+                    android:src="@mipmap/wwb_next"/>
+            </RelativeLayout>
+
+            <View
+                android:alpha="0.5"
+                android:background="#cfcfcf"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"></View>
+            <RelativeLayout
+                android:id="@+id/wwb_sou_layout"
+                android:layout_width="match_parent"
+                android:layout_height="65dp">
+
+                <ImageView
+                    android:layout_marginLeft="8dp"
+                    android:layout_width="10dp"
+                    android:layout_height="17dp"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/wwb_location_choose"/>
+                <TextView
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:id="@+id/wwb_locate_first"
+                    android:textSize="@dimen/text_size_16sp"
+                    android:layout_marginRight="@dimen/margin_20dp"
+                    android:textColor="@color/color_333"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="26dp"
+                    android:text="广州大学"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_marginRight="30dp"
+                    android:id="@+id/wwb_locate_sec"
+                    android:layout_marginLeft="26dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="5dp"
+                    android:text="南区教学楼6栋305"
+                    android:textColor="#888"
+                    android:textSize="@dimen/text_size_14sp"/>
+
+                <ImageView
+                    android:layout_marginRight="@dimen/margin_10dp"
+                    android:layout_width="10dp"
+                    android:layout_height="14dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+
+                    android:src="@mipmap/wwb_next"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:elevation="@dimen/margin_5dp"
+        android:layout_marginBottom="191dp"
+        android:src="@mipmap/wwb_positioning"
+        android:id="@+id/iv_home_locate"
+        android:layout_width="@dimen/length_view_35dp"
+        android:layout_height="@dimen/length_view_35dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/margin_20dp"
+        android:layout_alignParentLeft="true"></ImageView>
+    <ImageView
+        android:elevation="@dimen/margin_5dp"
+        android:layout_marginBottom="191dp"
+        android:src="@mipmap/wwb_inform"
+        android:id="@+id/iv_home_msg"
+        android:layout_width="@dimen/length_view_35dp"
+        android:layout_height="@dimen/length_view_35dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="@dimen/margin_20dp"
+        android:layout_alignParentRight="true"
+        />
+
+</RelativeLayout>

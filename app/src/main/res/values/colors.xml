@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="black">#000000</color>
+    <color name="alpha">#00000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="alpha_black">#99000000</color>
+
+    <color name="tv_blue">#0092ff</color>
+    <color name="bg_red">#D81E06</color>
+    <color name="text_red">#ff4343</color>
+    <color name="red_f45">#ff4545</color>
+    <color name="bg">#fbfbfb</color>
+    <color name="blue_line">#0480ef</color>
+    <color name="press_yellow">#fabf3d</color>
+    <color name="bg_blue">#0092ff</color>
+    <color name="bg_yellow">#ffbf00</color>
+    <color name="gold">#F3B605</color>
+    <color name="yellow_17">#ffda17</color>
+    <color name="bg_green">#22c386</color>
+    <color name="bg_theme">#183445</color>
+    <color name="tv_333">#333333</color>
+    <color name="tv_666">#666666</color>
+    <color name="tv_999">#999999</color>
+    <color name="tv_91">#919191</color>
+    <color name="tv_cc">#cccccc</color>
+    <color name="tv_b7">#b7b7b7</color>
+    <color name="tv_d7">#d7d6d6</color>
+    <color name="tv_1f">#1f1f1f</color>
+    <color name="lines">#bfbfbf</color>
+    <color name="bg_gray">#f8f8f8</color>
+    <color name="gray_f0">#f0f0f0</color>
+    <color name="gray_e2">#e2e2e2</color>
+    <color name="white_focus">#e9eaeb</color>
+
+    <color name="yellow_ea">#FFF7EA</color>
+
+
+    <color name="click">#14000000</color>
+
+    <!--sweetAlert-->
+    <color name="float_transparent">#00000000</color>
+    <color name="sweet_dialog_bg_color">#FFFFFF</color>
+    <color name="button_text_color">#FFFFFF</color>
+    <color name="gray_btn_bg_color">#D0D0D0</color>
+    <color name="gray_btn_bg_pressed_color">#B6B6B6</color>
+    <color name="gray_e6">#E6E6E6</color>
+    <color name="gray_fb">#FBFBFB</color>
+    <color name="gray_f7">#F7F7F7</color>
+    <color name="gray_f9">#F9F9F9</color>
+    <color name="blue_btn_bg_color">#AEDEF4</color>
+    <color name="blue_btn_bg_pressed_color">#96BFD2</color>
+    <color name="red_btn_bg_color">#DD6B55</color>
+    <color name="red_btn_bg_pressed_color">#CD5B55</color>
+    <color name="error_stroke_color">#F27474</color>
+    <color name="red_f7a">#ff7a7a</color>
+    <color name="success_stroke_color">#A5DC86</color>
+    <color name="trans_success_stroke_color">#33A5DC86</color>
+    <color name="warning_stroke_color">#F8BB86</color>
+    <color name="yellow_23">#ffac23</color>
+    <color name="text_color">#575757</color>
+    <color name="material_blue_grey_80">#ff37474f</color>
+    <color name="material_blue_grey_90">#ff263238</color>
+    <color name="material_blue_grey_95">#ff21272b</color>
+    <color name="material_deep_teal_20">#ff80cbc4</color>
+    <color name="material_deep_teal_50">#ff009688</color>
+
+
+    <color name="tabIndicatorColor">#3F51B5</color>
+    <color name="tabSelectedTextColor">#3F51B5</color>
+    <color name="tabTextColor">#000000</color>
+    <color name="goods_category_bg">#F2F2F2</color>
+    <color name="color_divider">#D2D2D2</color>
+    <color name="color_666">#666666</color>
+    <color name="color_333">#333333</color>
+    <color name="color_999">#999999</color>
+    <color name="color_d2">#D2D2D2</color>
+    <color name="color_red">#ff0000</color>
+    <color name="goods_category_dirver">#FF8A17</color>
+    <color name="shop_cart_bg">#aa000000</color>
+    <color name="touming">#00000000</color>
+
+    <!--字体颜色-->
+    <color name="black_33">#333333</color>
+    <color name="black_light_66">#666666</color>
+    <color name="grey_99">#999999</color>
+    <color name="grey_light_cc">#cccccc</color>
+    <color name="bg_gray_s">#f8f8f8</color>
+    <color name="yellow_1e">#ffde1e</color>
+    <color name="grey_ae">#aea7a7</color>
+
+    <!--背景颜色-->
+    <color name="btn_yellow_pressed">#aaffde1e</color>
+</resources>

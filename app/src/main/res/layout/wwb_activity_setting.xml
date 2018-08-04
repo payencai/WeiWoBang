@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".activity.SettingActivity">
+    <RelativeLayout
+        android:background="@color/press_yellow"
+        android:id="@+id/reg_title"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <ImageView
+            android:id="@+id/sett_back"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/wwb_black_back"
+            android:layout_width="12dp"
+            android:layout_height="20dp"/>
+
+    </RelativeLayout>
+    <TextView
+        android:layout_marginTop="@dimen/margin_20dp"
+        android:textColor="@color/color_333"
+        android:textSize="20sp"
+        android:layout_marginLeft="@dimen/margin_15dp"
+        android:text="系统设置"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <RelativeLayout
+        android:id="@+id/update_pwd"
+        android:layout_marginLeft="@dimen/margin_15dp"
+        android:layout_marginTop="@dimen/margin_30dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        <TextView
+
+            android:text="密码修改"
+            android:textColor="@color/color_333"
+            android:textSize="16sp"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/wwb_enter"
+            android:layout_width="10dp"
+            android:layout_height="18dp"/>
+    </RelativeLayout>
+    <View
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:background="#e2e2e2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"></View>
+    <RelativeLayout
+        android:id="@+id/clean_file"
+        android:layout_marginLeft="@dimen/margin_15dp"
+        android:layout_marginTop="@dimen/margin_10dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        <TextView
+
+            android:text="清除缓存"
+            android:textColor="@color/color_333"
+            android:textSize="16sp"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/cache_size"
+            android:textSize="@dimen/text_size_14sp"
+            android:textColor="@color/color_999"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
+            android:text="300m"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/logout"
+        android:layout_marginTop="120dp"
+        android:textColor="#ff5050"
+        android:textSize="20sp"
+        android:layout_marginLeft="@dimen/margin_15dp"
+        android:text="退出登录"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
