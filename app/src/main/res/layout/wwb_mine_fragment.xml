@@ -47,6 +47,42 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <RelativeLayout
+                android:id="@+id/order_layout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:id="@+id/wwb_order"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/wwb_my_order"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"/>
+
+                <TextView
+                    android:textSize="16sp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/wwb_order"
+                    android:text="我的订单"
+                    android:textColor="@color/color_333"/>
+                <ImageView
+                    android:layout_marginRight="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/wwb_enter"
+                    android:layout_width="10dp"
+                    android:layout_height="18dp"/>
+            </RelativeLayout>
+            <View
+                android:layout_marginBottom="10dp"
+
+                android:layout_marginLeft="15dp"
+                android:background="#e2e2e2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"></View>
+            <RelativeLayout
                 android:id="@+id/mupub_layout"
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
@@ -77,7 +113,6 @@
             </RelativeLayout>
             <View
                 android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="15dp"
                 android:background="#e2e2e2"
                 android:layout_width="match_parent"
@@ -113,7 +148,6 @@
             </RelativeLayout>
             <View
                 android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="15dp"
                 android:background="#e2e2e2"
                 android:layout_width="match_parent"
@@ -147,6 +181,12 @@
                     android:layout_width="10dp"
                     android:layout_height="18dp"/>
             </RelativeLayout>
+            <View
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="15dp"
+                android:background="#e2e2e2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"></View>
 
         </LinearLayout>
     </LinearLayout>
