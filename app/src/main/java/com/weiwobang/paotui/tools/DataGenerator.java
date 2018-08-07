@@ -14,15 +14,15 @@ import com.weiwobang.paotui.fragment.WwbFragment;
 
 
 public class DataGenerator {
-    public static final int []mTabRes = new int[]{R.mipmap.wwb_home_grey,R.mipmap.wwb_my_grey};
-    public static final int []mTabResPressed = new int[]{R.mipmap.wwb_home_pre,R.mipmap.wwb_my_pre};
-    public static final String []mTabTitle = new String[]{"同城信息","个人中心"};
+    public static final int []mTabRes = new int[]{R.mipmap.tab_wwb_grey,R.mipmap.wwb_home_grey,R.mipmap.wwb_my_grey};
+    public static final int []mTabResPressed = new int[]{R.mipmap.tab_wwb_yellow,R.mipmap.wwb_home_pre,R.mipmap.wwb_my_pre};
+    public static final String []mTabTitle = new String[]{"唯我帮","同城信息","个人中心"};
 
     public static Fragment[] getFragments(String from){
-        Fragment fragments[] = new Fragment[2];
-        //fragments[0] = WwbFragment.newInstance(from);
-        fragments[0] = ForumFragment.newInstance(from);
-        fragments[1] = MineFragment.newInstance(from);
+        Fragment fragments[] = new Fragment[3];
+        fragments[0] = WwbFragment.newInstance(from);
+        fragments[1] = ForumFragment.newInstance(from);
+        fragments[2] = MineFragment.newInstance(from);
         return fragments;
     }
 

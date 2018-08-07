@@ -39,7 +39,7 @@ public interface ApiService {
     @POST(Api.Login.sLogin)
     Observable<RetrofitResponse> postLogin(
             @FieldMap Map<String,String> params);
-    //获取急救知识列表
+
     @GET(Api.User.sGetVerifyCode)
     Observable<RetrofitResponse> getCode(
             @Query("telephone") String telephone

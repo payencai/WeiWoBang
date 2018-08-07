@@ -3,7 +3,6 @@ package com.weiwobang.paotui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +26,8 @@ import com.weiwobang.paotui.activity.SettingActivity;
 import com.weiwobang.paotui.activity.UserinfoActivity;
 import com.weiwobang.paotui.api.ApiService;
 import com.weiwobang.paotui.bean.Userinfo;
+import com.weiwobang.paotui.mvp.Contract;
+import com.weiwobang.paotui.mvp.presenter.MvpPresenter;
 import com.weiwobang.paotui.tools.PreferenceManager;
 
 import java.io.IOException;
@@ -41,7 +42,7 @@ import io.reactivex.functions.Consumer;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MineFragment extends Fragment {
+public class MineFragment extends Fragment implements Contract.MvpView<Userinfo>{
     @BindView(R.id.mupub_layout)
     RelativeLayout publish;
     @BindView(R.id.about_layout)
@@ -60,6 +61,7 @@ public class MineFragment extends Fragment {
     ImageView back;
     @BindView(R.id.header_confirm)
     TextView confirm;
+    private MvpPresenter<Userinfo> mUserinfoPresenter;
     public MineFragment() {
         // Required empty public constructor
     }
@@ -79,9 +81,20 @@ public class MineFragment extends Fragment {
         View view= inflater.inflate(R.layout.wwb_mine_fragment, container, false);
         ButterKnife.bind(this,view);
         initView();
+        getData();
+        //getUserinfo();
         return view;
     }
-
+    private void getData(){
+        try {
+            mUserinfoPresenter=new MvpPresenter(this,PreferenceManager.getInstance().getUserinfo().getToken());
+            mUserinfoPresenter.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
     private void getUserinfo(){
         Disposable disposable = null;
         try {
@@ -127,7 +140,6 @@ public class MineFragment extends Fragment {
         confirm.setText("设置");
 
         confirm.setTextColor(getResources().getColor(R.color.color_333));
-        getUserinfo();
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,6 +161,7 @@ public class MineFragment extends Fragment {
         publish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //startActivity(new Intent(getActivity(), MypubActivity.class));
                 startActivity(new Intent(getActivity(), MypublishActivity.class));
             }
         });
@@ -164,7 +177,47 @@ public class MineFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==1){
-            getUserinfo();
+           getData();
         }
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showData(Userinfo data) {
+        try {
+            PreferenceManager.getInstance().setUserinfo(data);
+            if(data!=null){
+                account.setText(data.getAccount());
+                nickname.setText(data.getNickname());
+                if (data.getHeadingUri()!=null){
+                    Glide.with(getContext()).load(data.getHeadingUri()).into(iv_head);
+                }
+                else{
+
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void failed(String error) {
+
+    }
+
+    @Override
+    public void setPresenter(Contract.Presenter presenter) {
+
     }
 }

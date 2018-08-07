@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.wwb_activity_main);
         ActManager.getAppManager().addActivity(this);
         mFragmensts = DataGenerator.getFragments("TabLayout Tab");
+        addFragments();
         initView();
     }
 
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
             int pos = (int) view.getTag();
             TabLayout.Tab tab = mTabLayout.getTabAt(pos);
-            if (pos==1) {
+            if (pos==2 ){
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 tab.select();
             }
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 Log.e("pos", tab.getPosition() + "");
-                if (tab.getPosition() == 1 && !MyAPP.isLogin) {
+                if (tab.getPosition() == 2 && !MyAPP.isLogin) {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
 //                    View tabView = (View) tab.getCustomView().getParent();
 //                    tabView.setTag(1);
@@ -68,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
                     onTabItemSelected(tab.getPosition());
-
                     // Tab 选中之后，改变各个Tab的状态
                     for (int i = 0; i < mTabLayout.getTabCount(); i++) {
                         View view = mTabLayout.getTabAt(i).getCustomView();
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
                 Log.e("pos", tab.getPosition() + "");
-                if (tab.getPosition() == 1 && !MyAPP.isLogin) {
+                if (tab.getPosition() == 2 && !MyAPP.isLogin) {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
 
                 }else{
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // 提供自定义的布局添加Tab
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             mTabLayout.addTab(mTabLayout.newTab().setCustomView(DataGenerator.getTabView(this, i)));
         }
 
@@ -115,18 +115,39 @@ public class MainActivity extends AppCompatActivity {
         switch (position) {
             case 0:
                 fragment = mFragmensts[0];
+                hideFragment(1);
+                hideFragment(2);
+                showFragment(0);
                 break;
             case 1:
                 fragment = mFragmensts[1];
+                hideFragment(0);
+                showFragment(1);
+                hideFragment(2);
+                break;
+            case 2:
+                fragment = mFragmensts[2];
+                hideFragment(0);
+                hideFragment(1);
+                showFragment(2);
                 break;
 
         }
-        if (fragment != null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.home_container, fragment).commit();
-        }
+//        if (fragment != null) {
+//            getSupportFragmentManager().beginTransaction().replace(R.id.home_container, fragment).commit();
+//        }
+    }
+    private void addFragments(){
+        getSupportFragmentManager().beginTransaction().add(R.id.home_container, mFragmensts[0]).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.home_container, mFragmensts[1]).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.home_container, mFragmensts[2]).commit();
     }
 
-
-
+   private void showFragment(int index){
+       getSupportFragmentManager().beginTransaction().show( mFragmensts[index]).commit();
+   }
+    private void hideFragment(int index){
+        getSupportFragmentManager().beginTransaction().hide( mFragmensts[index]).commit();
+    }
 
 }

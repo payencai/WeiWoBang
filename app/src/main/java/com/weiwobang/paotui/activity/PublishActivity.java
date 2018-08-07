@@ -310,6 +310,7 @@ public class PublishActivity extends AppCompatActivity {
                         @Override
                         public void accept(RetrofitResponse retrofitResponse) throws Exception {
                             Toast.makeText(PublishActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     }, new Consumer<Throwable>() {
                         @Override

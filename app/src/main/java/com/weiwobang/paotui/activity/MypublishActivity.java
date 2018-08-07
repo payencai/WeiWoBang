@@ -40,7 +40,12 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 public class MypublishActivity extends AppCompatActivity {
-
+    CommonPopupWindow popupWindow;
+    RecyclerView mRecyclerView;
+    MyNewsAdapter mNewsAdapter;
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    private int page=1;
+    boolean isLoadMore = false;
     @BindView(R.id.fabu)
     TextView fabu;
     @Override
@@ -52,11 +57,7 @@ public class MypublishActivity extends AppCompatActivity {
         initNews();
         loadData();
     }
-    RecyclerView mRecyclerView;
-    MyNewsAdapter mNewsAdapter;
-    SwipeRefreshLayout mSwipeRefreshLayout;
-    private int page=1;
-    boolean isLoadMore = false;
+
     private void initNews(){
 
 
@@ -111,7 +112,7 @@ public class MypublishActivity extends AppCompatActivity {
         });
 
     }
-    private CommonPopupWindow popupWindow;
+
     //向下弹出
     public void showDownPop(View view) {
         if (popupWindow != null && popupWindow.isShowing()) return;

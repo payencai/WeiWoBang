@@ -62,7 +62,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
-
 public class UserinfoActivity extends AppCompatActivity {
     @BindView(R.id.myname)
     TextView tv_name;
@@ -70,6 +69,9 @@ public class UserinfoActivity extends AppCompatActivity {
     RelativeLayout nick;
     @BindView(R.id.iv_head)
     CircleImageView head;
+    Uri photoUri;
+    Uri photoOutputUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,8 +84,8 @@ public class UserinfoActivity extends AppCompatActivity {
     private void initView() {
         try {
             tv_name.setText(PreferenceManager.getInstance().getUserinfo().getNickname());
-            if(PreferenceManager.getInstance().getUserinfo().getHeadingUri()!=null)
-            Glide.with(this).load(PreferenceManager.getInstance().getUserinfo().getHeadingUri()).into(head);
+            if (PreferenceManager.getInstance().getUserinfo().getHeadingUri() != null)
+                Glide.with(this).load(PreferenceManager.getInstance().getUserinfo().getHeadingUri()).into(head);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -99,11 +101,12 @@ public class UserinfoActivity extends AppCompatActivity {
         nick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                  showInputDialog();
+                showInputDialog();
             }
         });
     }
-    private void getUserinfo(){
+
+    private void getUserinfo() {
         Disposable disposable = null;
         try {
             disposable = NetWorkManager.getRequest(ApiService.class).getUserinfo(PreferenceManager.getInstance().getUserinfo().getToken())
@@ -112,8 +115,8 @@ public class UserinfoActivity extends AppCompatActivity {
                     .subscribe(new Consumer<RetrofitResponse<Userinfo>>() {
                         @Override
                         public void accept(RetrofitResponse<Userinfo> retrofitResponse) throws Exception {
-                            Userinfo user=retrofitResponse.getData();
-                            if(user!=null){
+                            Userinfo user = retrofitResponse.getData();
+                            if (user != null) {
                                 tv_name.setText(user.getNickname());
                                 Glide.with(UserinfoActivity.this).load(user.getHeadingUri()).into(head);
                             }
@@ -133,6 +136,10 @@ public class UserinfoActivity extends AppCompatActivity {
         }
         new CompositeDisposable().add(disposable);
     }
+
+    /**
+     * 修改昵称dialog
+     */
     private void showInputDialog() {
         /*@setView 装入一个EditView
          */
@@ -155,7 +162,13 @@ public class UserinfoActivity extends AppCompatActivity {
             }
         }).show();
     }
-    private void updateName(String name){
+
+    /**
+     * 更新昵称
+     *
+     * @param name
+     */
+    private void updateName(String name) {
         Disposable disposable = null;
         try {
             disposable = NetWorkManager.getRequest(ApiService.class).postUpdateName(name, PreferenceManager.getInstance().getUserinfo().getToken())
@@ -180,6 +193,7 @@ public class UserinfoActivity extends AppCompatActivity {
         }
         new CompositeDisposable().add(disposable);
     }
+
     public void upImage(String url, File file) {
         Log.d("leng", file.length() / 1000 + "");
         OkHttpClient mOkHttpClent = new OkHttpClient();
@@ -214,33 +228,39 @@ public class UserinfoActivity extends AppCompatActivity {
             }
         });
     }
-  private void updateHead(String data){
-      Disposable disposable = null;
-      try {
-          disposable = NetWorkManager.getRequest(ApiService.class).postUpdateHead(data, PreferenceManager.getInstance().getUserinfo().getToken())
-                  //.compose(ResponseTransformer.handleResult())
-                  .compose(SchedulerProvider.getInstance().applySchedulers())
-                  .subscribe(new Consumer<RetrofitResponse>() {
-                      @Override
-                      public void accept(RetrofitResponse retrofitResponse) throws Exception {
-                          getUserinfo();
-                          Toast.makeText(UserinfoActivity.this, "更新成功", Toast.LENGTH_SHORT).show();
-                          //finish();
-                      }
-                  }, new Consumer<Throwable>() {
-                      @Override
-                      public void accept(Throwable throwable) throws Exception {
-                          ApiException apiException = CustomException.handleException(throwable);
-                         // Toast.makeText(RegisterActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
-                      }
-                  });
-      } catch (IOException e) {
-          e.printStackTrace();
-      } catch (ClassNotFoundException e) {
-          e.printStackTrace();
-      }
-      new CompositeDisposable().add(disposable);
-  }
+
+    //更新头像
+    private void updateHead(String data) {
+        Disposable disposable = null;
+        try {
+            disposable = NetWorkManager.getRequest(ApiService.class).postUpdateHead(data, PreferenceManager.getInstance().getUserinfo().getToken())
+                    //.compose(ResponseTransformer.handleResult())
+                    .compose(SchedulerProvider.getInstance().applySchedulers())
+                    .subscribe(new Consumer<RetrofitResponse>() {
+                        @Override
+                        public void accept(RetrofitResponse retrofitResponse) throws Exception {
+                            getUserinfo();
+                            Toast.makeText(UserinfoActivity.this, "更新成功", Toast.LENGTH_SHORT).show();
+                            //finish();
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            ApiException apiException = CustomException.handleException(throwable);
+                            // Toast.makeText(RegisterActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        new CompositeDisposable().add(disposable);
+    }
+
+    /**
+     * 上传头像对话框
+     */
     private void showDialog() {
         final Dialog dialog = new Dialog(this, R.style.dialog);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.wwb_select_head, null);
@@ -286,19 +306,12 @@ public class UserinfoActivity extends AppCompatActivity {
         });
         dialog.show();
     }
+
     /**
-     * 拍照
+     * 剪裁照片
+     *
+     * @param inputUri
      */
-    Uri photoUri;
-
-    public Uri getPhotoUri() {
-        return photoUri;
-    }
-
-    public void setPhotoUri(Uri photoUri) {
-        this.photoUri = photoUri;
-    }
-
     public void cropPhoto(Uri inputUri) {
         // 调用系统裁剪图片的 Action
         Intent cropPhotoIntent = new Intent("com.android.camera.action.CROP");
@@ -309,8 +322,9 @@ public class UserinfoActivity extends AppCompatActivity {
         // 设置图片的最终输出目录
         cropPhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                 photoOutputUri = Uri.parse("file:////sdcard/image_output.jpg"));
-      startActivityForResult(cropPhotoIntent, 3);
+        startActivityForResult(cropPhotoIntent, 3);
     }
+
     private void startCamera() {
         String savePath = "";
         String storageState = Environment.getExternalStorageState();
@@ -341,7 +355,7 @@ public class UserinfoActivity extends AppCompatActivity {
 //        if (Build.VERSION.SDK_INT >= 24) {
 //            photoUri = FileProvider.getUriForFile(getContext(), "com.example.meimeng.fileprovider", file);
 //        } else {
-            photoUri = Uri.fromFile(file); // Android 7.0 以前使用原来的方法来获取文件的 Uri
+        photoUri = Uri.fromFile(file); // Android 7.0 以前使用原来的方法来获取文件的 Uri
 //        }
         // 打开系统相机的 Action，等同于："android.media.action.IMAGE_CAPTURE"
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -349,27 +363,29 @@ public class UserinfoActivity extends AppCompatActivity {
         takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
         startActivityForResult(takePhotoIntent, 1);
     }
-    Uri photoOutputUri;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-      //  Log.e("req",requestCode+"");
-        if(requestCode==1){
+        //  Log.e("req",requestCode+"");
+        if (requestCode == 1) {
             cropPhoto(photoUri);
 //            File file=new File(photoUri.getPath());
 //            Log.e("req",photoUri.getPath()+"");
 //           upImage(Api.testUrl,file);
-        }if(requestCode==2){
+        }
+        if (requestCode == 2) {
             cropPhoto(data.getData());
 //            Uri uri = data.getData();
 //            File file=new File(uri.getPath());
 //            upImage(Api.testUrl,file);
-           // Log.e("req",uri.getPath()+"");
-        }if(requestCode==3){
+            // Log.e("req",uri.getPath()+"");
+        }
+        if (requestCode == 3) {
             File file = new File(photoOutputUri.getPath());
             if (file.exists()) {
                 Glide.with(this).load(photoOutputUri).into(head);
-                upImage(Api.testUrl,file);
+                upImage(Api.testUrl, file);
             } else {
                 Toast.makeText(this, "找不到照片", Toast.LENGTH_SHORT).show();
             }

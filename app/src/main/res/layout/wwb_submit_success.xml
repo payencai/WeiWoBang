@@ -8,6 +8,7 @@
                   android:layout_width="match_parent"
                   android:layout_height="50dp">
                   <ImageView
+
                       android:layout_marginLeft="15dp"
                       android:layout_centerVertical="true"
                       android:src="@mipmap/wwb_black_back"

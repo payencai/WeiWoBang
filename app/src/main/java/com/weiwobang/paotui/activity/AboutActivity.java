@@ -14,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class AboutActivity extends AppCompatActivity {
+    @BindView(R.id.back)
     ImageView back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

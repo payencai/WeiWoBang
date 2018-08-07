@@ -24,6 +24,11 @@ import com.weiwobang.paotui.adapter.NewsAdapter;
 import com.weiwobang.paotui.api.ApiService;
 import com.weiwobang.paotui.bean.Data;
 import com.weiwobang.paotui.bean.News;
+import com.weiwobang.paotui.mvp.Contract;
+import com.weiwobang.paotui.mvp.presenter.TypePresenter;
+import com.weiwobang.paotui.mvp.view.MvpView;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,7 +36,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
-public class TypeActivity extends AppCompatActivity {
+public class TypeActivity extends AppCompatActivity implements Contract.MvpView<List<News>> {
     @BindView(R.id.type_title)
     TextView title;
     @BindView(R.id.back)
@@ -39,10 +44,13 @@ public class TypeActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     NewsAdapter mNewsAdapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
-    private int page=1;
+    TypePresenter mTypePresenter;
+    private Contract.Presenter mPresenter;
+    private int page = 1;
     boolean isLoadMore = false;
-    String categoryId="";
-    String categoryName="";
+    String categoryId = "";
+    String categoryName = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,9 +58,15 @@ public class TypeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initView();
         initNews();
-        loadData();
+        getData();
     }
-    private void initNews(){
+
+    private void getData() {
+        mTypePresenter = new TypePresenter(this, page, categoryId);
+        mTypePresenter.start();
+    }
+
+    private void initNews() {
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_new);
         mRecyclerView = findViewById(R.id.recycleview_new);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -64,7 +78,8 @@ public class TypeActivity extends AppCompatActivity {
             public void onRefresh() {
                 page = 1;
                 //mNewsAdapter.openAutoLoadMore(true);
-                loadData();
+                //loadData();
+                getData();
             }
         });
         mNewsAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -72,34 +87,79 @@ public class TypeActivity extends AppCompatActivity {
             public void onLoadMore() {
                 isLoadMore = true;
                 page++;
-                loadData();
+                getData();
+                //loadData();
             }
         });
         mNewsAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull View view, int adapterPosition) {
-                String id=mNewsAdapter.getData(adapterPosition).getId();
-                Intent intent=new Intent(TypeActivity.this,DetailActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putString("id",id);
+                mPresenter.itemclick(adapterPosition);
+                String id = mNewsAdapter.getData(adapterPosition).getId();
+                Intent intent = new Intent(TypeActivity.this, DetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", id);
                 intent.putExtras(bundle);
                 startActivity(intent);
 
             }
         });
     }
+    private void initView() {
+        Bundle bundle = getIntent().getExtras();
+        categoryId = bundle.getString("id");
+        categoryName = bundle.getString("name");
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        title.setText(categoryName);
+
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showData(List<News> data) {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+        if (isLoadMore) {
+            isLoadMore = false;
+            mNewsAdapter.addData(data);
+        } else {
+            mNewsAdapter.setData(data);
+            mRecyclerView.setAdapter(mNewsAdapter);
+        }
+
+    }
+
+    @Override
+    public void failed(String error) {
+
+    }
     private void loadData() {
-        Disposable disposable = NetWorkManager.getRequest(ApiService.class).getMsgByType(page,categoryId)
+        Disposable disposable = NetWorkManager.getRequest(ApiService.class).getMsgByType(page, categoryId)
                 //.compose(ResponseTransformer.handleResult())
                 .compose(SchedulerProvider.getInstance().applySchedulers())
                 .subscribe(new Consumer<RetrofitResponse<Data<News>>>() {
                     @Override
                     public void accept(RetrofitResponse<Data<News>> retrofitResponse) throws Exception {
-                        Log.e("result",retrofitResponse.getData().getBeanList().get(0).getTitle());
+                        Log.e("result", retrofitResponse.getData().getBeanList().get(0).getTitle());
                         if (mSwipeRefreshLayout.isRefreshing()) {
                             mSwipeRefreshLayout.setRefreshing(false);
                         }
-                        if(page==1&&retrofitResponse.getData().getBeanList().size()==0){
+                        if (page == 1 && retrofitResponse.getData().getBeanList().size() == 0) {
                             //mKnowAdapter.setAlwaysShowHead(true);
                             mNewsAdapter.setData(retrofitResponse.getData().getBeanList());
                             mRecyclerView.setAdapter(mNewsAdapter);
@@ -126,17 +186,9 @@ public class TypeActivity extends AppCompatActivity {
         new CompositeDisposable().add(disposable);
     }
 
-    private void initView() {
-        Bundle bundle=getIntent().getExtras();
-        categoryId=bundle.getString("id");
-        categoryName=bundle.getString("name");
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        title.setText(categoryName);
 
+    @Override
+    public void setPresenter(Contract.Presenter presenter) {
+         mPresenter=presenter;
     }
 }

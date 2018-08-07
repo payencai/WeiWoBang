@@ -22,8 +22,7 @@ import com.weiwobang.paotui.api.Api;
 import com.weiwobang.paotui.api.ApiService;
 import com.weiwobang.paotui.bean.Account;
 import com.weiwobang.paotui.constant.CommomConstant;
-import com.weiwobang.paotui.http.HttpProxy;
-import com.weiwobang.paotui.http.ICallBack;
+
 import com.weiwobang.paotui.tools.ActManager;
 
 import org.json.JSONObject;
