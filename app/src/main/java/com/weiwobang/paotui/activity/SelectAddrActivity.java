@@ -172,7 +172,7 @@ public class SelectAddrActivity extends AppCompatActivity {
                         addrBean.setLon(lon);
                         bundle.putSerializable("addrbean",addrBean);
                         intent.putExtras(bundle);
-                        setResult(3,intent);
+                        setResult(1,intent);
                         finish();
 
                     }

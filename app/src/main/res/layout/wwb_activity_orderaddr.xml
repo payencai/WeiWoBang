@@ -8,12 +8,14 @@
     android:layout_height="match_parent"
     tools:context=".activity.OrderaddrActivity">
     <ImageView
+        android:id="@+id/back"
         android:layout_marginLeft="@dimen/margin_15dp"
         android:layout_marginTop="@dimen/margin_15dp"
         android:src="@mipmap/wwb_black_back"
         android:layout_width="20dp"
         android:layout_height="25dp"/>
     <TextView
+        android:id="@+id/tv_addr"
         android:textStyle="bold"
         android:textSize="@dimen/text_size_20sp"
         android:textColor="@color/black_33"
@@ -23,6 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <RelativeLayout
+        android:id="@+id/sel_addr"
         android:gravity="center_vertical"
         android:layout_marginTop="@dimen/margin_50dp"
         android:layout_width="match_parent"
@@ -63,11 +66,12 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"></View>
     <RelativeLayout
-        android:gravity="center_vertical"
+
 
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="60dp">
         <TextView
+            android:layout_centerVertical="true"
             android:id="@+id/addr_namedet"
             android:textSize="@dimen/text_size_16sp"
             android:textColor="@color/black_33"
@@ -76,8 +80,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <EditText
-            android:singleLine="true"
-            android:ellipsize="end"
+
+            android:layout_centerVertical="true"
+            android:maxLines="2"
             android:layout_marginLeft="@dimen/margin_20dp"
             android:layout_marginRight="@dimen/margin_30dp"
             android:id="@+id/in_addrdet"
@@ -99,6 +104,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
+            android:id="@+id/confirm"
             android:textSize="@dimen/text_size_16sp"
             android:textColor="@color/color_333"
             android:gravity="center"

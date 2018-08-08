@@ -138,6 +138,10 @@
         </activity>
         <activity android:name=".activity.OrderaddrActivity">
         </activity>
+        <activity
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:name=".activity.ConfirmActivity">
+        </activity>
     </application>
 
 </manifest>
