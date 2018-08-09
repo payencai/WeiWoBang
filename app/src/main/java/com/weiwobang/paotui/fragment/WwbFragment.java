@@ -38,9 +38,11 @@ import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.weiwobang.paotui.MyAPP;
 import com.weiwobang.paotui.R;
 import com.weiwobang.paotui.activity.ConfirmActivity;
 import com.weiwobang.paotui.activity.HelpSendActivity;
+import com.weiwobang.paotui.activity.LoginActivity;
 import com.weiwobang.paotui.activity.OrderaddrActivity;
 import com.weiwobang.paotui.bean.AddrBean;
 import com.weiwobang.paotui.bean.NetworkType;
@@ -95,7 +97,6 @@ public class WwbFragment extends Fragment implements NetStateChangeObserver {
     AddrBean mAddrBean;
     OrderAddr nowAddr;
     OrderAddr whereAddr;
-
 
 
     public WwbFragment() {
@@ -202,26 +203,27 @@ public class WwbFragment extends Fragment implements NetStateChangeObserver {
 
         return view;
     }
-    public void showDialog(View view,int flag) {
+
+    public void showDialog(View view, int flag) {
         WheelViewDialog dialog = new WheelViewDialog(getContext());
         dialog.setOnDialogItemClickListener(new WheelViewDialog.OnDialogItemClickListener() {
             @Override
             public void onItemClick(int position, String s) {
                 dialog.dismiss();
-                if(flag==0){
+                if (flag == 0) {
                     tv_ceng.setText(s);
-                }else{
+                } else {
                     tv_ceng2.setText(s);
                 }
-                if(isJump()){
-                    Intent intent=new Intent(getContext(), ConfirmActivity.class);
-                    Bundle bundle =new Bundle();
-                    bundle.putSerializable("fa",nowAddr);
-                    bundle.putSerializable("shou",whereAddr);
-                    bundle.putString("fir",tv_ceng.getText().toString());
-                    bundle.putString("sec",tv_ceng2.getText().toString());
+                if (isJump()) {
+                    Intent intent = new Intent(getContext(), ConfirmActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("fa", nowAddr);
+                    bundle.putSerializable("shou", whereAddr);
+                    bundle.putString("fir", tv_ceng.getText().toString());
+                    bundle.putString("sec", tv_ceng2.getText().toString());
                     intent.putExtras(bundle);
-                    startActivity(intent);
+                    startActivityForResult(intent,7);
                 }
 
             }
@@ -230,6 +232,7 @@ public class WwbFragment extends Fragment implements NetStateChangeObserver {
                 .parseColor("#6699ff")).setCount(5).show();
 
     }
+
     private ArrayList<String> createArrays() {
         ArrayList<String> list = new ArrayList<String>();
         list.add("有电梯");
@@ -244,17 +247,19 @@ public class WwbFragment extends Fragment implements NetStateChangeObserver {
 
         return list;
     }
-    private boolean isJump(){
-        if(TextUtils.equals("楼层",tv_ceng.getText()))
+
+    private boolean isJump() {
+        if (TextUtils.equals("楼层", tv_ceng.getText()))
             return false;
-        if(TextUtils.equals("楼层",tv_ceng2.getText()))
+        if (TextUtils.equals("楼层", tv_ceng2.getText()))
             return false;
-        if(nowAddr==null)
+        if (nowAddr == null)
             return false;
-        if (whereAddr==null)
+        if (whereAddr == null)
             return false;
         return true;
     }
+
     private void initView(View view) {
         iv_locate = (ImageView) view.findViewById(R.id.iv_home_locate);
         iv_inform = (ImageView) view.findViewById(R.id.iv_home_msg);
@@ -264,8 +269,8 @@ public class WwbFragment extends Fragment implements NetStateChangeObserver {
                 locate();
             }
         });
-        now=view.findViewById(R.id.now);
-        where=view.findViewById(R.id.where);
+        now = view.findViewById(R.id.now);
+        where = view.findViewById(R.id.where);
         tv_send = (TextView) view.findViewById(R.id.wwb_send_tv);
         tv_get = (TextView) view.findViewById(R.id.wwb_get_tv);
         send_layout = (LinearLayout) view.findViewById(R.id.wwb_send_layout);
@@ -280,18 +285,24 @@ public class WwbFragment extends Fragment implements NetStateChangeObserver {
         get_firstAddr = (TextView) view.findViewById(R.id.wwb_locate_first);
         get_secAddr = (TextView) view.findViewById(R.id.wwb_locate_sec);
         get_mude = (TextView) view.findViewById(R.id.wwb_shou_address);
-        tv_ceng=view.findViewById(R.id.ceng);
+        tv_ceng = view.findViewById(R.id.ceng);
         tv_ceng.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog(view,0);
+                if (MyAPP.isLogin)
+                    showDialog(view, 0);
+                else
+                    startActivity(new Intent(getContext(), LoginActivity.class));
             }
         });
-        tv_ceng2=view.findViewById(R.id.ceng2);
+        tv_ceng2 = view.findViewById(R.id.ceng2);
         tv_ceng2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog(view,1);
+                if (MyAPP.isLogin)
+                    showDialog(view, 1);
+                else
+                    startActivity(new Intent(getContext(), LoginActivity.class));
             }
         });
         view.findViewById(R.id.helpme).setOnClickListener(new View.OnClickListener() {
@@ -306,14 +317,14 @@ public class WwbFragment extends Fragment implements NetStateChangeObserver {
                 Intent intent = new Intent(getActivity(), HelpSendActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("value", 1);
-                AddrBean addrBean=new AddrBean();
+                AddrBean addrBean = new AddrBean();
                 addrBean.setLat(lat);
                 addrBean.setLon(lon);
                 addrBean.setName(name);
                 addrBean.setPhone(phone);
                 addrBean.setFiraddr(send_firstAddr.getText().toString());
                 addrBean.setSecaddr(send_secAddr.getText().toString());
-                bundle.putSerializable("address",addrBean);
+                bundle.putSerializable("address", addrBean);
                 bundle.putString("addr", send_firstAddr.getText().toString() + ":" + send_secAddr.getText().toString());
                 bundle.putString("latlon", lat + ":" + lon);
                 intent.putExtras(bundle);
@@ -355,14 +366,14 @@ public class WwbFragment extends Fragment implements NetStateChangeObserver {
                 Intent intent = new Intent(getContext(), HelpSendActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("value", 3);
-                AddrBean addrBean=new AddrBean();
+                AddrBean addrBean = new AddrBean();
                 addrBean.setLat(lat);
                 addrBean.setLon(lon);
                 addrBean.setName(name);
                 addrBean.setPhone(phone);
                 addrBean.setFiraddr(get_firstAddr.getText().toString());
                 addrBean.setSecaddr(get_secAddr.getText().toString());
-                bundle.putSerializable("address",addrBean);
+                bundle.putSerializable("address", addrBean);
                 bundle.putString("addr", get_firstAddr.getText().toString() + ":" + get_secAddr.getText().toString());
                 bundle.putString("latlon", lat + ":" + lon);
 
@@ -384,26 +395,37 @@ public class WwbFragment extends Fragment implements NetStateChangeObserver {
         view.findViewById(R.id.now).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getContext(), OrderaddrActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("addr", 0);
-                intent.putExtras(bundle);
-                startActivityForResult(intent,5);
+                if (MyAPP.isLogin) {
+                    Intent intent = new Intent(getContext(), OrderaddrActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("addr", 0);
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, 5);
+                } else {
+                    startActivity(new Intent(getContext(), LoginActivity.class));
+                }
+
             }
         });
         view.findViewById(R.id.where).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getContext(), OrderaddrActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("addr", 1);
-                intent.putExtras(bundle);
-                startActivityForResult(intent,6);
+                if (MyAPP.isLogin) {
+                    Intent intent = new Intent(getContext(), OrderaddrActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("addr", 1);
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, 6);
+                } else {
+                    startActivity(new Intent(getContext(), LoginActivity.class));
+                }
             }
         });
     }
+
     String name;
     String phone;
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -415,8 +437,8 @@ public class WwbFragment extends Fragment implements NetStateChangeObserver {
                 lon = mAddrBean.getLon();
                 send_firstAddr.setText(mAddrBean.getFiraddr());
                 send_secAddr.setText(mAddrBean.getSecaddr());
-                name=mAddrBean.getName();
-                phone=mAddrBean.getPhone();
+                name = mAddrBean.getName();
+                phone = mAddrBean.getPhone();
             }
         }
         if (requestCode == 4) {
@@ -426,44 +448,56 @@ public class WwbFragment extends Fragment implements NetStateChangeObserver {
                 lon = mAddrBean.getLon();
                 get_firstAddr.setText(mAddrBean.getFiraddr());
                 get_secAddr.setText(mAddrBean.getSecaddr());
-                name=mAddrBean.getName();
-                phone=mAddrBean.getPhone();
+                name = mAddrBean.getName();
+                phone = mAddrBean.getPhone();
             }
             Log.e("data", 1 + "");
         }
-        if(requestCode==5){
-            if(data!=null){
-                nowAddr= (OrderAddr) data.getExtras().getSerializable("addr");
+        if (requestCode == 5) {
+            if (data != null) {
+                nowAddr = (OrderAddr) data.getExtras().getSerializable("addr");
                 now.setText(nowAddr.getAddress());
-                if(isJump()){
-                    Intent intent=new Intent(getContext(), ConfirmActivity.class);
-                    Bundle bundle =new Bundle();
-                    bundle.putSerializable("fa",nowAddr);
-                    bundle.putSerializable("shou",whereAddr);
-                    bundle.putString("fir",tv_ceng.getText().toString());
-                    bundle.putString("sec",tv_ceng2.getText().toString());
+                if (isJump()) {
+                    Intent intent = new Intent(getContext(), ConfirmActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("fa", nowAddr);
+                    bundle.putSerializable("shou", whereAddr);
+                    bundle.putString("fir", tv_ceng.getText().toString());
+                    bundle.putString("sec", tv_ceng2.getText().toString());
                     intent.putExtras(bundle);
-                    startActivity(intent);
+                    startActivityForResult(intent,8);
                 }
             }
         }
-        if(requestCode==6){
-            if(data!=null){
-                whereAddr= (OrderAddr) data.getExtras().getSerializable("addr");
+        if (requestCode == 6) {
+            if (data != null) {
+                whereAddr = (OrderAddr) data.getExtras().getSerializable("addr");
                 where.setText(whereAddr.getAddress());
-                if(isJump()){
-                    Intent intent=new Intent(getContext(), ConfirmActivity.class);
-                    Bundle bundle =new Bundle();
-                    bundle.putSerializable("fa",nowAddr);
-                    bundle.putSerializable("shou",whereAddr);
-                    bundle.putString("fir",tv_ceng.getText().toString());
-                    bundle.putString("sec",tv_ceng2.getText().toString());
+                if (isJump()) {
+                    Intent intent = new Intent(getContext(), ConfirmActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("fa", nowAddr);
+                    bundle.putSerializable("shou", whereAddr);
+                    bundle.putString("fir", tv_ceng.getText().toString());
+                    bundle.putString("sec", tv_ceng2.getText().toString());
                     intent.putExtras(bundle);
-                    startActivity(intent);
+                    startActivityForResult(intent,9);
                 }
             }
+        }
+        if(requestCode>=7){
+            clearData();
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void clearData() {
+        nowAddr=null;
+        whereAddr=null;
+        now.setText("你目前在哪里");
+        where.setText("你要搬去哪儿");
+        tv_ceng.setText("楼层");
+        tv_ceng2.setText("楼层");
     }
 
     private void initMapView(View view, Bundle savedInstanceState) {

@@ -8,6 +8,7 @@ import com.payencai.library.http.retrofitAndrxjava.schedulers.SchedulerProvider;
 import com.weiwobang.paotui.api.ApiService;
 import com.weiwobang.paotui.bean.Data;
 import com.weiwobang.paotui.bean.News;
+import com.weiwobang.paotui.bean.Order;
 import com.weiwobang.paotui.bean.Userinfo;
 
 import java.util.List;
@@ -21,7 +22,8 @@ public class MvpModel<T> {
     private int page;
     private String categoryId;
     private MvpCallback<List<News>> mMvpModel;
-    private MvpCallback<T> mUserinfoModel;
+    ///private MvpCallback<List<Order>> mOrderModel;
+    private MvpCallback<T> mMvpCallback;
     public MvpModel(MvpCallback<List<News>> mMvpModel, int page, String categoryId){
         this.mMvpModel=mMvpModel;
         this.page=page;
@@ -30,9 +32,13 @@ public class MvpModel<T> {
 
     public MvpModel(String token, MvpCallback<T> userCallBack) {
         this.token = token;
-        mUserinfoModel = userCallBack;
+        mMvpCallback = userCallBack;
     }
-
+    public MvpModel(String token, MvpCallback<T> userCallBack,int page) {
+        this.token = token;
+        mMvpCallback = userCallBack;
+        this.page=page;
+    }
     /**
      * 获取用户信息
      */
@@ -43,13 +49,13 @@ public class MvpModel<T> {
                 .subscribe(new Consumer<RetrofitResponse<Userinfo>>() {
                     @Override
                     public void accept(RetrofitResponse<Userinfo> retrofitResponse) throws Exception {
-                        mUserinfoModel.loadSuccess((T) retrofitResponse.getData());
+                        mMvpCallback.loadSuccess((T) retrofitResponse.getData());
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         ApiException apiException = CustomException.handleException(throwable);
-                        mUserinfoModel.loadError(apiException.getDisplayMessage());
+                        mMvpCallback.loadError(apiException.getDisplayMessage());
                     }
                 });
 
@@ -73,6 +79,28 @@ public class MvpModel<T> {
                     public void accept(Throwable throwable) throws Exception {
                         ApiException apiException = CustomException.handleException(throwable);
                         mMvpModel.loadError(apiException.getDisplayMessage());
+                    }
+                });
+        new CompositeDisposable().add(disposable);
+    }
+    /**
+     * 获取我的订单
+     */
+    public void getMyOrder(){
+        Disposable disposable = NetWorkManager.getRequest(ApiService.class).getMyOrder(page,token)
+                //.compose(ResponseTransformer.handleResult())
+                .compose(SchedulerProvider.getInstance().applySchedulers())
+                .subscribe(new Consumer<RetrofitResponse<Data<Order>>>() {
+                    @Override
+                    public void accept(RetrofitResponse<Data<Order>> retrofitResponse) throws Exception {
+
+                        mMvpCallback.loadSuccess((T) retrofitResponse.getData().getBeanList());
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        ApiException apiException = CustomException.handleException(throwable);
+                        mMvpCallback.loadError(apiException.getDisplayMessage());
                     }
                 });
         new CompositeDisposable().add(disposable);

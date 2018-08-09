@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -61,6 +64,8 @@ public class SelectAddrActivity extends AppCompatActivity {
     TextView confirm;
     TextView title;
     AddrBean mAddrBean;
+    EditText et_search;
+    TextView tv_city;
     public AMapLocationClient mlocationClient;
     public AMapLocationClientOption mLocationOption = null;
     @Override
@@ -81,6 +86,8 @@ public class SelectAddrActivity extends AppCompatActivity {
         mGeocodeSearch=new GeocodeSearch(this);
         title=findViewById(R.id.tv_title);
         title.setText("选择地址");
+        et_search=findViewById(R.id.et_search);
+        tv_city=findViewById(R.id.tv_city);
         findViewById(R.id.header_confirm).setVisibility(View.GONE);
         mGeocodeSearch.setOnGeocodeSearchListener(new GeocodeSearch.OnGeocodeSearchListener() {
             @Override
@@ -92,6 +99,23 @@ public class SelectAddrActivity extends AppCompatActivity {
             @Override
             public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
 
+            }
+        });
+        et_search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+               String word= editable.toString();
+               searchPoi(word);
             }
         });
         aMap.setOnCameraChangeListener(new AMap.OnCameraChangeListener() {
@@ -228,6 +252,7 @@ public class SelectAddrActivity extends AppCompatActivity {
                         aMapLocation.getCountry();//国家信息
                         province=aMapLocation.getProvince();//省信息
                         city=aMapLocation.getCity();//城市信息
+                        tv_city.setText(city);
                         aMapLocation.getDistrict();//城区信息
                         aMapLocation.getStreet();//街道信息
                         aMapLocation.getStreetNum();//街道门牌号信息
@@ -269,7 +294,8 @@ public class SelectAddrActivity extends AppCompatActivity {
                 .setOnPickListener(new OnPickListener() {
                     @Override
                     public void onPick(int position, City data) {
-
+                         tv_city.setText(data.getName());
+                         cityCode=data.getCode();
                     }
 
                     @Override

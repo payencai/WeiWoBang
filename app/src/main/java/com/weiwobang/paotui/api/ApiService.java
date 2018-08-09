@@ -6,6 +6,7 @@ import com.weiwobang.paotui.bean.AddrBean;
 import com.weiwobang.paotui.bean.Bean;
 import com.weiwobang.paotui.bean.Data;
 import com.weiwobang.paotui.bean.News;
+import com.weiwobang.paotui.bean.Order;
 import com.weiwobang.paotui.bean.Userinfo;
 import com.weiwobang.paotui.constant.Constant;
 
@@ -35,10 +36,10 @@ import retrofit2.http.Query;
 public interface ApiService {
     //获取急救知识列表
     @FormUrlEncoded
-  //  @Headers({"Content-Type:application/json;charset=utf-8", "Accept:application/json;"})
+    //  @Headers({"Content-Type:application/json;charset=utf-8", "Accept:application/json;"})
     @POST(Api.Login.sLogin)
     Observable<RetrofitResponse> postLogin(
-            @FieldMap Map<String,String> params);
+            @FieldMap Map<String, String> params);
 
     @GET(Api.User.sGetVerifyCode)
     Observable<RetrofitResponse> getCode(
@@ -49,6 +50,7 @@ public interface ApiService {
     Observable<RetrofitResponse<Data<News>>> getToday(
             @Query("page") int page
     );
+
     @GET(Api.Message.sGetMine)
     Observable<RetrofitResponse<Data<News>>> getMine(
             @Query("page") int page,
@@ -71,10 +73,25 @@ public interface ApiService {
             @Query("page") int page,
             @Query("categoryId") String categoryId
     );
+
     @GET(Api.Comment.sGetComment)
     Observable<RetrofitResponse<Bean>> getComment(
-            @Query("messageId") String  messageId,
+            @Query("messageId") String messageId,
             @Query("page") int page
+    );
+
+    @GET(Api.Remove.sGetMine)
+    Observable<RetrofitResponse<Data<Order>>> getMyOrder(
+            @Query("page") int page,
+            @Header("token") String token
+    );
+
+    @GET(Api.Remove.sGetDistance)
+    Observable<RetrofitResponse> getDistance(
+            @Query("longitudeFrom") double longitudeFrom ,
+            @Query("latitudeFrom") double latitudeFrom,
+            @Query("longitudeTo") double longitudeTo,
+            @Query("latitudeTo") double latitudeTo
     );
 
     @FormUrlEncoded
@@ -110,12 +127,14 @@ public interface ApiService {
             @Field("content") String content,
             @Header("token") String token
     );
+
     @Multipart
     @POST(Api.User.sUpLoadImg)
     Observable<RetrofitResponse> uploadImg(
-         @Part
-         MultipartBody.Part file
+            @Part
+                    MultipartBody.Part file
     );
+
     @FormUrlEncoded
     @POST(Api.User.sPostRegister)
     Observable<RetrofitResponse> postRegister(
@@ -123,12 +142,14 @@ public interface ApiService {
             @Field("code") String code,
             @Field("password") String password
     );
+
     @FormUrlEncoded
     @POST(Api.User.sPostLogin)
     Observable<RetrofitResponse<Userinfo>> postLogin(
             @Field("account") String account,
             @Field("password") String password
     );
+
     @FormUrlEncoded
     @POST(Api.User.sPostResetPwd)
     Observable<RetrofitResponse> postResetPwd(
@@ -136,30 +157,35 @@ public interface ApiService {
             @Field("code") String code,
             @Field("password") String password
     );
+
     @FormUrlEncoded
     @POST(Api.User.sPostSugg)
     Observable<RetrofitResponse> postSugg(
             @Field("content") String content,
             @Header("token") String token
     );
+
     @FormUrlEncoded
     @POST(Api.User.sPostUpdateHead)
     Observable<RetrofitResponse> postUpdateHead(
             @Field("heading") String heading,
             @Header("token") String token
     );
+
     @FormUrlEncoded
     @POST(Api.Message.sPostDel)
     Observable<RetrofitResponse> postDelMsg(
             @Field("id") String id,
             @Header("token") String token
     );
+
     @FormUrlEncoded
     @POST(Api.User.sPostUpdateName)
     Observable<RetrofitResponse> postUpdateName(
             @Field("name") String name,
             @Header("token") String token
     );
+
     @FormUrlEncoded
     @POST(Api.Comment.sPostAdd)
     Observable<RetrofitResponse> postAddComment(
@@ -167,6 +193,7 @@ public interface ApiService {
             @Field("content") String content,
             @Header("token") String token
     );
+
     @FormUrlEncoded
     @POST(Api.Comment.sPostInform)
     Observable<RetrofitResponse> postInformComment(
@@ -174,6 +201,7 @@ public interface ApiService {
             @Field("content") String content,
             @Header("token") String token
     );
+
     @FormUrlEncoded
     @POST(Api.Comment.sPostReply)
     Observable<RetrofitResponse> postReplyComment(
@@ -181,11 +209,31 @@ public interface ApiService {
             @Field("content") String content,
             @Header("token") String token
     );
+
     @FormUrlEncoded
     @POST(Api.Message.sPostMsgInform)
     Observable<RetrofitResponse> postInformMsg(
             @Field("messageId") String messageId,
             @Field("content") String content,
+            @Header("token") String token
+    );
+
+    @FormUrlEncoded
+    @POST(Api.Remove.sPostAdd)
+    Observable<RetrofitResponse> postAdd(
+            @Field("longitudeFrom") double longitudeFrom,
+            @Field("latitudeFrom") double latitudeFrom,
+            @Field("addressFrom") String addressFrom,
+            @Field("addressFromDetail") String addressFromDetail,
+            @Field("floorFrom") String floorFrom,
+            @Field("longitudeTo") double longitudeTo,
+            @Field("latitudeTo") double latitudeTo,
+            @Field("addressTo") String addressTo,
+            @Field("floorTo") String floorTo,
+            @Field("telephoneNum") String telephoneNum,
+            @Field("removeTime") String removeTime,
+            @Field("note") String note,
+            @Field("addressToDetail") String addressToDetail,
             @Header("token") String token
     );
 }

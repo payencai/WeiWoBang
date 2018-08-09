@@ -125,13 +125,19 @@
                 android:background="@drawable/wwb_content_fill"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"/>
-            <ImageView
-                android:id="@+id/image"
-                android:src="@mipmap/wwb_icon"
-                android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:layout_width="160dp"
-                android:layout_height="120dp"/>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_marginRight="@dimen/margin_20dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/margin_30dp"
+                        android:id="@+id/rv_photo"
+                        android:scrollbars="none"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="150dp">
+                    </android.support.v7.widget.RecyclerView>
+
             <LinearLayout
                 android:id="@+id/layout_contact"
                 android:layout_marginLeft="@dimen/margin_15dp"

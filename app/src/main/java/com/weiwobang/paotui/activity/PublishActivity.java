@@ -1,6 +1,7 @@
 package com.weiwobang.paotui.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +29,9 @@ import com.weiwobang.paotui.api.ApiService;
 import com.weiwobang.paotui.bean.News;
 import com.weiwobang.paotui.tools.ActManager;
 import com.weiwobang.paotui.tools.PreferenceManager;
+import com.zyao89.view.zloading.ZLoadingDialog;
+import com.zyao89.view.zloading.Z_TYPE;
+import com.zyao89.view.zloading.star.StarBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -84,10 +88,24 @@ public class PublishActivity extends AppCompatActivity {
         setContentView(R.layout.wwb_activity_publish);
         ButterKnife.bind(this);
         //ImageSelectorUtils.op
+        //loading();
         ActManager.getAppManager().addActivity(this);
         initView();
-    }
 
+    }
+    ZLoadingDialog dialog;
+    private void loading(){
+         dialog = new ZLoadingDialog(PublishActivity.this);
+        dialog.setLoadingBuilder(Z_TYPE.STAR_LOADING)//设置类型
+                .setLoadingColor(Color.BLACK)//颜色
+                .setHintText("发布中...")
+                .setHintTextSize(12)
+
+                .setCanceledOnTouchOutside(false)
+                .show();
+
+
+    }
     private void initView() {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,8 +126,11 @@ public class PublishActivity extends AppCompatActivity {
             con.setText(mNews.getLinkman());
             phone.setText(mNews.getContactInfomation());
             publish.setText("确定修改");
+            title.setText(mNews.getCategoryName());
+        }else{
+            title.setText(categoryName);
         }
-        title.setText(categoryName);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -137,6 +158,7 @@ public class PublishActivity extends AppCompatActivity {
                     if (selected.size() == 0) {
                         publish();
                     } else {
+                        loading();
                         for (String image : selected) {
                             Log.e("iamge", image);
                             upImage(Api.testUrl, new File(image));
@@ -144,7 +166,17 @@ public class PublishActivity extends AppCompatActivity {
                         }
                     }
                 }else{
-                    publishUpdate();
+                    if (selected.size() == 0) {
+                        publishUpdate();
+                    } else {
+                        loading();
+                        for (String image : selected) {
+                            Log.e("iamge", image);
+                            upImage(Api.testUrl, new File(image));
+                            //uploadImg(image);
+                        }
+                    }
+
                 }
 
 //                for(int i=0;i<selected.size();i++){
@@ -168,6 +200,7 @@ public class PublishActivity extends AppCompatActivity {
                     .subscribe(new Consumer<RetrofitResponse>() {
                         @Override
                         public void accept(RetrofitResponse retrofitResponse) throws Exception {
+                            dialog.dismiss();
                             Toast.makeText(PublishActivity.this, "更新成功", Toast.LENGTH_SHORT).show();
                             finish();
                         }
@@ -242,7 +275,12 @@ public class PublishActivity extends AppCompatActivity {
                             break;
                     }
                     if (flag == selected.size() && selected.size() != 0) {
+                        if(mNews==null)
                         publish();
+                        else {
+
+                            publishUpdate();
+                        }
                     }
 
 
@@ -309,6 +347,7 @@ public class PublishActivity extends AppCompatActivity {
                     .subscribe(new Consumer<RetrofitResponse>() {
                         @Override
                         public void accept(RetrofitResponse retrofitResponse) throws Exception {
+                            dialog.dismiss();
                             Toast.makeText(PublishActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
                             finish();
                         }

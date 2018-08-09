@@ -1,12 +1,13 @@
 package com.weiwobang.paotui.api;
 
 public class Api {
+    public static final String localUrl="http://192.168.3.29:8083/";
     public static final String testUrl="http://119.23.216.131:8083/image/uploadImage";
     public static final String baseUrl="http://119.23.216.131:8083/";
-    public static final String rootUrl="http://www.wewobang.com/delivery/";
+    ///public static final String rootUrl="http://www.wewobang.com/delivery/";
     public static class Login {
         public static final String sLogin ="login/";
-        public static final String sFullLogin =rootUrl+"login";
+       // public static final String sFullLogin =rootUrl+"login";
 
     }
     public static class Message{
@@ -48,5 +49,10 @@ public class Api {
         public static final String sPostReply ="comment/reply/";
 
 
+    }
+    public static class Remove{
+        public static final String sGetDistance="distance/get/";
+        public static final String sPostAdd ="remove/add/";
+        public static final String sGetMine ="remove/getMine/";
     }
 }

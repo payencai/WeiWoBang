@@ -201,7 +201,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/margin_20dp"
                 android:layout_marginRight="@dimen/margin_30dp"
-                android:id="@+id/in_addrdet"
+                android:id="@+id/con_phone"
                 android:textSize="@dimen/text_size_15sp"
                 android:textColorHint="@color/color_999"
                 android:hint="请输入你的电话号码"
@@ -246,6 +246,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <EditText
+                android:id="@+id/note"
                 android:textColor="@color/color_999"
                 android:singleLine="true"
                 android:layout_centerVertical="true"

@@ -373,8 +373,8 @@ public class ForumFragment extends Fragment {
                                 popupWindow.dismiss();
                                 Intent intent=new Intent(getActivity(),PublishActivity.class);
                                 Bundle bundle=new Bundle();
-                                bundle.putString("id","6");
-                                bundle.putString("name","房屋装修");
+                                bundle.putString("id","5");
+                                bundle.putString("name","房屋租售");
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             }
@@ -385,8 +385,8 @@ public class ForumFragment extends Fragment {
                                 popupWindow.dismiss();
                                 Intent intent=new Intent(getActivity(),PublishActivity.class);
                                 Bundle bundle=new Bundle();
-                                bundle.putString("id","5");
-                                bundle.putString("name","房屋租售");
+                                bundle.putString("id","6");
+                                bundle.putString("name","房屋装修");
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             }

@@ -21,6 +21,7 @@ import com.payencai.library.http.retrofitAndrxjava.schedulers.SchedulerProvider;
 import com.weiwobang.paotui.R;
 import com.weiwobang.paotui.activity.AboutActivity;
 import com.weiwobang.paotui.activity.MypublishActivity;
+import com.weiwobang.paotui.activity.OrderActivity;
 import com.weiwobang.paotui.activity.RebackActivity;
 import com.weiwobang.paotui.activity.SettingActivity;
 import com.weiwobang.paotui.activity.UserinfoActivity;
@@ -43,6 +44,8 @@ import io.reactivex.functions.Consumer;
  * A simple {@link Fragment} subclass.
  */
 public class MineFragment extends Fragment implements Contract.MvpView<Userinfo>{
+    @BindView(R.id.order_layout)
+    RelativeLayout order;
     @BindView(R.id.mupub_layout)
     RelativeLayout publish;
     @BindView(R.id.about_layout)
@@ -138,7 +141,12 @@ public class MineFragment extends Fragment implements Contract.MvpView<Userinfo>
         title.setTextColor(getResources().getColor(R.color.color_333));
         title.setText("个人中心");
         confirm.setText("设置");
-
+        order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), OrderActivity.class));
+            }
+        });
         confirm.setTextColor(getResources().getColor(R.color.color_333));
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override

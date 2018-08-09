@@ -22,6 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/tv_city"
                 android:textColor="@color/black_33"
                 android:textSize="14sp"
                 android:text="番禺区"
@@ -34,6 +35,7 @@
                 android:layout_height="12dp"/>
         </LinearLayout>
         <EditText
+            android:id="@+id/et_search"
             android:paddingLeft="@dimen/margin_15dp"
             android:background="@drawable/shape_search_bg"
             android:layout_marginTop="10dp"

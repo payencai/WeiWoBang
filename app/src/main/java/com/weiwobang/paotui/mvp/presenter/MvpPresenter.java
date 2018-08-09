@@ -13,7 +13,11 @@ public class MvpPresenter<T> implements MvpCallback<T> {
        // mvpView.setPresenter(this);
         mMvpModel=new MvpModel(token,this);
     }
-
+    public MvpPresenter(Contract.MvpView<T> mvpView, String token,int page) {
+        mMvpView = mvpView;
+        // mvpView.setPresenter(this);
+        mMvpModel=new MvpModel(token,this,page);
+    }
     @Override
     public void loadSuccess(T data) {
        mMvpView.showData(data);
@@ -27,4 +31,9 @@ public class MvpPresenter<T> implements MvpCallback<T> {
         mMvpView.showLoading();
         mMvpModel.getUserinfo();
     }
+    public void getMyOrder(){
+        mMvpView.showLoading();
+        mMvpModel.getMyOrder();
+    }
+
 }

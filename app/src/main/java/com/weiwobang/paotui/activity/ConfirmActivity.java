@@ -1,11 +1,17 @@
 package com.weiwobang.paotui.activity;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,19 +39,34 @@ import com.amap.api.services.route.DriveRouteResult;
 import com.amap.api.services.route.RideRouteResult;
 import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
+import com.payencai.library.http.retrofitAndrxjava.ApiException;
+import com.payencai.library.http.retrofitAndrxjava.CustomException;
+import com.payencai.library.http.retrofitAndrxjava.NetWorkManager;
+import com.payencai.library.http.retrofitAndrxjava.RetrofitResponse;
+import com.payencai.library.http.retrofitAndrxjava.schedulers.SchedulerProvider;
+import com.payencai.library.util.ToastUtil;
+import com.weiwobang.paotui.MyAPP;
 import com.weiwobang.paotui.R;
+import com.weiwobang.paotui.api.Api;
+import com.weiwobang.paotui.api.ApiService;
 import com.weiwobang.paotui.bean.AddrBean;
 import com.weiwobang.paotui.bean.NetworkType;
 import com.weiwobang.paotui.bean.OrderAddr;
 import com.weiwobang.paotui.receiver.NetStateChangeReceiver;
+import com.weiwobang.paotui.tools.PreferenceManager;
+import com.weiwobang.paotui.view.CommomDialog;
 
 import org.feezu.liuli.timeselector.TimeSelector;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 public class ConfirmActivity extends AppCompatActivity {
 
@@ -62,21 +83,29 @@ public class ConfirmActivity extends AppCompatActivity {
     MapView mMapView;
     @BindView(R.id.view)
     TextView view;
+    @BindView(R.id.conorder)
+    TextView confirm;
     @BindView(R.id.layout_back)
     LinearLayout back;
     @BindView(R.id.now)
     TextView tv_now;
     @BindView(R.id.where)
     TextView tv_where;
-    @BindView(R.id.ceng)
-    TextView tv_ceng;
-    @BindView(R.id.ceng2)
-    TextView tv_ceng2;
+
     @BindView(R.id.sel_time)
     TextView tv_time;
+    @BindView(R.id.note)
+    EditText et_note;
+    @BindView(R.id.con_phone)
+    EditText et_phone;
+    @BindView(R.id.ceng2)
+    TextView tv_floorTo;
+    @BindView(R.id.ceng)
+    TextView tv_floorFrom;
     String firceng;
     String secceng;
     RouteSearch mRouteSearch;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,24 +124,25 @@ public class ConfirmActivity extends AppCompatActivity {
         //aMap.getUiSettings().setZoomGesturesEnabled(false);
         if (fa != null && shou != null) {
             //setMarker(where, shou, R.layout.wwb_marker_shou);
-           // setMarker(now, fa, R.layout.wwb_marker_fa);
-           // setCenter(fa, shou);
+            // setMarker(now, fa, R.layout.wwb_marker_fa);
+            // setCenter(fa, shou);
         }
-        mRouteSearch=new RouteSearch(this);
+        mRouteSearch = new RouteSearch(this);
         mRouteSearch.setRouteSearchListener(new RouteSearch.OnRouteSearchListener() {
             @Override
             public void onBusRouteSearched(BusRouteResult busRouteResult, int i) {
 
             }
+
             @Override
             public void onDriveRouteSearched(DriveRouteResult driveRouteResult, int i) {
-                  List<DrivePath> drivePaths=driveRouteResult.getPaths();
+                List<DrivePath> drivePaths = driveRouteResult.getPaths();
                 //DrivingRouteOverlay
-                List<LatLonPoint> latLonPoints=new ArrayList<>();
+                List<LatLonPoint> latLonPoints = new ArrayList<>();
                 latLonPoints.add(driveRouteResult.getStartPos());
                 latLonPoints.add(driveRouteResult.getTargetPos());
-                Log.e("fddg","sdfg");
-                DrivingRouteOverlay drivingRouteOverlay = new DrivingRouteOverlay(ConfirmActivity.this,aMap,drivePaths.get(0),driveRouteResult.getStartPos(),driveRouteResult.getTargetPos());
+               // Log.e("fddg", "sdfg");
+                DrivingRouteOverlay drivingRouteOverlay = new DrivingRouteOverlay(ConfirmActivity.this, aMap, drivePaths.get(0), driveRouteResult.getStartPos(), driveRouteResult.getTargetPos());
                 aMap.clear();
 
                 drivingRouteOverlay.setNodeIconVisibility(false);//设置节点marker是否显示
@@ -120,6 +150,7 @@ public class ConfirmActivity extends AppCompatActivity {
                 drivingRouteOverlay.setThroughPointIconVisibility(false);
                 drivingRouteOverlay.addToMap();
                 drivingRouteOverlay.zoomToSpan();
+                getDistance();
             }
 
             @Override
@@ -132,11 +163,58 @@ public class ConfirmActivity extends AppCompatActivity {
 
             }
         });
-        LatLonPoint from=new LatLonPoint(fa.getLat(),fa.getLon());
-        LatLonPoint to=new LatLonPoint(shou.getLat(),shou.getLon());
-        RouteSearch.FromAndTo fromAndTo=new RouteSearch.FromAndTo(from,to);
+        LatLonPoint from = new LatLonPoint(fa.getLat(), fa.getLon());
+        LatLonPoint to = new LatLonPoint(shou.getLat(), shou.getLon());
+        RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(from, to);
         RouteSearch.DriveRouteQuery query = new RouteSearch.DriveRouteQuery(fromAndTo, RouteSearch.DRIVING_MULTI_STRATEGY_FASTEST_SHORTEST_AVOID_CONGESTION, null, null, "");
         mRouteSearch.calculateDriveRouteAsyn(query);
+    }
+
+    private void getDistance() {
+        Disposable disposable = NetWorkManager.getRequest(ApiService.class).getDistance(fa.getLon(), fa.getLat(), shou.getLon(),shou.getLat())
+                //.compose(ResponseTransformer.handleResult())
+                .compose(SchedulerProvider.getInstance().applySchedulers())
+                .subscribe(new Consumer<RetrofitResponse>() {
+                    @Override
+                    public void accept(RetrofitResponse retrofitResponse) throws Exception {
+                        double distance= (double) retrofitResponse.getData();
+                        Log.e("dis",distance+"");
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        ApiException apiException = CustomException.handleException(throwable);
+                        Toast.makeText(ConfirmActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+        new CompositeDisposable().add(disposable);
+    }
+  private void showDialog(){
+      CommomDialog dialog = new CommomDialog(this, R.style.dialog, "是否退出？", new CommomDialog.OnCloseListener() {
+          @Override
+          public void onClick(Dialog dialog, boolean confirm) {
+              if (confirm) {
+                  dialog.dismiss();
+                  setResult(1);
+                  finish();
+              } else {
+
+              }
+          }
+      });
+
+      dialog.setTitle("消息提示").show();
+      WindowManager windowManager = getWindowManager();
+      Display display = windowManager.getDefaultDisplay();
+      WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+      lp.width = (int) (display.getWidth()); //设置宽度
+      dialog.getWindow().setAttributes(lp);
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        showDialog();
     }
 
     private void initView() {
@@ -144,32 +222,100 @@ public class ConfirmActivity extends AppCompatActivity {
         if (bundle != null) {
             fa = (OrderAddr) bundle.getSerializable("fa");
             shou = (OrderAddr) bundle.getSerializable("shou");
-            firceng=bundle.getString("fir");
-            secceng=bundle.getString("sec");
+            firceng = bundle.getString("fir");
+            secceng = bundle.getString("sec");
         }
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                showDialog();
+                //finish();
             }
         });
         tv_now.setText(fa.getAddress());
         tv_where.setText(shou.getAddress());
-        tv_ceng.setText(firceng);
-        tv_ceng2.setText(secceng);
+        tv_floorFrom.setText(firceng);
+        tv_floorTo.setText(secceng);
         tv_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showTimerDialog();
             }
         });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (MyAPP.isLogin)
+                    addBanjia();
+                else
+                    startActivity(new Intent(ConfirmActivity.this, LoginActivity.class));
+            }
+        });
     }
-    private void showTimerDialog(){
+
+    private void addBanjia() {
+        String addressFrom = fa.getAddress();
+        String addressFromDetail = fa.getDetail();
+        String addressTo = shou.getAddress();
+        String addressToDetail = shou.getDetail();
+        String note = et_note.getEditableText().toString();
+        String removeTime = tv_time.getText().toString();
+        String telephoneNum = et_phone.getEditableText().toString();
+        String floorTo = tv_floorTo.getText().toString();
+        String floorFrom = tv_floorFrom.getText().toString();
+        double latitudeTo = shou.getLat();
+        double longitudeTo = shou.getLon();
+        double latitudeFrom = fa.getLat();
+        double longitudeFrom = fa.getLon();
+        if (TextUtils.isEmpty(telephoneNum)) {
+            ToastUtil.showToast(this, "电话不能为空");
+            return;
+        }
+        if (TextUtils.equals(removeTime, "点击选择计划搬家时间")) {
+            ToastUtil.showToast(this, "请选择搬家时间");
+            return;
+        }
+        if (TextUtils.isEmpty(note)) {
+            ToastUtil.showToast(this, "备注不能为空");
+            return;
+        }
+        String token;
+        try {
+            token = PreferenceManager.getInstance().getUserinfo().getToken();
+            Disposable disposable = NetWorkManager.getRequest(ApiService.class).postAdd(longitudeFrom,
+                    latitudeFrom, addressFrom, addressFromDetail, floorFrom, longitudeTo, latitudeTo,
+                    addressTo, floorTo, telephoneNum, removeTime, note, addressToDetail, token)
+                    .compose(SchedulerProvider.getInstance().applySchedulers())
+                    .subscribe(new Consumer<RetrofitResponse>() {
+                        @Override
+                        public void accept(RetrofitResponse retrofitResponse) throws Exception {
+                            Toast.makeText(ConfirmActivity.this, "下单成功", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            ApiException apiException = CustomException.handleException(throwable);
+                            Toast.makeText(ConfirmActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            new CompositeDisposable().add(disposable);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+
+    }
+
+    private void showTimerDialog() {
         TimeSelector timeSelector = new TimeSelector(ConfirmActivity.this, new TimeSelector.ResultHandler() {
             @Override
             public void handle(String time) {
                 tv_time.setText(time);
-               // Toast.makeText(MainActivity.this, time, Toast.LENGTH_SHORT).show();
+                // Toast.makeText(MainActivity.this, time, Toast.LENGTH_SHORT).show();
             }
         }, "2018-01-01 00:00", "2020-12-31 23:59:59");
 
@@ -178,6 +324,7 @@ public class ConfirmActivity extends AppCompatActivity {
         timeSelector.show();
 
     }
+
     private void setCenter(OrderAddr fa, OrderAddr shou) {
         double lat, lon;
         lat = (fa.getLat() + shou.getLat()) / 2;
@@ -195,8 +342,6 @@ public class ConfirmActivity extends AppCompatActivity {
 //                .icon(BitmapDescriptorFactory.fromView(markerView)));
 
     }
-
-
 
 
     @Override
