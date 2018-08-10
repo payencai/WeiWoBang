@@ -9,6 +9,7 @@ public interface Contract {
         void showData(T data);
         void failed(String error);
 
+
     }
 
 

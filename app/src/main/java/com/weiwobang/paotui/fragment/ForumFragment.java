@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.payencai.library.adapter.OnItemClickListener;
 import com.payencai.library.adapter.OnLoadMoreListener;
 import com.payencai.library.http.retrofitAndrxjava.ApiException;
@@ -46,6 +48,10 @@ import com.weiwobang.paotui.adapter.NewsAdapter;
 import com.weiwobang.paotui.api.ApiService;
 import com.weiwobang.paotui.bean.Data;
 import com.weiwobang.paotui.bean.News;
+import com.weiwobang.paotui.bean.Order;
+import com.weiwobang.paotui.mvp.Contract;
+import com.weiwobang.paotui.mvp.presenter.MvpPresenter;
+import com.weiwobang.paotui.tools.PreferenceManager;
 import com.weiwobang.paotui.view.CommonPopupWindow;
 import com.weiwobang.paotui.view.MyDialog;
 
@@ -61,7 +67,7 @@ import io.reactivex.functions.Consumer;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ForumFragment extends Fragment {
+public class ForumFragment extends Fragment implements Contract.MvpView<List<News>> {
     @BindView(R.id.search_layout)
     LinearLayout search;
     @BindView(R.id.second_layout)
@@ -89,8 +95,10 @@ public class ForumFragment extends Fragment {
     RecyclerView mRecyclerView;
     NewsAdapter mNewsAdapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
-    private int page=1;
+    MvpPresenter<List<News>> mMvpPresenter;
+    private int page = 1;
     boolean isLoadMore = false;
+
     public ForumFragment() {
         // Required empty public constructor
     }
@@ -108,7 +116,7 @@ public class ForumFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
-        String from=args.getString("from");
+        String from = args.getString("from");
     }
 
     @Override
@@ -118,82 +126,54 @@ public class ForumFragment extends Fragment {
         ButterKnife.bind(this, view);
         init();
         initNews(view);
-        loadData();
-        // Inflate the layout for this fragment
+        getData();
+
         return view;
     }
-    private void initNews(View view){
+
+    private void initNews(View view) {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_new);
         mRecyclerView = view.findViewById(R.id.recycleview_new);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mNewsAdapter = new NewsAdapter();
-        //mKnowAdapter.addHeadLayout(R.layout.header_know);
-        mNewsAdapter.openAutoLoadMore(false);
+        mNewsAdapter = new NewsAdapter(R.layout.wwb_item_forum);
+        //  mNewsAdapter.setPreLoadNumber(1);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 page = 1;
-                //mNewsAdapter.openAutoLoadMore(true);
-                loadData();
+                mNewsAdapter.setEnableLoadMore(true);
+                isLoadMore = false;
+                getData();
             }
         });
-        mNewsAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+        mNewsAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
-            public void onLoadMore() {
+            public void onLoadMoreRequested() {
                 isLoadMore = true;
                 page++;
-                loadData();
+                Log.e("page", page + "");
+                getData();
             }
-        });
-        mNewsAdapter.setOnItemClickListener(new OnItemClickListener() {
+        }, mRecyclerView);
+
+        mNewsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(@NonNull View view, int adapterPosition) {
-                String id=mNewsAdapter.getData(adapterPosition).getId();
-                Intent intent=new Intent(getActivity(),DetailActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putString("id",id);
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                String id = mNewsAdapter.getItem(position).getId();
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", id);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
     }
-    private void loadData(){
-        Disposable disposable = NetWorkManager.getRequest(ApiService.class).getToday(page)
-                //.compose(ResponseTransformer.handleResult())
-                .compose(SchedulerProvider.getInstance().applySchedulers())
-                .subscribe(new Consumer<RetrofitResponse<Data<News>>>() {
-                    @Override
-                    public void accept(RetrofitResponse<Data<News>> retrofitResponse) throws Exception {
-                        Log.e("result",retrofitResponse.getData().getBeanList().get(0).getTitle());
-                        if (mSwipeRefreshLayout.isRefreshing()) {
-                            mSwipeRefreshLayout.setRefreshing(false);
-                        }
-                        if(page==1&&retrofitResponse.getData().getBeanList().size()==0){
-                            //mKnowAdapter.setAlwaysShowHead(true);
-                            mNewsAdapter.setData(retrofitResponse.getData().getBeanList());
-                            mRecyclerView.setAdapter(mNewsAdapter);
-                            return;
-                        }
 
-                        if (retrofitResponse.getData().getBeanList().size() != 0) {
-                            if (isLoadMore) {
-                                isLoadMore = false;
-                                mNewsAdapter.addData(retrofitResponse.getData().getBeanList());
-                            } else {
-                                mNewsAdapter.setData(retrofitResponse.getData().getBeanList());
-                                mRecyclerView.setAdapter(mNewsAdapter);
-                            }
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        ApiException apiException = CustomException.handleException(throwable);
-
-                    }
-                });
-        new CompositeDisposable().add(disposable);
+    private void loadData() {
+        mMvpPresenter = new MvpPresenter(this, "", page);
+        mMvpPresenter.getTodayNews();
     }
+
     private void init() {
         back.setVisibility(View.GONE);
         title.setText("同城信息");
@@ -203,10 +183,10 @@ public class ForumFragment extends Fragment {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(),TypeActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putString("id","1");
-                bundle.putString("name","寻人寻物");
+                Intent intent = new Intent(getActivity(), TypeActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", "1");
+                bundle.putString("name", "寻人寻物");
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -215,10 +195,10 @@ public class ForumFragment extends Fragment {
         second.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(),TypeActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putString("id","2");
-                bundle.putString("name","二手物品");
+                Intent intent = new Intent(getActivity(), TypeActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", "2");
+                bundle.putString("name", "二手物品");
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -226,10 +206,10 @@ public class ForumFragment extends Fragment {
         work.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(),TypeActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putString("id","3");
-                bundle.putString("name","工作兼职");
+                Intent intent = new Intent(getActivity(), TypeActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", "3");
+                bundle.putString("name", "工作兼职");
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -237,10 +217,10 @@ public class ForumFragment extends Fragment {
         clean.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(),TypeActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putString("id","4");
-                bundle.putString("name","家政保洁");
+                Intent intent = new Intent(getActivity(), TypeActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", "4");
+                bundle.putString("name", "家政保洁");
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -248,10 +228,10 @@ public class ForumFragment extends Fragment {
         sell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(),TypeActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putString("id","5");
-                bundle.putString("name","房屋租售");
+                Intent intent = new Intent(getActivity(), TypeActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", "5");
+                bundle.putString("name", "房屋租售");
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -259,10 +239,10 @@ public class ForumFragment extends Fragment {
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(),TypeActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putString("id","6");
-                bundle.putString("name","房屋装修");
+                Intent intent = new Intent(getActivity(), TypeActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", "6");
+                bundle.putString("name", "房屋装修");
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -270,10 +250,10 @@ public class ForumFragment extends Fragment {
         shop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(),TypeActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putString("id","7");
-                bundle.putString("name","店铺租赁");
+                Intent intent = new Intent(getActivity(), TypeActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", "7");
+                bundle.putString("name", "店铺租赁");
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -281,10 +261,10 @@ public class ForumFragment extends Fragment {
         jieyang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(),TypeActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putString("id","8");
-                bundle.putString("name","揭阳杂谈");
+                Intent intent = new Intent(getActivity(), TypeActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", "8");
+                bundle.putString("name", "揭阳杂谈");
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -294,7 +274,7 @@ public class ForumFragment extends Fragment {
             public void onClick(View view) {
                 if (MyAPP.isLogin) {
                     showDialog();
-                   // startActivity(new Intent(getActivity(), PublishActivity.class));
+                    // startActivity(new Intent(getActivity(), PublishActivity.class));
                 } else {
                     startActivity(new Intent(getActivity(), LoginActivity.class));
                 }
@@ -302,7 +282,9 @@ public class ForumFragment extends Fragment {
         });
 
     }
+
     private CommonPopupWindow popupWindow;
+
     //向下弹出
     public void showDownPop(View view) {
         if (popupWindow != null && popupWindow.isShowing()) return;
@@ -323,10 +305,10 @@ public class ForumFragment extends Fragment {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent=new Intent(getActivity(),PublishActivity.class);
-                                Bundle bundle=new Bundle();
-                                bundle.putString("id","1");
-                                bundle.putString("name","寻人寻物");
+                                Intent intent = new Intent(getActivity(), PublishActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("id", "1");
+                                bundle.putString("name", "寻人寻物");
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             }
@@ -335,10 +317,10 @@ public class ForumFragment extends Fragment {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent=new Intent(getActivity(),PublishActivity.class);
-                                Bundle bundle=new Bundle();
-                                bundle.putString("id","2");
-                                bundle.putString("name","二手物品");
+                                Intent intent = new Intent(getActivity(), PublishActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("id", "2");
+                                bundle.putString("name", "二手物品");
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             }
@@ -347,10 +329,10 @@ public class ForumFragment extends Fragment {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent=new Intent(getActivity(),PublishActivity.class);
-                                Bundle bundle=new Bundle();
-                                bundle.putString("id","3");
-                                bundle.putString("name","工作兼职");
+                                Intent intent = new Intent(getActivity(), PublishActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("id", "3");
+                                bundle.putString("name", "工作兼职");
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             }
@@ -359,10 +341,10 @@ public class ForumFragment extends Fragment {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent=new Intent(getActivity(),PublishActivity.class);
-                                Bundle bundle=new Bundle();
-                                bundle.putString("id","4");
-                                bundle.putString("name","家政保洁");
+                                Intent intent = new Intent(getActivity(), PublishActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("id", "4");
+                                bundle.putString("name", "家政保洁");
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             }
@@ -371,10 +353,10 @@ public class ForumFragment extends Fragment {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent=new Intent(getActivity(),PublishActivity.class);
-                                Bundle bundle=new Bundle();
-                                bundle.putString("id","5");
-                                bundle.putString("name","房屋租售");
+                                Intent intent = new Intent(getActivity(), PublishActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("id", "5");
+                                bundle.putString("name", "房屋租售");
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             }
@@ -383,10 +365,10 @@ public class ForumFragment extends Fragment {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent=new Intent(getActivity(),PublishActivity.class);
-                                Bundle bundle=new Bundle();
-                                bundle.putString("id","6");
-                                bundle.putString("name","房屋装修");
+                                Intent intent = new Intent(getActivity(), PublishActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("id", "6");
+                                bundle.putString("name", "房屋装修");
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             }
@@ -395,10 +377,10 @@ public class ForumFragment extends Fragment {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent=new Intent(getActivity(),PublishActivity.class);
-                                Bundle bundle=new Bundle();
-                                bundle.putString("id","7");
-                                bundle.putString("name","店铺租赁");
+                                Intent intent = new Intent(getActivity(), PublishActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("id", "7");
+                                bundle.putString("name", "店铺租赁");
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             }
@@ -407,10 +389,10 @@ public class ForumFragment extends Fragment {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent=new Intent(getActivity(),PublishActivity.class);
-                                Bundle bundle=new Bundle();
-                                bundle.putString("id","8");
-                                bundle.putString("name","揭阳杂谈");
+                                Intent intent = new Intent(getActivity(), PublishActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("id", "8");
+                                bundle.putString("name", "揭阳杂谈");
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             }
@@ -426,18 +408,90 @@ public class ForumFragment extends Fragment {
 //        view.getLocationOnScreen(positions);
 //        popupWindow.showAtLocation(findViewById(android.R.id.content), Gravity.NO_GRAVITY, 0, positions[1] + view.getHeight());
     }
+
     private void showDialog() {
         showDownPop(head);
     }
 
-    /**
-     * 判断是否登录，如果没有登录跳转到登录界面
-     * @return
-     */
-    public boolean isLogin() {
-        if (true) {
 
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showData(List<News> data) {
+        Log.e("time", page + "");
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+            mNewsAdapter.setEnableLoadMore(true);
         }
-        return false;
+        if (data == null) {
+            mNewsAdapter.loadMoreEnd();
+            //mNewsAdapter.setEnableLoadMore(false);
+        }
+        if (isLoadMore) {
+            isLoadMore = false;
+            mNewsAdapter.loadMoreComplete();
+            mNewsAdapter.addData(data);
+
+        } else {
+            mNewsAdapter.setNewData(data);
+            mRecyclerView.setAdapter(mNewsAdapter);
+        }
+
+
+    }
+
+    @Override
+    public void failed(String error) {
+
+    }
+
+    @Override
+    public void setPresenter(Contract.Presenter presenter) {
+
+    }
+
+    private void getData() {
+        Disposable disposable = NetWorkManager.getRequest(ApiService.class).getToday(page)
+                //.compose(ResponseTransformer.handleResult())
+                .compose(SchedulerProvider.getInstance().applySchedulers())
+                .subscribe(new Consumer<RetrofitResponse<Data<News>>>() {
+                    @Override
+                    public void accept(RetrofitResponse<Data<News>> retrofitResponse) throws Exception {
+                        if (mSwipeRefreshLayout.isRefreshing()) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
+                        if (isLoadMore) {
+                            isLoadMore = false;
+                            mNewsAdapter.loadMoreComplete();
+                            mNewsAdapter.addData(retrofitResponse.getData().getBeanList());
+                            if(retrofitResponse.getData().getBeanList().size()==0){
+                                Log.e("empty","empty");
+                                mNewsAdapter.loadMoreEnd();
+
+                            }
+                            //mRecyclerView.setAdapter(mOrderAdapter);
+                        } else {
+                            mNewsAdapter.setNewData(retrofitResponse.getData().getBeanList());
+                            mRecyclerView.setAdapter(mNewsAdapter);
+                        }
+
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        ApiException apiException = CustomException.handleException(throwable);
+                        //mMvpCallback.loadError(apiException.getDisplayMessage());
+                    }
+                });
+        new CompositeDisposable().add(disposable);
     }
 }

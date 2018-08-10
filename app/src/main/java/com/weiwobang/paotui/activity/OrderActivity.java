@@ -1,7 +1,5 @@
 package com.weiwobang.paotui.activity;
 
-import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,23 +10,11 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.payencai.library.adapter.OnItemClickListener;
-import com.payencai.library.adapter.OnLoadMoreListener;
-import com.payencai.library.http.retrofitAndrxjava.ApiException;
-import com.payencai.library.http.retrofitAndrxjava.CustomException;
-import com.payencai.library.http.retrofitAndrxjava.NetWorkManager;
-import com.payencai.library.http.retrofitAndrxjava.RetrofitResponse;
-import com.payencai.library.http.retrofitAndrxjava.schedulers.SchedulerProvider;
-import com.payencai.library.util.ToastUtil;
 import com.weiwobang.paotui.R;
-import com.weiwobang.paotui.adapter.NewsAdapter;
 import com.weiwobang.paotui.adapter.OrderAdapter;
-import com.weiwobang.paotui.api.ApiService;
-import com.weiwobang.paotui.bean.Data;
 import com.weiwobang.paotui.bean.Order;
 import com.weiwobang.paotui.mvp.Contract;
 import com.weiwobang.paotui.mvp.presenter.MvpPresenter;
-import com.weiwobang.paotui.mvp.presenter.TypePresenter;
 import com.weiwobang.paotui.tools.PreferenceManager;
 
 import java.io.IOException;
@@ -36,9 +22,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 public class OrderActivity extends AppCompatActivity implements Contract.MvpView<List<Order>>{
     @BindView(R.id.sr_order)
@@ -176,31 +159,32 @@ public class OrderActivity extends AppCompatActivity implements Contract.MvpView
    }
     @Override
     public void showData(List<Order> data) {
-        Log.e("page",page+"");
+        Log.e("page", page + "");
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
             mOrderAdapter.setEnableLoadMore(true);
         }
-        if(data.size()==0){
-            //没有更多数据
-            mOrderAdapter.loadMoreEnd();
-            mOrderAdapter.loadMoreComplete();
-            Log.e("load","load");
-            mOrderAdapter.setEnableLoadMore(false);
-            return;
-        }else{
+        if (data.size() == 0) {
+            if (isLoadMore) {
+                Log.e("load", "type");
+                //没有更多数据
+                mOrderAdapter.loadMoreEnd();
+            }else{
+                mOrderAdapter.setNewData(data);
+                mRecyclerView.setAdapter(mOrderAdapter);
+            }
+        } else {
             if (isLoadMore) {
                 isLoadMore = false;
                 mOrderAdapter.addData(data);
                 mOrderAdapter.loadMoreComplete();
-                //mOrderAdapter.setEnableLoadMore(false);
-                // mRecyclerView.setAdapter(mOrderAdapter);
             } else {
                 mOrderAdapter.setNewData(data);
                 mRecyclerView.setAdapter(mOrderAdapter);
 
             }
         }
+
 
     }
 

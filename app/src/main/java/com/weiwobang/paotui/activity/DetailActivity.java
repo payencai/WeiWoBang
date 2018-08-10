@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.payencai.library.adapter.OnItemClickListener;
 import com.payencai.library.adapter.OnLoadMoreListener;
 import com.payencai.library.http.retrofitAndrxjava.ApiException;
@@ -84,7 +85,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView contact;
     @BindView(R.id.phone)
     TextView phone;
-//    @BindView(R.id.image)
+    //    @BindView(R.id.image)
 //    ImageView image;
     @BindView(R.id.tv_inform)
     TextView tv_inform;
@@ -96,6 +97,7 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.rv_photo)
     RecyclerView mRvPhoto;
     PhotoAdapter mPhotoAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,12 +123,12 @@ public class DetailActivity extends AppCompatActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRvPhoto.setLayoutManager(linearLayoutManager);
-        mPhotoAdapter=new PhotoAdapter();
+        mPhotoAdapter = new PhotoAdapter();
         //mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setNestedScrollingEnabled(false);
-        mCommentAdapter = new CommentAdapter();
+        mCommentAdapter = new CommentAdapter(R.layout.wwb_item_comment);
         //mKnowAdapter.addHeadLayout(R.layout.header_know);
-        mCommentAdapter.openAutoLoadMore(false);
+        // mCommentAdapter.openAutoLoadMore(false);
         mPhotoAdapter.openAutoLoadMore(false);
         // mRecyclerView.setAdapter(mCommentAdapter);
 //        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -137,10 +139,10 @@ public class DetailActivity extends AppCompatActivity {
 //                getComment(id,page);
 //            }
 //        });
-        mCommentAdapter.setOnItemClickListener(new OnItemClickListener() {
+        mCommentAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(@NonNull View view, int adapterPosition) {
-                Comment comment = mCommentAdapter.getData(adapterPosition);
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Comment comment = mCommentAdapter.getItem(position);
                 Intent intent = new Intent(DetailActivity.this, ReplyActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("comment", comment);
@@ -151,26 +153,26 @@ public class DetailActivity extends AppCompatActivity {
         mCommentAdapter.setOnDelListener(new CommentAdapter.onDelListener() {
             @Override
             public void onClick(int index) {
-                contentId = mCommentAdapter.getData(index).getId();
+                contentId = mCommentAdapter.getItem(index).getId();
                 if (MyAPP.isLogin)
                     showCommentDialog(contentId);
                 else
                     startActivity(new Intent(DetailActivity.this, LoginActivity.class));
             }
         });
-        mCommentAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+        mCommentAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
-            public void onLoadMore() {
+            public void onLoadMoreRequested() {
                 isLoadMore = true;
                 page++;
+                Log.e("comm",page+"");
                 getComment(id, page);
-                // loadData();
             }
-        });
-
+        },mRecyclerView);
 
     }
-    List<String> photoList=new ArrayList<>();
+
+    List<String> photoList = new ArrayList<>();
     List<String> commentlist = new ArrayList<>();
 
     private void submitCommentInform(List<String> content, String id) {
@@ -365,6 +367,10 @@ public class DetailActivity extends AppCompatActivity {
                 .subscribe(new Consumer<RetrofitResponse<Bean>>() {
                     @Override
                     public void accept(RetrofitResponse<Bean> bean) throws Exception {
+                        if(bean.getData().getComment().getComments().size()==0&&isLoadMore){
+                            mCommentAdapter.loadMoreEnd();
+                            return;
+                        }
                         mComments = bean.getData().getComment().getComments();
                         Bean.ReplyUserInfo replyUserInfo = bean.getData().getReplyUserInfo();
                         for (int i = 0; i < mComments.size(); i++) {
@@ -378,33 +384,21 @@ public class DetailActivity extends AppCompatActivity {
                             }
                             comment.setReplyList(mReplies);
                             mComments.set(i, comment);
-//                            if(comment.getReplyList().size()>0){
-//                                c
-//                            }
                         }
                         Log.e("m", mComments.get(0).getCommentContent());
-//                        if (mSwipeRefreshLayout.isRefreshing()) {
-//                            mSwipeRefreshLayout.setRefreshing(false);
-//                        }
-                        if (page == 1 && mComments.size() == 0) {
-                            //mKnowAdapter.setAlwaysShowHead(true);
-                            mCommentAdapter.setData(mComments);
+
+                        if (isLoadMore) {
+
+                            isLoadMore = false;
+                            mCommentAdapter.addData(mComments);
+                            mCommentAdapter.loadMoreComplete();
+
+                        } else {
+                            mCommentAdapter.setNewData(mComments);
                             mRecyclerView.setAdapter(mCommentAdapter);
-                            return;
-                        }
-
-                        if (mComments.size() != 0) {
-                            if (isLoadMore) {
-                                isLoadMore = false;
-                                mCommentAdapter.addData(mComments);
-                            } else {
-                                // Toast.makeText(DetailActivity.this, "获取信息成功", Toast.LENGTH_SHORT).show();
-                                mCommentAdapter.setData(mComments);
-
-                                mRecyclerView.setAdapter(mCommentAdapter);
-                            }
                         }
                     }
+
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
@@ -508,8 +502,8 @@ public class DetailActivity extends AppCompatActivity {
                         photoList.add(news.getImage4Uri());
                         photoList.add(news.getImage5Uri());
                         photoList.add(news.getImage6Uri());
-                        for(int i=0;i<photoList.size();i++){
-                            if(TextUtils.isEmpty(photoList.get(i))){
+                        for (int i = 0; i < photoList.size(); i++) {
+                            if (TextUtils.isEmpty(photoList.get(i))) {
                                 photoList.remove(i);
                             }
                         }

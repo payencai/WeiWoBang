@@ -29,11 +29,11 @@ public class MvpModel<T> {
     ///private MvpCallback<List<Order>> mOrderModel;
     private MvpCallback<T> mMvpCallback;
 
-    public MvpModel(MvpCallback<List<News>> mMvpModel, int page, String categoryId) {
-        this.mMvpModel = mMvpModel;
-        this.page = page;
-        this.categoryId = categoryId;
-    }
+//    public MvpModel(MvpCallback<List<News>> mMvpModel, int page, String categoryId) {
+//        this.mMvpModel = mMvpModel;
+//        this.page = page;
+//        this.categoryId = categoryId;
+//    }
 
     public MvpModel(String token, MvpCallback<T> userCallBack) {
         this.token = token;
@@ -45,7 +45,11 @@ public class MvpModel<T> {
         mMvpCallback = userCallBack;
         this.page = page;
     }
-
+    public MvpModel( MvpCallback<T> userCallBack, int page,String categoryId) {
+        this.categoryId = categoryId;
+        mMvpCallback = userCallBack;
+        this.page = page;
+    }
     /**
      * 获取用户信息
      */
@@ -79,13 +83,13 @@ public class MvpModel<T> {
                 .subscribe(new Consumer<RetrofitResponse<Data<News>>>() {
                     @Override
                     public void accept(RetrofitResponse<Data<News>> retrofitResponse) throws Exception {
-                        mMvpModel.loadSuccess(retrofitResponse.getData().getBeanList());
+                        mMvpCallback.loadSuccess((T) retrofitResponse.getData().getBeanList());
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         ApiException apiException = CustomException.handleException(throwable);
-                        mMvpModel.loadError(apiException.getDisplayMessage());
+                        mMvpCallback.loadError(apiException.getDisplayMessage());
                     }
                 });
         new CompositeDisposable().add(disposable);
@@ -134,6 +138,28 @@ public class MvpModel<T> {
                     }
                 });
 
+        new CompositeDisposable().add(disposable);
+    }
+    /**
+     * 获取今日消息
+     */
+    public void getTodayNews(){
+        Disposable disposable = NetWorkManager.getRequest(ApiService.class).getToday(page)
+                //.compose(ResponseTransformer.handleResult())
+                .compose(SchedulerProvider.getInstance().applySchedulers())
+                .subscribe(new Consumer<RetrofitResponse<Data<News>>>() {
+                    @Override
+                    public void accept(RetrofitResponse<Data<News>> retrofitResponse) throws Exception {
+                       // Log.e("result",retrofitResponse.getData().getBeanList().get(0).getTitle());
+                        mMvpCallback.loadSuccess((T) retrofitResponse.getData().getBeanList());
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        ApiException apiException = CustomException.handleException(throwable);
+                        mMvpCallback.loadError(apiException.getDisplayMessage());
+                    }
+                });
         new CompositeDisposable().add(disposable);
     }
 }

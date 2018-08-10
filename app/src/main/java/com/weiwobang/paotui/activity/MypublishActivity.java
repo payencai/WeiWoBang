@@ -340,31 +340,32 @@ public class MypublishActivity extends AppCompatActivity implements Contract.Mvp
 
     @Override
     public void showData(List<News> data) {
-        Log.e("page",page+"");
+        Log.e("page", page + "");
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
             mNewsAdapter.setEnableLoadMore(true);
         }
-        if(data.size()==0){
-            //没有更多数据
-            mNewsAdapter.loadMoreEnd();
-            mNewsAdapter.loadMoreComplete();
-            Log.e("load","load");
-            mNewsAdapter.setEnableLoadMore(false);
-            return;
-        }else{
+        if (data.size() == 0) {
+            if (isLoadMore) {
+               // Log.e("load", "type");
+                //没有更多数据
+                mNewsAdapter.loadMoreEnd();
+            }else{
+                mNewsAdapter.setNewData(data);
+                mRecyclerView.setAdapter(mNewsAdapter);
+            }
+        } else {
             if (isLoadMore) {
                 isLoadMore = false;
                 mNewsAdapter.addData(data);
                 mNewsAdapter.loadMoreComplete();
-                //mOrderAdapter.setEnableLoadMore(false);
-                // mRecyclerView.setAdapter(mOrderAdapter);
             } else {
                 mNewsAdapter.setNewData(data);
                 mRecyclerView.setAdapter(mNewsAdapter);
 
             }
         }
+
 
 
     }
