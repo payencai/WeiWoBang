@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.payencai.library.adapter.OnItemClickListener;
 import com.payencai.library.adapter.OnLoadMoreListener;
 import com.payencai.library.http.retrofitAndrxjava.ApiException;
@@ -59,33 +60,32 @@ public class OrderActivity extends AppCompatActivity implements Contract.MvpView
         ButterKnife.bind(this);
         initView();
         initAdapter();
-      //  getData();
-        loadData();
+        getData();
+        //loadData();
     }
     private void  initAdapter(){
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mOrderAdapter = new OrderAdapter();
-        //mKnowAdapter.addHeadLayout(R.layout.header_know);
-        mOrderAdapter.openAutoLoadMore(false);
+        mOrderAdapter = new OrderAdapter(R.layout.wwb_item_order);
+        mOrderAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                isLoadMore = true;
+              //  mOrderAdapter.setEnableLoadMore(true);
+                page++;
+                getData();
+            }
+        });
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                page = 1;
-                //isLoadMore=false;
-               // getData();
-                loadData();
+                 page = 1;
+                 isLoadMore=false;
+                 getData();
+                //loadData();
             }
         });
-        mOrderAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                isLoadMore = true;
-                page++;
-                Log.e("page",page+"");
-                //getData();
-                loadData();
-            }
-        });
+
 //        mOrderAdapter.setOnItemClickListener(new OnItemClickListener() {
 //            @Override
 //            public void onItemClick(@NonNull View view, int adapterPosition) {
@@ -133,60 +133,75 @@ public class OrderActivity extends AppCompatActivity implements Contract.MvpView
 
     }
     private void loadData(){
-        Log.e("laod","dfdgfg");
-        Disposable disposable = null;
-        try {
-            disposable = NetWorkManager.getRequest(ApiService.class).getMyOrder(page, PreferenceManager.getInstance().getUserinfo().getToken())
-                    //.compose(ResponseTransformer.handleResult())
-                    .compose(SchedulerProvider.getInstance().applySchedulers())
-                    .subscribe(new Consumer<RetrofitResponse<Data<Order>>>() {
-                        @Override
-                        public void accept(RetrofitResponse<Data<Order>> retrofitResponse) throws Exception {
-                            Log.e("gggg","gggg"+retrofitResponse.getData().getBeanList().size());
-                            if (mSwipeRefreshLayout.isRefreshing()) {
-                                mSwipeRefreshLayout.setRefreshing(false);
-                            }
-                            if (retrofitResponse.getData().getBeanList().size() != 0) {
-                                if (isLoadMore) {
-                                    isLoadMore = false;
-                                    mOrderAdapter.addData(retrofitResponse.getData().getBeanList());
-                                    //mRecyclerView.setAdapter(mOrderAdapter);
-                                } else {
-                                    mOrderAdapter.setData(retrofitResponse.getData().getBeanList());
-                                    mRecyclerView.setAdapter(mOrderAdapter);
-                                }
-                            }
-
-
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-                            ApiException apiException = CustomException.handleException(throwable);
-                            Log.e("tag",apiException.getDisplayMessage());
-                           // mMvpCallback.loadError(apiException.getDisplayMessage());
-                        }
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        new CompositeDisposable().add(disposable);
-    }
+//        Log.e("laod","dfdgfg");
+//        Disposable disposable = null;
+//        try {
+//            disposable = NetWorkManager.getRequest(ApiService.class).getMyOrder(page, PreferenceManager.getInstance().getUserinfo().getToken())
+//                    //.compose(ResponseTransformer.handleResult())
+//                    .compose(SchedulerProvider.getInstance().applySchedulers())
+//                    .subscribe(new Consumer<RetrofitResponse<Data<Order>>>() {
+//                        @Override
+//                        public void accept(RetrofitResponse<Data<Order>> retrofitResponse) throws Exception {
+//                            Log.e("gggg","gggg"+retrofitResponse.getData().getBeanList().size());
+//                            if (mSwipeRefreshLayout.isRefreshing()) {
+//                                mSwipeRefreshLayout.setRefreshing(false);
+//                            }
+//                            if (retrofitResponse.getData().getBeanList().size() != 0) {
+//                                if (isLoadMore) {
+//                                    isLoadMore = false;
+//                                    mOrderAdapter.addData(retrofitResponse.getData().getBeanList());
+//                                    //mRecyclerView.setAdapter(mOrderAdapter);
+//                                } else {
+//                                    mOrderAdapter.setData(retrofitResponse.getData().getBeanList());
+//                                    mRecyclerView.setAdapter(mOrderAdapter);
+//                                }
+//                            }
+//
+//
+//                        }
+//                    }, new Consumer<Throwable>() {
+//                        @Override
+//                        public void accept(Throwable throwable) throws Exception {
+//                            ApiException apiException = CustomException.handleException(throwable);
+//                            Log.e("tag",apiException.getDisplayMessage());
+//                           // mMvpCallback.loadError(apiException.getDisplayMessage());
+//                        }
+//                    });
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        new CompositeDisposable().add(disposable);
+   }
     @Override
     public void showData(List<Order> data) {
+        Log.e("page",page+"");
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
+            mOrderAdapter.setEnableLoadMore(true);
         }
-        if (isLoadMore) {
-            isLoadMore = false;
-            mOrderAdapter.addData(data);
-           // mRecyclerView.setAdapter(mOrderAdapter);
-        } else {
-            mOrderAdapter.setData(data);
-            mRecyclerView.setAdapter(mOrderAdapter);
+        if(data.size()==0){
+            //没有更多数据
+            mOrderAdapter.loadMoreEnd();
+            mOrderAdapter.loadMoreComplete();
+            Log.e("load","load");
+            mOrderAdapter.setEnableLoadMore(false);
+            return;
+        }else{
+            if (isLoadMore) {
+                isLoadMore = false;
+                mOrderAdapter.addData(data);
+                mOrderAdapter.loadMoreComplete();
+                //mOrderAdapter.setEnableLoadMore(false);
+                // mRecyclerView.setAdapter(mOrderAdapter);
+            } else {
+                mOrderAdapter.setNewData(data);
+                mRecyclerView.setAdapter(mOrderAdapter);
+
+            }
         }
+
     }
 
     @Override

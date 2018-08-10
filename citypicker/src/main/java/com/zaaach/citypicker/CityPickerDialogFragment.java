@@ -229,7 +229,7 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.cp_cancel) {
-            dismiss(-1, null);
+           // dismiss(-1, null);
             //getActivity().finish();
         }else if(id == R.id.cp_clear_all){
             mSearchBox.setText("");
@@ -251,7 +251,7 @@ public class CityPickerDialogFragment extends AppCompatDialogFragment implements
 
     @Override
     public void dismiss(int position, City data) {
-        //dismiss();
+        dismiss();
         if (mOnPickListener != null){
             mOnPickListener.onPick(position, data);
         }

@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.payencai.library.adapter.OnItemClickListener;
 import com.payencai.library.adapter.OnLoadMoreListener;
 import com.payencai.library.http.retrofitAndrxjava.ApiException;
@@ -27,11 +28,15 @@ import com.weiwobang.paotui.adapter.NewsAdapter;
 import com.weiwobang.paotui.api.ApiService;
 import com.weiwobang.paotui.bean.Data;
 import com.weiwobang.paotui.bean.News;
+import com.weiwobang.paotui.bean.Order;
+import com.weiwobang.paotui.mvp.Contract;
+import com.weiwobang.paotui.mvp.presenter.MvpPresenter;
 import com.weiwobang.paotui.tools.ActManager;
 import com.weiwobang.paotui.tools.PreferenceManager;
 import com.weiwobang.paotui.view.CommonPopupWindow;
 
 import java.io.IOException;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,15 +44,17 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
-public class MypublishActivity extends AppCompatActivity {
+public class MypublishActivity extends AppCompatActivity implements Contract.MvpView<List<News>> {
     CommonPopupWindow popupWindow;
     RecyclerView mRecyclerView;
     MyNewsAdapter mNewsAdapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
-    private int page=1;
+    private int page = 1;
     boolean isLoadMore = false;
+    MvpPresenter<List<News>> mMvpPresenter;
     @BindView(R.id.fabu)
     TextView fabu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,10 +62,22 @@ public class MypublishActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         ActManager.getAppManager().addActivity(this);
         initNews();
-        loadData();
+        getData();
+        // loadData();
     }
 
-    private void initNews(){
+    private void getData() {
+        try {
+            mMvpPresenter = new MvpPresenter(this, PreferenceManager.getInstance().getUserinfo().getToken(), page);
+            mMvpPresenter.getMyPublish();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initNews() {
 
 
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
@@ -76,36 +95,36 @@ public class MypublishActivity extends AppCompatActivity {
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_new);
         mRecyclerView = findViewById(R.id.recycleview_new);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mNewsAdapter = new MyNewsAdapter();
-        mNewsAdapter.openAutoLoadMore(false);
+        mNewsAdapter = new MyNewsAdapter(R.layout.wwb_item_publish);
+        //  mNewsAdapter.openAutoLoadMore(false);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 page = 1;
-                //mNewsAdapter.openAutoLoadMore(true);
-                loadData();
+                isLoadMore = false;
+                getData();
             }
         });
-        mNewsAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+        mNewsAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
-            public void onLoadMore() {
+            public void onLoadMoreRequested() {
                 isLoadMore = true;
                 page++;
-                loadData();
+                getData();
             }
         });
         mNewsAdapter.setOnDelListener(new MyNewsAdapter.onDelListener() {
             @Override
-            public void onClick(String id,int index) {
+            public void onClick(String id, int index) {
                 delMsg(id);
 
             }
 
             @Override
-            public void onEdit(String id,int name) {
-                Intent intent=new Intent(MypublishActivity.this,PublishActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putSerializable("news",mNewsAdapter.getData(name));
+            public void onEdit(String id, int name) {
+                Intent intent = new Intent(MypublishActivity.this, PublishActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("news", mNewsAdapter.getItem(name));
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -133,10 +152,10 @@ public class MypublishActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent=new Intent(MypublishActivity.this,PublishActivity.class);
-                                Bundle bundle=new Bundle();
-                                bundle.putString("id","1");
-                                bundle.putString("name","寻人寻物");
+                                Intent intent = new Intent(MypublishActivity.this, PublishActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("id", "1");
+                                bundle.putString("name", "寻人寻物");
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             }
@@ -145,10 +164,10 @@ public class MypublishActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent=new Intent(MypublishActivity.this,PublishActivity.class);
-                                Bundle bundle=new Bundle();
-                                bundle.putString("id","2");
-                                bundle.putString("name","二手物品");
+                                Intent intent = new Intent(MypublishActivity.this, PublishActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("id", "2");
+                                bundle.putString("name", "二手物品");
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             }
@@ -157,10 +176,10 @@ public class MypublishActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent=new Intent(MypublishActivity.this,PublishActivity.class);
-                                Bundle bundle=new Bundle();
-                                bundle.putString("id","3");
-                                bundle.putString("name","工作兼职");
+                                Intent intent = new Intent(MypublishActivity.this, PublishActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("id", "3");
+                                bundle.putString("name", "工作兼职");
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             }
@@ -169,10 +188,10 @@ public class MypublishActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent=new Intent(MypublishActivity.this,PublishActivity.class);
-                                Bundle bundle=new Bundle();
-                                bundle.putString("id","4");
-                                bundle.putString("name","家政保洁");
+                                Intent intent = new Intent(MypublishActivity.this, PublishActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("id", "4");
+                                bundle.putString("name", "家政保洁");
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             }
@@ -181,10 +200,10 @@ public class MypublishActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent=new Intent(MypublishActivity.this,PublishActivity.class);
-                                Bundle bundle=new Bundle();
-                                bundle.putString("id","6");
-                                bundle.putString("name","房屋装修");
+                                Intent intent = new Intent(MypublishActivity.this, PublishActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("id", "6");
+                                bundle.putString("name", "房屋装修");
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             }
@@ -193,10 +212,10 @@ public class MypublishActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent=new Intent(MypublishActivity.this,PublishActivity.class);
-                                Bundle bundle=new Bundle();
-                                bundle.putString("id","5");
-                                bundle.putString("name","房屋租售");
+                                Intent intent = new Intent(MypublishActivity.this, PublishActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("id", "5");
+                                bundle.putString("name", "房屋租售");
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             }
@@ -205,10 +224,10 @@ public class MypublishActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent=new Intent(MypublishActivity.this,PublishActivity.class);
-                                Bundle bundle=new Bundle();
-                                bundle.putString("id","7");
-                                bundle.putString("name","店铺租赁");
+                                Intent intent = new Intent(MypublishActivity.this, PublishActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("id", "7");
+                                bundle.putString("name", "店铺租赁");
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             }
@@ -217,10 +236,10 @@ public class MypublishActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent=new Intent(MypublishActivity.this,PublishActivity.class);
-                                Bundle bundle=new Bundle();
-                                bundle.putString("id","8");
-                                bundle.putString("name","揭阳杂谈");
+                                Intent intent = new Intent(MypublishActivity.this, PublishActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("id", "8");
+                                bundle.putString("name", "揭阳杂谈");
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             }
@@ -236,7 +255,8 @@ public class MypublishActivity extends AppCompatActivity {
 //        view.getLocationOnScreen(positions);
 //        popupWindow.showAtLocation(findViewById(android.R.id.content), Gravity.NO_GRAVITY, 0, positions[1] + view.getHeight());
     }
-    private void delMsg(String id){
+
+    private void delMsg(String id) {
         Disposable disposable = null;
         try {
             disposable = NetWorkManager.getRequest(ApiService.class).postDelMsg(id, PreferenceManager.getInstance().getUserinfo().getToken())
@@ -245,8 +265,8 @@ public class MypublishActivity extends AppCompatActivity {
                     .subscribe(new Consumer<RetrofitResponse>() {
                         @Override
                         public void accept(RetrofitResponse retrofitResponse) throws Exception {
-                            Toast.makeText(MypublishActivity.this,"删除成功",Toast.LENGTH_LONG).show();
-                            loadData();
+                            Toast.makeText(MypublishActivity.this, "删除成功", Toast.LENGTH_LONG).show();
+                            getData();
                         }
                     }, new Consumer<Throwable>() {
                         @Override
@@ -262,48 +282,100 @@ public class MypublishActivity extends AppCompatActivity {
         }
         new CompositeDisposable().add(disposable);
     }
-    private void loadData(){
-        Disposable disposable = null;
-        try {
-            disposable = NetWorkManager.getRequest(ApiService.class).getMine(page, PreferenceManager.getInstance().getUserinfo().getToken())
-                    //.compose(ResponseTransformer.handleResult())
-                    .compose(SchedulerProvider.getInstance().applySchedulers())
-                    .subscribe(new Consumer<RetrofitResponse<Data<News>>>() {
-                        @Override
-                        public void accept(RetrofitResponse<Data<News>> retrofitResponse) throws Exception {
-                            Log.e("result",retrofitResponse.getData().getBeanList().get(0).getTitle());
-                            if (mSwipeRefreshLayout.isRefreshing()) {
-                                mSwipeRefreshLayout.setRefreshing(false);
-                            }
-                            if(page==1&&retrofitResponse.getData().getBeanList().size()==0){
-                                //mKnowAdapter.setAlwaysShowHead(true);
-                                mNewsAdapter.setData(retrofitResponse.getData().getBeanList());
-                                mRecyclerView.setAdapter(mNewsAdapter);
-                                return;
-                            }
 
-                            if (retrofitResponse.getData().getBeanList().size() != 0) {
-                                if (isLoadMore) {
-                                    isLoadMore = false;
-                                    mNewsAdapter.addData(retrofitResponse.getData().getBeanList());
-                                } else {
-                                    mNewsAdapter.setData(retrofitResponse.getData().getBeanList());
-                                    mRecyclerView.setAdapter(mNewsAdapter);
-                                }
-                            }
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-                            ApiException apiException = CustomException.handleException(throwable);
+//    private void loadData() {
+//        Disposable disposable = null;
+//        try {
+//            disposable = NetWorkManager.getRequest(ApiService.class).getMine(page, PreferenceManager.getInstance().getUserinfo().getToken())
+//                    //.compose(ResponseTransformer.handleResult())
+//                    .compose(SchedulerProvider.getInstance().applySchedulers())
+//                    .subscribe(new Consumer<RetrofitResponse<Data<News>>>() {
+//                        @Override
+//                        public void accept(RetrofitResponse<Data<News>> retrofitResponse) throws Exception {
+//                            Log.e("result", retrofitResponse.getData().getBeanList().get(0).getTitle());
+//                            if (mSwipeRefreshLayout.isRefreshing()) {
+//                                mSwipeRefreshLayout.setRefreshing(false);
+//                            }
+//                            if (page == 1 && retrofitResponse.getData().getBeanList().size() == 0) {
+//                                //mKnowAdapter.setAlwaysShowHead(true);
+//                                mNewsAdapter.setData(retrofitResponse.getData().getBeanList());
+//                                mRecyclerView.setAdapter(mNewsAdapter);
+//                                return;
+//                            }
+//
+//                            if (retrofitResponse.getData().getBeanList().size() != 0) {
+//                                if (isLoadMore) {
+//                                    isLoadMore = false;
+//                                    mNewsAdapter.addData(retrofitResponse.getData().getBeanList());
+//                                } else {
+//                                    mNewsAdapter.setData(retrofitResponse.getData().getBeanList());
+//                                    mRecyclerView.setAdapter(mNewsAdapter);
+//                                }
+//                            }
+//                        }
+//                    }, new Consumer<Throwable>() {
+//                        @Override
+//                        public void accept(Throwable throwable) throws Exception {
+//                            ApiException apiException = CustomException.handleException(throwable);
+//
+//                        }
+//                    });
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        new CompositeDisposable().add(disposable);
+//    }
 
-                        }
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showData(List<News> data) {
+        Log.e("page",page+"");
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+            mNewsAdapter.setEnableLoadMore(true);
         }
-        new CompositeDisposable().add(disposable);
+        if(data.size()==0){
+            //没有更多数据
+            mNewsAdapter.loadMoreEnd();
+            mNewsAdapter.loadMoreComplete();
+            Log.e("load","load");
+            mNewsAdapter.setEnableLoadMore(false);
+            return;
+        }else{
+            if (isLoadMore) {
+                isLoadMore = false;
+                mNewsAdapter.addData(data);
+                mNewsAdapter.loadMoreComplete();
+                //mOrderAdapter.setEnableLoadMore(false);
+                // mRecyclerView.setAdapter(mOrderAdapter);
+            } else {
+                mNewsAdapter.setNewData(data);
+                mRecyclerView.setAdapter(mNewsAdapter);
+
+            }
+        }
+
+
+    }
+
+    @Override
+    public void failed(String error) {
+
+    }
+
+    @Override
+    public void setPresenter(Contract.Presenter presenter) {
+
     }
 }

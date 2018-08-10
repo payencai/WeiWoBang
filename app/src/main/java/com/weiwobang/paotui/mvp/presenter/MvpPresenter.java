@@ -35,5 +35,9 @@ public class MvpPresenter<T> implements MvpCallback<T> {
         mMvpView.showLoading();
         mMvpModel.getMyOrder();
     }
+    public void getMyPublish(){
+        mMvpView.showLoading();
+        mMvpModel.getMyPublish();
+    }
 
 }
