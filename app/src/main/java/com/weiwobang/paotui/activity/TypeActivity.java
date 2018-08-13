@@ -96,28 +96,7 @@ public class TypeActivity extends AppCompatActivity implements Contract.MvpView<
                 startActivity(intent);
             }
         });
-//        mNewsAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
-//            @Override
-//            public void onLoadMore() {
-//                isLoadMore = true;
-//                page++;
-//                getData();
-//                //loadData();
-//            }
-//        });
-//        mNewsAdapter.setOnItemClickListener(new OnItemClickListener() {
-//            @Override
-//            public void onItemClick(@NonNull View view, int adapterPosition) {
-//                mPresenter.itemclick(adapterPosition);
-//                String id = mNewsAdapter.getData(adapterPosition).getId();
-//                Intent intent = new Intent(TypeActivity.this, DetailActivity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putString("id", id);
-//                intent.putExtras(bundle);
-//                startActivity(intent);
-//
-//            }
-//        });
+
     }
 
     private void initView() {

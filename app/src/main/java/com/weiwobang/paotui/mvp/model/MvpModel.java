@@ -25,15 +25,7 @@ public class MvpModel<T> {
     private String token;
     private int page;
     private String categoryId;
-    private MvpCallback<List<News>> mMvpModel;
-    ///private MvpCallback<List<Order>> mOrderModel;
     private MvpCallback<T> mMvpCallback;
-
-//    public MvpModel(MvpCallback<List<News>> mMvpModel, int page, String categoryId) {
-//        this.mMvpModel = mMvpModel;
-//        this.page = page;
-//        this.categoryId = categoryId;
-//    }
 
     public MvpModel(String token, MvpCallback<T> userCallBack) {
         this.token = token;

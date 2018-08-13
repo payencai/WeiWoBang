@@ -40,7 +40,7 @@ public class Api {
         public static final String sPostResetPwd="bbs_user/resetPassword/";
         public static final String sPostUpdateHead="bbs_user/updateHeading/";
         public static final String sPostSugg="problem_report/add/";
-        public static final String sUpLoadImg="image/uploadImage";
+        public static final String sUpLoadImg="image/uploadImage/";
     }
     public static class Comment{
         public static final String sGetComment="comment/getDetail/" ;

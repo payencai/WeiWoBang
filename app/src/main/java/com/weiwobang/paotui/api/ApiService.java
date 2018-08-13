@@ -130,9 +130,8 @@ public interface ApiService {
 
     @Multipart
     @POST(Api.User.sUpLoadImg)
-    Observable<RetrofitResponse> uploadImg(
-            @Part
-                    MultipartBody.Part file
+    Observable<RetrofitResponse> postHeadImg(
+            @Part() MultipartBody.Part image
     );
 
     @FormUrlEncoded

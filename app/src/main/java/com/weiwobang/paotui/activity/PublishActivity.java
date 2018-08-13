@@ -22,6 +22,7 @@ import com.payencai.library.http.retrofitAndrxjava.CustomException;
 import com.payencai.library.http.retrofitAndrxjava.NetWorkManager;
 import com.payencai.library.http.retrofitAndrxjava.RetrofitResponse;
 import com.payencai.library.http.retrofitAndrxjava.schedulers.SchedulerProvider;
+import com.payencai.library.util.image.Compressor;
 import com.weiwobang.paotui.R;
 import com.weiwobang.paotui.adapter.ImgAdapter;
 import com.weiwobang.paotui.api.Api;
@@ -40,6 +41,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -81,6 +83,13 @@ public class PublishActivity extends AppCompatActivity {
     String categoryId = "";
     String categoryName = "";
     private News mNews;
+    String image1;
+    String image2;
+    String image3;
+    String image4;
+    String image5;
+    String image6;
+    int flag = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,9 +102,11 @@ public class PublishActivity extends AppCompatActivity {
         initView();
 
     }
+
     ZLoadingDialog dialog;
-    private void loading(){
-         dialog = new ZLoadingDialog(PublishActivity.this);
+
+    private void loading() {
+        dialog = new ZLoadingDialog(PublishActivity.this);
         dialog.setLoadingBuilder(Z_TYPE.STAR_LOADING)//设置类型
                 .setLoadingColor(Color.BLACK)//颜色
                 .setHintText("发布中...")
@@ -106,6 +117,7 @@ public class PublishActivity extends AppCompatActivity {
 
 
     }
+
     private void initView() {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,7 +139,7 @@ public class PublishActivity extends AppCompatActivity {
             phone.setText(mNews.getContactInfomation());
             publish.setText("确定修改");
             title.setText(mNews.getCategoryName());
-        }else{
+        } else {
             title.setText(categoryName);
         }
 
@@ -160,35 +172,42 @@ public class PublishActivity extends AppCompatActivity {
                     } else {
                         loading();
                         for (String image : selected) {
-                            Log.e("iamge", image);
-                            upImage(Api.testUrl, new File(image));
-                            //uploadImg(image);
+                            File file=new File(image);
+                            File newFile = null;
+                            try {
+                                newFile = new Compressor(PublishActivity.this)
+                                        .compressToFile(file,file.getName());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            upLoadImg(newFile);
                         }
                     }
-                }else{
+                } else {
                     if (selected.size() == 0) {
                         publishUpdate();
                     } else {
                         loading();
                         for (String image : selected) {
-                            Log.e("iamge", image);
-                            upImage(Api.testUrl, new File(image));
-                            //uploadImg(image);
+                            File file=new File(image);
+                            File newFile = null;
+                            try {
+                                newFile = new Compressor(PublishActivity.this)
+                                        .compressToFile(file,file.getName());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            upLoadImg(newFile);
                         }
                     }
 
                 }
 
-//                for(int i=0;i<selected.size();i++){
-//                    //Log.e("url",selected.get(i));
-//                   // uploadImg(selected.get(0));
-//                    upImage(Api.baseUrl+Api.User.sUpLoadImg,new File(selected.get(i)));
-//                 }
-
             }
         });
     }
-    private void publishUpdate(){
+
+    private void publishUpdate() {
         Disposable disposable = null;
         try {
             disposable = NetWorkManager.getRequest(ApiService.class).postEdit(
@@ -218,118 +237,56 @@ public class PublishActivity extends AppCompatActivity {
         }
         new CompositeDisposable().add(disposable);
     }
-    String image1;
-    String image2;
-    String image3;
-    String image4;
-    String image5;
-    String image6;
-    int flag = 0;
 
+    private void upLoadImg(File file) {
 
-    public void upImage(String url, File file) {
-        Log.d("leng", file.length() / 1000 + "");
-        OkHttpClient mOkHttpClent = new OkHttpClient();
-
-        MultipartBody.Builder builder = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("image", "image",
-                        RequestBody.create(MediaType.parse("image/png"), file));
-        RequestBody requestBody = builder.build();
-        Request request = new Request.Builder()
-                .url(url)
-                .post(requestBody)
-                .build();
-        Call call = mOkHttpClent.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                flag++;
-                String string = response.body().string();
-                try {
-                    JSONObject object = new JSONObject(string);
-                    String data = object.getString("data");
-                    switch (flag) {
-                        case 1:
-                            image1 = data;
-                            break;
-                        case 2:
-                            image2 = data;
-                            break;
-                        case 3:
-                            image2 = data;
-                            break;
-                        case 4:
-                            image4 = data;
-                            break;
-                        case 5:
-                            image5 = data;
-                            break;
-                        case 6:
-                            image6 = data;
-                            break;
-                    }
-                    if (flag == selected.size() && selected.size() != 0) {
-                        if(mNews==null)
-                        publish();
-                        else {
-
-                            publishUpdate();
-                        }
-                    }
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Log.e("upload", "onResponse: " + string);
-
-
-            }
-        });
-    }
-
-    private void uploadImg(String path) {
-        //Uri uri=new Uri()
-        Uri uri = Uri.parse(path);
-        File file = new File(path);
-
-        Log.d("leng", file.length() / 1000 + "");
-        // 创建 RequestBody，用于封装构建RequestBody
         RequestBody requestFile =
-                RequestBody.create(MediaType.parse("multipart/form-data"), file);
-
-// MultipartBody.Part  和后端约定好Key，这里的partName是用image
+                RequestBody.create(MediaType.parse("image/png"), file);
         MultipartBody.Part body =
                 MultipartBody.Part.createFormData("image", file.getName(), requestFile);
 
-// 添加描述
-        String descriptionString = "hello, 这是文件描述";
-        RequestBody description =
-                RequestBody.create(
-                        MediaType.parse("multipart/form-data"), descriptionString);
-
-        Disposable disposable = NetWorkManager.getRequest(ApiService.class).uploadImg(body)
+        Disposable disposable = NetWorkManager.getRequest(ApiService.class).postHeadImg(body)
                 //.compose(ResponseTransformer.handleResult())
                 .compose(SchedulerProvider.getInstance().applySchedulers())
                 .subscribe(new Consumer<RetrofitResponse>() {
                     @Override
                     public void accept(RetrofitResponse retrofitResponse) throws Exception {
-                        Log.e("image", retrofitResponse.getData().toString());
+                        String data = retrofitResponse.getData().toString();
                         flag++;
-                        Toast.makeText(PublishActivity.this, "上传成功", Toast.LENGTH_LONG).show();
+                        switch (flag) {
+                            case 1:
+                                image1 = data;
+                                break;
+                            case 2:
+                                image2 = data;
+                                break;
+                            case 3:
+                                image3 = data;
+                                break;
+                            case 4:
+                                image4 = data;
+                                break;
+                            case 5:
+                                image5 = data;
+                                break;
+                            case 6:
+                                image6 = data;
+                                break;
+                        }
+                        if (flag == selected.size() && selected.size() != 0) {
+                            if (mNews == null)
+                                publish();
+                            else {
 
+                                publishUpdate();
+                            }
+                        }
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         ApiException apiException = CustomException.handleException(throwable);
-                        Toast.makeText(PublishActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(RegisterActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
         new CompositeDisposable().add(disposable);

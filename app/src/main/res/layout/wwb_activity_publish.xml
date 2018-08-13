@@ -165,12 +165,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
+                    android:paddingLeft="@dimen/margin_10dp"
                     android:id="@+id/contactpub"
                     android:layout_marginLeft="@dimen/margin_20dp"
                     android:layout_toRightOf="@id/contact"
                     android:layout_marginRight="@dimen/margin_20dp"
                     android:layout_marginTop="@dimen/margin_10dp"
-                    android:gravity="left"
+                    android:gravity="center_vertical"
                     android:background="@drawable/wwb_content_fill"
                     android:layout_alignParentRight="true"
                     android:layout_width="match_parent"
@@ -203,12 +204,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
+                    android:paddingLeft="@dimen/margin_10dp"
                     android:id="@+id/phonepub"
                     android:layout_marginLeft="@dimen/margin_20dp"
                     android:layout_toRightOf="@id/phone"
                     android:layout_marginRight="@dimen/margin_20dp"
                     android:layout_marginTop="@dimen/margin_10dp"
-                    android:gravity="left"
+                    android:gravity="center_vertical"
                     android:background="@drawable/wwb_content_fill"
                     android:layout_alignParentRight="true"
                     android:layout_width="match_parent"

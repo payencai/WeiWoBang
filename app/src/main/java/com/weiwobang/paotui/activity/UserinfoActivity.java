@@ -30,6 +30,7 @@ import com.payencai.library.http.retrofitAndrxjava.CustomException;
 import com.payencai.library.http.retrofitAndrxjava.NetWorkManager;
 import com.payencai.library.http.retrofitAndrxjava.RetrofitResponse;
 import com.payencai.library.http.retrofitAndrxjava.schedulers.SchedulerProvider;
+import com.payencai.library.util.image.Compressor;
 import com.weiwobang.paotui.MyAPP;
 import com.weiwobang.paotui.R;
 import com.weiwobang.paotui.api.Api;
@@ -194,40 +195,35 @@ public class UserinfoActivity extends AppCompatActivity {
         new CompositeDisposable().add(disposable);
     }
 
-    public void upImage(String url, File file) {
-        Log.d("leng", file.length() / 1000 + "");
-        OkHttpClient mOkHttpClent = new OkHttpClient();
 
-        MultipartBody.Builder builder = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("image", "image",
-                        RequestBody.create(MediaType.parse("image/png"), file));
-        RequestBody requestBody = builder.build();
-        Request request = new Request.Builder()
-                .url(url)
-                .post(requestBody)
-                .build();
-        Call call = mOkHttpClent.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
+    private void upLoadImg(File file) {
 
-            }
+        RequestBody requestFile =
+                RequestBody.create(MediaType.parse("image/png"), file);
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("image", file.getName(), requestFile);
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                JSONObject object = null;
-                try {
-                    object = new JSONObject(response.body().string());
-                    String data = object.getString("data");
-                    updateHead(data);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+        Disposable disposable = NetWorkManager.getRequest(ApiService.class).postHeadImg(body)
+                //.compose(ResponseTransformer.handleResult())
+                .compose(SchedulerProvider.getInstance().applySchedulers())
+                .subscribe(new Consumer<RetrofitResponse>() {
+                    @Override
+                    public void accept(RetrofitResponse retrofitResponse) throws Exception {
+                        String data = retrofitResponse.getData().toString();
+                        updateHead(data);
 
-            }
-        });
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        ApiException apiException = CustomException.handleException(throwable);
+                        // Toast.makeText(RegisterActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+        new CompositeDisposable().add(disposable);
     }
+
+
 
     //更新头像
     private void updateHead(String data) {
@@ -239,7 +235,7 @@ public class UserinfoActivity extends AppCompatActivity {
                     .subscribe(new Consumer<RetrofitResponse>() {
                         @Override
                         public void accept(RetrofitResponse retrofitResponse) throws Exception {
-                            getUserinfo();
+                            //getUserinfo();
                             Toast.makeText(UserinfoActivity.this, "更新成功", Toast.LENGTH_SHORT).show();
                             //finish();
                         }
@@ -385,7 +381,14 @@ public class UserinfoActivity extends AppCompatActivity {
             File file = new File(photoOutputUri.getPath());
             if (file.exists()) {
                 Glide.with(this).load(photoOutputUri).into(head);
-                upImage(Api.testUrl, file);
+                File newFile = null;
+                try {
+                    newFile = new Compressor(UserinfoActivity.this)
+                            .compressToFile(file,file.getName());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                upLoadImg(newFile);
             } else {
                 Toast.makeText(this, "找不到照片", Toast.LENGTH_SHORT).show();
             }

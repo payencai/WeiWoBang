@@ -135,8 +135,6 @@ public class SelectAddrActivity extends AppCompatActivity {
                 Log.e("lat", lon + ":" + lat);
                 getAddress(new LatLonPoint(lat,lon));
                 isFirst = false;
-                // Log.e("latlng", lat + " : " + lon);
-                //mPoiSearch.setBound(new PoiSearch.SearchBound(new LatLonPoint(lat, lon), 5000));
 
             }
         });
@@ -144,7 +142,6 @@ public class SelectAddrActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startFindCity();
-               //startActivityForResult(new Intent(SelectAddrActivity.this,CityPickerActivity.class),4);
             }
         });
         locate();

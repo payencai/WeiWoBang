@@ -94,7 +94,6 @@
             android:name=".activity.SelectAddrActivity"
             android:theme="@style/DefaultCityPickerTheme"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
-        <activity android:name=".activity.CityPickerActivity"/>
 
         <receiver android:name=".receiver.NetStateChangeReceiver"/>
 
@@ -132,8 +131,6 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".activity.TypeActivity"/>
         <activity android:name=".activity.ReplyActivity"/>
-        <activity android:name=".activity.MypubActivity">
-        </activity>
         <activity android:name=".activity.OrderActivity">
         </activity>
         <activity android:name=".activity.OrderaddrActivity">
