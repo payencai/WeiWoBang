@@ -33,16 +33,17 @@ import com.amap.api.services.geocoder.RegeocodeResult;
 import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 
+import com.payencai.library.citypicker.CityPicker;
+import com.payencai.library.citypicker.model.City;
+import com.payencai.library.citypicker.model.HotCity;
+import com.payencai.library.citypicker.model.LocatedCity;
 import com.weiwobang.paotui.R;
 import com.weiwobang.paotui.adapter.PoiAdapter;
 import com.weiwobang.paotui.bean.AddrBean;
 import com.weiwobang.paotui.bean.PoiBean;
-import com.zaaach.citypicker.CityPicker;
+
 import com.zaaach.citypicker.adapter.OnPickListener;
-import com.zaaach.citypicker.model.City;
-import com.zaaach.citypicker.model.HotCity;
-import com.zaaach.citypicker.model.LocateState;
-import com.zaaach.citypicker.model.LocatedCity;
+
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
