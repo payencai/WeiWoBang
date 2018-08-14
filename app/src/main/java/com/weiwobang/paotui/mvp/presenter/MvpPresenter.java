@@ -26,6 +26,11 @@ public class MvpPresenter<T> implements MvpCallback<T> {
         // mvpView.setPresenter(this);
         mMvpModel=new MvpModel(this,page,categoryId);
     }
+    public MvpPresenter(Contract.MvpView<T> mvpView) {
+        mMvpView = mvpView;
+        // mvpView.setPresenter(this);
+        mMvpModel=new MvpModel(this);
+    }
     @Override
     public void loadSuccess(T data) {
        mMvpView.showData(data);
@@ -40,7 +45,10 @@ public class MvpPresenter<T> implements MvpCallback<T> {
     public void loadEmpty() {
        // mMvpView.showData(new ArrayList<News>());
     }
-
+    public void getSearchResult(int page,String content){
+        mMvpView.showLoading();
+        mMvpModel.getSearchResult(page,content);
+    }
     public void start(){
         mMvpView.showLoading();
         mMvpModel.getUserinfo();

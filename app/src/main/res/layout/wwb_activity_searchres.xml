@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.SearchresActivity">
+    <RelativeLayout
+        android:paddingTop="10dp"
+        android:paddingBottom="8dp"
+        android:background="@color/press_yellow"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_50dp">
+        <ImageView
+            android:layout_marginLeft="@dimen/margin_15dp"
+            android:id="@+id/cancel"
+            android:layout_marginRight="@dimen/margin_20dp"
+             android:src="@mipmap/wwb_black_back"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_width="12dp"
+            android:layout_height="20dp"/>
+
+        <LinearLayout
+            android:layout_marginRight="@dimen/margin_20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/margin_10dp"
+            android:layout_toRightOf="@id/cancel"
+            android:background="@drawable/wwb_white_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_marginRight="@dimen/margin_5dp"
+                android:id="@+id/search"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/wwb_search"
+                android:layout_width="15dp"
+                android:layout_height="20dp"/>
+            <EditText
+                android:id="@+id/content"
+                android:layout_marginRight="@dimen/margin_10dp"
+                android:gravity="center_vertical"
+                android:background="@color/white"
+                android:textSize="@dimen/text_size_14sp"
+                android:hint="用户输入的内容"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="@dimen/margin_5dp"
+        android:id="@+id/rv_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>

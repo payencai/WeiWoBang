@@ -19,6 +19,7 @@ public class Api {
         public static final String sPostMsgInform = "message/inform/";
         public static final String sPostPublish = "message/publish/";
         public static final String sGetTypeMsg="message/getByType/";
+        public static final String sGetBySearch="message/getBySearch/";
     }
 //    public static class Logout{
 //        public static final String sLogout ="logout/";

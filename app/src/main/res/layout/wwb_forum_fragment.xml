@@ -8,7 +8,63 @@
                  android:orientation="vertical"
                  android:layout_width="match_parent"
                  android:layout_height="match_parent">
-                 <include layout="@layout/wwb_header"></include>
+                 <RelativeLayout
+                     android:id="@+id/head"
+                     android:paddingTop="10dp"
+                     android:paddingBottom="8dp"
+                     android:background="@color/press_yellow"
+                     android:layout_width="match_parent"
+                     android:layout_height="@dimen/margin_50dp">
+                     <LinearLayout
+                         android:id="@+id/layout_search"
+                         android:gravity="center_vertical"
+                         android:orientation="horizontal"
+                         android:paddingLeft="@dimen/margin_10dp"
+                         android:layout_marginLeft="@dimen/margin_20dp"
+                         android:layout_toLeftOf="@id/pub_icon"
+                         android:background="@drawable/wwb_white_bg"
+                         android:layout_width="match_parent"
+                         android:layout_height="match_parent">
+                         <ImageView
+                             android:layout_marginRight="@dimen/margin_5dp"
+                             android:id="@+id/search"
+                             android:layout_centerVertical="true"
+                             android:src="@mipmap/wwb_search"
+                             android:layout_width="15dp"
+                             android:layout_height="20dp"/>
+                         <TextView
+                             android:textColor="@color/color_999"
+                             android:layout_marginRight="@dimen/margin_10dp"
+                             android:gravity="center_vertical"
+                             android:textSize="@dimen/text_size_14sp"
+                             android:text="请输入你要查找的内容"
+                             android:layout_width="match_parent"
+                             android:layout_height="match_parent"/>
+                     </LinearLayout>
+
+                     <ImageView
+                         android:layout_marginRight="5dp"
+                         android:layout_marginLeft="@dimen/margin_20dp"
+                         android:layout_centerVertical="true"
+                         android:id="@+id/pub_icon"
+                         android:layout_toLeftOf="@id/header_confirm"
+                         android:src="@mipmap/wwb_publish"
+                         android:layout_width="17dp"
+                         android:layout_height="20dp"/>
+                     <TextView
+
+                         android:id="@+id/header_confirm"
+                         android:layout_marginRight="@dimen/margin_20dp"
+                         android:textSize="@dimen/text_size_16sp"
+                         android:textColor="@color/color_333"
+                         android:text="发布"
+                         android:layout_centerVertical="true"
+                         android:layout_alignParentRight="true"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"/>
+
+
+                 </RelativeLayout>
                  <include layout="@layout/wwb_forum_content"></include>
                  <LinearLayout
                      android:orientation="vertical"

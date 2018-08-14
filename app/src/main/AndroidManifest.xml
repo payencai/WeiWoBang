@@ -136,8 +136,16 @@
         <activity android:name=".activity.OrderaddrActivity">
         </activity>
         <activity
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:name=".activity.ConfirmActivity">
+            android:name=".activity.ConfirmActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan">
+        </activity>
+        <activity
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:name=".activity.SearchActivity">
+        </activity>
+        <activity
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:name=".activity.SearchresActivity">
         </activity>
     </application>
 

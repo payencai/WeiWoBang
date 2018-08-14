@@ -25,6 +25,7 @@ public class MvpModel<T> {
     private String token;
     private int page;
     private String categoryId;
+    private String content;
     private MvpCallback<T> mMvpCallback;
 
     public MvpModel(String token, MvpCallback<T> userCallBack) {
@@ -42,9 +43,36 @@ public class MvpModel<T> {
         mMvpCallback = userCallBack;
         this.page = page;
     }
+    public MvpModel( MvpCallback<T> userCallBack) {
+        mMvpCallback = userCallBack;
+    }
+
+    /**
+    * 获取搜索结果
+    */
+
+     public  void getSearchResult(int page,String content){
+         Disposable disposable = NetWorkManager.getRequest(ApiService.class).getSearchMsg(page, content)
+                 //.compose(ResponseTransformer.handleResult())
+                 .compose(SchedulerProvider.getInstance().applySchedulers())
+                 .subscribe(new Consumer<RetrofitResponse<Data<News>>>() {
+                     @Override
+                     public void accept(RetrofitResponse<Data<News>> retrofitResponse) throws Exception {
+                         mMvpCallback.loadSuccess((T) retrofitResponse.getData().getBeanList());
+                     }
+                 }, new Consumer<Throwable>() {
+                     @Override
+                     public void accept(Throwable throwable) throws Exception {
+                         ApiException apiException = CustomException.handleException(throwable);
+                         mMvpCallback.loadError(apiException.getDisplayMessage());
+                     }
+                 });
+         new CompositeDisposable().add(disposable);
+     }
     /**
      * 获取用户信息
      */
+
     public void getUserinfo() {
         Disposable disposable = NetWorkManager.getRequest(ApiService.class).getUserinfo(token)
                 //.compose(ResponseTransformer.handleResult())

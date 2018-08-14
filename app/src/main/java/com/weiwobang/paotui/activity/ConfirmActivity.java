@@ -2,6 +2,8 @@ package com.weiwobang.paotui.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,13 +24,16 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.TextureMapView;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
+
+
 
 
 import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.model.BitmapDescriptor;
+import com.amap.api.maps2d.model.BitmapDescriptorFactory;
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.Marker;
+import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.overlay.DrivingRouteOverlay;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.BusRouteResult;
@@ -55,6 +60,7 @@ import com.weiwobang.paotui.bean.OrderAddr;
 import com.weiwobang.paotui.receiver.NetStateChangeReceiver;
 import com.weiwobang.paotui.tools.PreferenceManager;
 import com.weiwobang.paotui.view.CommomDialog;
+import com.wx.wheelview.widget.WheelViewDialog;
 
 import org.feezu.liuli.timeselector.TimeSelector;
 
@@ -105,7 +111,40 @@ public class ConfirmActivity extends AppCompatActivity {
     String firceng;
     String secceng;
     RouteSearch mRouteSearch;
+    public void showDialog(View view, int flag) {
+        WheelViewDialog dialog = new WheelViewDialog(this);
+        dialog.setOnDialogItemClickListener(new WheelViewDialog.OnDialogItemClickListener() {
+            @Override
+            public void onItemClick(int position, String s) {
+                dialog.dismiss();
+                if (flag == 0) {
+                    tv_floorFrom.setText(s);
+                } else {
+                    tv_floorTo.setText(s);
+                }
 
+
+            }
+        });
+        dialog.setTitle("楼层选择内容").setItems(createArrays()).setButtonText("确定").setDialogStyle(Color
+                .parseColor("#6699ff")).setCount(5).show();
+
+    }
+
+    private ArrayList<String> createArrays() {
+        ArrayList<String> list = new ArrayList<String>();
+        list.add("有电梯");
+        list.add("无电梯一层");
+        list.add("无电梯二层");
+        list.add("无电梯三层");
+        list.add("无电梯四层");
+        list.add("无电梯五层");
+        list.add("无电梯六层");
+        list.add("无电梯七层及以上");
+
+
+        return list;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +153,16 @@ public class ConfirmActivity extends AppCompatActivity {
         initView();
         initMapView(savedInstanceState);
     }
-
+    private void addMarker(double lat,double lon,String msg){
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(new LatLng(lat, lon));
+        markerOptions.visible(true);
+        markerOptions.title("距离");
+        markerOptions.snippet(msg);
+        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.wwb_shou));
+        //markerOptions.icon(bitmapDescriptor);
+        now=aMap.addMarker(markerOptions);
+    }
     private void initMapView(Bundle savedInstanceState) {
         mMapView.onCreate(savedInstanceState);// 此方法须覆写，虚拟机需要在很多情况下保存地图绘制的当前状态。
         aMap = mMapView.getMap();
@@ -139,18 +187,23 @@ public class ConfirmActivity extends AppCompatActivity {
                 List<DrivePath> drivePaths = driveRouteResult.getPaths();
                 //DrivingRouteOverlay
                 List<LatLonPoint> latLonPoints = new ArrayList<>();
+
                 latLonPoints.add(driveRouteResult.getStartPos());
+
                 latLonPoints.add(driveRouteResult.getTargetPos());
                // Log.e("fddg", "sdfg");
                 DrivingRouteOverlay drivingRouteOverlay = new DrivingRouteOverlay(ConfirmActivity.this, aMap, drivePaths.get(0), driveRouteResult.getStartPos(), driveRouteResult.getTargetPos());
                 aMap.clear();
-
+                lat=(driveRouteResult.getStartPos().getLatitude()+driveRouteResult.getTargetPos().getLatitude())/2;
+                lon=(driveRouteResult.getStartPos().getLongitude()+driveRouteResult.getTargetPos().getLongitude())/2;
                 drivingRouteOverlay.setNodeIconVisibility(false);//设置节点marker是否显示
                 drivingRouteOverlay.removeFromMap();
                 drivingRouteOverlay.setThroughPointIconVisibility(false);
                 drivingRouteOverlay.addToMap();
                 drivingRouteOverlay.zoomToSpan();
+
                 getDistance();
+
             }
 
             @Override
@@ -178,6 +231,8 @@ public class ConfirmActivity extends AppCompatActivity {
                     @Override
                     public void accept(RetrofitResponse retrofitResponse) throws Exception {
                         double distance= (double) retrofitResponse.getData();
+                        addMarker(lat,lon,distance+"千米");
+                        now.showInfoWindow();
                         Log.e("dis",distance+"");
                     }
                 }, new Consumer<Throwable>() {
@@ -240,6 +295,18 @@ public class ConfirmActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showTimerDialog();
+            }
+        });
+        tv_floorTo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog(view,1);
+            }
+        });
+        tv_floorFrom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog(view,0);
             }
         });
         confirm.setOnClickListener(new View.OnClickListener() {

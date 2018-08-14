@@ -43,6 +43,7 @@ import com.weiwobang.paotui.activity.DetailActivity;
 import com.weiwobang.paotui.activity.LoginActivity;
 import com.weiwobang.paotui.activity.PublishActivity;
 import com.weiwobang.paotui.activity.RegisterActivity;
+import com.weiwobang.paotui.activity.SearchActivity;
 import com.weiwobang.paotui.activity.TypeActivity;
 import com.weiwobang.paotui.adapter.NewsAdapter;
 import com.weiwobang.paotui.api.ApiService;
@@ -86,12 +87,11 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
     LinearLayout jieyang;
     @BindView(R.id.head)
     RelativeLayout head;
-    @BindView(R.id.tv_title)
-    TextView title;
+
     @BindView(R.id.header_confirm)
     TextView confirm;
-    @BindView(R.id.iv_back)
-    ImageView back;
+    @BindView(R.id.layout_search)
+    LinearLayout search_layout;
     RecyclerView mRecyclerView;
     NewsAdapter mNewsAdapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -146,6 +146,12 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
                 getData();
             }
         });
+        search_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), SearchActivity.class));
+            }
+        });
         mNewsAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
@@ -175,9 +181,8 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
     }
 
     private void init() {
-        back.setVisibility(View.GONE);
-        title.setText("同城信息");
-        title.setTextColor(getResources().getColor(R.color.color_333));
+
+
         confirm.setText("发布");
         confirm.setTextColor(getResources().getColor(R.color.black_33));
         search.setOnClickListener(new View.OnClickListener() {

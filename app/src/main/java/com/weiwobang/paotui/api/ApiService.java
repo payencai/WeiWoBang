@@ -35,11 +35,11 @@ import retrofit2.http.Query;
 
 public interface ApiService {
     //获取急救知识列表
-    @FormUrlEncoded
-    //  @Headers({"Content-Type:application/json;charset=utf-8", "Accept:application/json;"})
-    @POST(Api.Login.sLogin)
-    Observable<RetrofitResponse> postLogin(
-            @FieldMap Map<String, String> params);
+//    @FormUrlEncoded
+//    //  @Headers({"Content-Type:application/json;charset=utf-8", "Accept:application/json;"})
+//    @POST(Api.Login.sLogin)
+//    Observable<RetrofitResponse> postLogin(
+//            @FieldMap Map<String, String> params);
 
     @GET(Api.User.sGetVerifyCode)
     Observable<RetrofitResponse> getCode(
@@ -74,6 +74,11 @@ public interface ApiService {
             @Query("categoryId") String categoryId
     );
 
+    @GET(Api.Message.sGetBySearch)
+    Observable<RetrofitResponse<Data<News>>> getSearchMsg(
+            @Query("page") int page,
+            @Query("content") String content
+    );
     @GET(Api.Comment.sGetComment)
     Observable<RetrofitResponse<Bean>> getComment(
             @Query("messageId") String messageId,
@@ -93,6 +98,18 @@ public interface ApiService {
             @Query("longitudeTo") double longitudeTo,
             @Query("latitudeTo") double latitudeTo
     );
+
+
+
+
+
+
+    /****************************************************POST请求*****************************************************/
+
+
+
+
+
 
     @FormUrlEncoded
     @POST(Api.Message.sPostPublish)
