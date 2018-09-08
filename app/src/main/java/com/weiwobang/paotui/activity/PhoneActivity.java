@@ -17,6 +17,7 @@ import com.payencai.library.http.retrofitAndrxjava.CustomException;
 import com.payencai.library.http.retrofitAndrxjava.NetWorkManager;
 import com.payencai.library.http.retrofitAndrxjava.RetrofitResponse;
 import com.payencai.library.http.retrofitAndrxjava.schedulers.SchedulerProvider;
+import com.weiwobang.paotui.JPush.JpushConfig;
 import com.weiwobang.paotui.MyAPP;
 import com.weiwobang.paotui.R;
 import com.weiwobang.paotui.api.ApiService;
@@ -56,6 +57,9 @@ public class PhoneActivity extends AppCompatActivity {
     }
 
     private void init() {
+        et_phone.setText("13202908144");
+        et_pwd.setText("123456");
+       // login(et_phone.getText().toString(), et_pwd.getText().toString());
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,8 +97,15 @@ public class PhoneActivity extends AppCompatActivity {
                             Userinfo userinfo = userinfoRetrofitResponse.getData();
                             PreferenceManager.getInstance().setUserinfo(userinfo);
                             MyAPP.isLogin=true;
+                            MyAPP.token=userinfo.getBusinessToken();
+                            MyAPP.token2=userinfo.getToken();
+                           // MyAPP.alias=userinfo.getPushAlias();
+                            //JpushConfig.getInstance().resumeJPush();
+                           // JpushConfig.getInstance().setAlias(userinfo.getPushAlias());
+                            //JpushConfig.getInstance().setTag("android");
                             ActManager.getAppManager().finishAllActivity();
                             startActivity(new Intent(PhoneActivity.this, MainActivity.class));
+
                         }
 
                     }

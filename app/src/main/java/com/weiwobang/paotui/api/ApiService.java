@@ -19,6 +19,7 @@ import java.util.Map;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -46,6 +47,16 @@ public interface ApiService {
             @Query("telephone") String telephone
     );
 
+
+    @FormUrlEncoded
+    @POST(Api.User.sPostAddSeller)
+    Observable<RetrofitResponse> postAddSeller(
+            @Field("merchantName") String merchantName,
+            @Field("contactName") String contactName,
+            @Field("contactNumber") String contactNumber,
+            @Field("contactLocation") String contactLocation,
+            @Header("token") String token
+    );
     @GET(Api.Message.sGetToday)
     Observable<RetrofitResponse<Data<News>>> getToday(
             @Query("page") int page
@@ -100,6 +111,119 @@ public interface ApiService {
     );
 
 
+    /****************************************************Seller*****************************************************/
+
+
+
+
+    @GET(Api.Seller.getHomepage)
+    Observable<ResponseBody> getHomePage(
+            @Header("token") String token);
+
+
+
+    @GET(Api.Seller.getInProcess)
+    Observable<ResponseBody> getInProcess(
+            @Header("token") String token);
+
+
+    @GET(Api.Seller.getFinished)
+    Observable<ResponseBody> getFinished(
+            @Query("pn") int pn,
+            @Header("token") String token);
+
+
+    @GET(Api.Seller.getOrderDetail)
+    Observable<ResponseBody> getOrderDetail(
+            @Query("orderId") String orderId,
+            @Header("token") String token);
+
+    @GET(Api.Seller.getPesonalCenter)
+    Observable<ResponseBody> getPesonalCenter(
+            @Header("token") String token);
+
+    @GET(Api.Seller.getNotice)
+    Observable<ResponseBody> getNotice(
+            @Query("pn") int pn,
+            @Header("token") String token);
+
+
+    @FormUrlEncoded
+    @POST(Api.Seller.addName)
+    Observable<ResponseBody> addName(
+            @Field("name") String name,
+            @Header("token") String token
+    );
+    @FormUrlEncoded
+    @POST(Api.Seller.addTel)
+    Observable<ResponseBody> addTel(
+            @Field("telNum") String telNum,
+            @Header("token") String token
+    );
+
+    @FormUrlEncoded
+    @POST(Api.Seller.addMap)
+    Observable<ResponseBody> addMap(
+            @Field("longitude") String longitude,
+            @Field("latitude") String latitude,
+            @Field("adress") String adress,
+            @Field("heading") String heading,
+            @Header("token") String token
+    );
+    @FormUrlEncoded
+    @POST(Api.Seller.add)
+    Observable<ResponseBody> addOrder(
+            @Field("buyerName") String buyerName,
+            @Field("buyerTelnum") String buyerTelnum,
+            @Field("longitude") String longitude,
+            @Field("latitude") String latitude,
+            @Field("adress") String adress,
+            @Field("heading") String heading,
+            @Header("token") String token
+    );
+    @FormUrlEncoded
+    @POST(Api.Seller.cancel)
+    Observable<ResponseBody> cancel(
+            @Field("id") String id,
+            @Header("token") String token
+    );
+
+    @FormUrlEncoded
+    @POST(Api.Seller.complain)
+    Observable<ResponseBody> complain(
+            @Field("orderId") String orderId,
+            @Field("complainRank") String complainRank,
+            @Field("complainSubstance") String complainSubstance,
+            @Header("token") String token
+    );
+
+
+    @FormUrlEncoded
+    @POST(Api.Seller.refuseCancel)
+    Observable<ResponseBody> refuseCancel(
+            @Field("id") String id,
+            @Header("token") String token
+    );
+
+    @FormUrlEncoded
+    @POST(Api.Seller.agreeCancel)
+    Observable<ResponseBody> agreeCancel(
+            @Field("id") String id,
+            @Header("token") String token
+    );
+
+    @FormUrlEncoded
+    @POST(Api.Seller.apply)
+    Observable<ResponseBody> apply(
+            @Field("amount") int amount,
+            @Field("receiveMethod") String receiveMethod,
+            @Field("name") String name,
+            @Field("account") String account,
+            @Header("token") String token
+    );
+
+
+
 
 
 
@@ -114,34 +238,36 @@ public interface ApiService {
     @FormUrlEncoded
     @POST(Api.Message.sPostPublish)
     Observable<RetrofitResponse> postPublic(
-            @Field("title") String title,
-            @Field("categoryId") String categoryId,
-            @Field("categoryName") String categoryName,
-            @Field("image1") String image1,
-            @Field("image2") String image2,
-            @Field("image3") String image3,
-            @Field("image4") String image4,
-            @Field("image5") String image5,
-            @Field("image6") String image6,
-            @Field("linkman") String linkman,
-            @Field("contactInfomation") String contactInfomation,
-            @Field("content") String content,
+              @FieldMap Map<String,Object> params,
+//            @Field("title") String title,
+//            @Field("categoryId") String categoryId,
+//            @Field("categoryName") String categoryName,
+//            @Field("image1") String image1,
+//            @Field("image2") String image2,
+//            @Field("image3") String image3,
+//            @Field("image4") String image4,
+//            @Field("image5") String image5,
+//            @Field("image6") String image6,
+//            @Field("linkman") String linkman,
+//            @Field("contactInfomation") String contactInfomation,
+//            @Field("content") String content,
             @Header("token") String token
     );
 
     @FormUrlEncoded
     @POST(Api.Message.sPostEdit)
     Observable<RetrofitResponse> postEdit(
-            @Field("id") String id,
-            @Field("image1") String image1,
-            @Field("image2") String image2,
-            @Field("image3") String image3,
-            @Field("image4") String image4,
-            @Field("image5") String image5,
-            @Field("image6") String image6,
-            @Field("linkman") String linkman,
-            @Field("contactInfomation") String contactInfomation,
-            @Field("content") String content,
+            @FieldMap Map<String,Object> params,
+//            @Field("id") String id,
+//            @Field("image1") String image1,
+//            @Field("image2") String image2,
+//            @Field("image3") String image3,
+//            @Field("image4") String image4,
+//            @Field("image5") String image5,
+//            @Field("image6") String image6,
+//            @Field("linkman") String linkman,
+//            @Field("contactInfomation") String contactInfomation,
+//            @Field("content") String content,
             @Header("token") String token
     );
 
@@ -150,7 +276,11 @@ public interface ApiService {
     Observable<RetrofitResponse> postHeadImg(
             @Part() MultipartBody.Part image
     );
-
+    @Multipart
+    @POST(Api.User.sUpLoadVideo)
+    Observable<RetrofitResponse> upLoadVideo(
+            @Part() MultipartBody.Part file
+    );
     @FormUrlEncoded
     @POST(Api.User.sPostRegister)
     Observable<RetrofitResponse> postRegister(
@@ -250,6 +380,24 @@ public interface ApiService {
             @Field("removeTime") String removeTime,
             @Field("note") String note,
             @Field("addressToDetail") String addressToDetail,
+            @Header("token") String token
+    );
+    @FormUrlEncoded
+    @POST(Api.Remove.sPostAdd)
+    Observable<RetrofitResponse> removeAdd(
+            @FieldMap Map<String,Object>  params,
+            @Header("token") String token
+    );
+    @FormUrlEncoded
+    @POST(Api.Remove.sAddCityOrder)
+    Observable<RetrofitResponse> addCityOrder(
+            @FieldMap Map<String,Object> params,
+            @Header("token") String token
+    );
+    @FormUrlEncoded
+    @POST(Api.User.sGetCash)
+    Observable<RetrofitResponse> getMoney(
+            @Field("distance") double distance,
             @Header("token") String token
     );
 }

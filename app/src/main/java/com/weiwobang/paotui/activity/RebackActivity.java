@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +30,7 @@ import io.reactivex.functions.Consumer;
 
 public class RebackActivity extends AppCompatActivity {
     @BindView(R.id.sugg_back)
-    ImageView back;
+    FrameLayout back;
     @BindView(R.id.sugg_in)
     EditText et_sugg;
     @BindView(R.id.sugg_submit)

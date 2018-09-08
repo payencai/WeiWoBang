@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,9 +21,8 @@ import butterknife.ButterKnife;
 
 public class SettingActivity extends AppCompatActivity {
 
-
-    @BindView(R.id.sett_back)
-    ImageView back;
+    @BindView(R.id.fr_b)
+    FrameLayout back;
     @BindView(R.id.update_pwd)
     RelativeLayout updatePwd;
     @BindView(R.id.clean_file)

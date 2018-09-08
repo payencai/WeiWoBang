@@ -13,16 +13,30 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="50dp">
-        <ImageView
-            android:id="@+id/sett_back"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:src="@mipmap/wwb_black_back"
-            android:layout_width="12dp"
-            android:layout_height="20dp"/>
+        <FrameLayout
+            android:id="@+id/fr_b"
+            android:layout_width="50dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@mipmap/wwb_black_back"
+                android:layout_width="12dp"
+                android:layout_height="20dp"/>
+        </FrameLayout>
+
+        <TextView
+            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/margin_20dp"
+            android:textColor="@color/color_333"
+            android:textSize="20sp"
+            android:layout_marginLeft="@dimen/margin_15dp"
+            android:text="系统设置"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
     </RelativeLayout>
     <TextView
+        android:visibility="gone"
         android:layout_marginTop="@dimen/margin_20dp"
         android:textColor="@color/color_333"
         android:textSize="20sp"
@@ -33,7 +47,7 @@
     <RelativeLayout
         android:id="@+id/update_pwd"
         android:layout_marginLeft="@dimen/margin_15dp"
-        android:layout_marginTop="@dimen/margin_30dp"
+        android:layout_marginTop="@dimen/margin_10dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
@@ -62,7 +76,7 @@
     <RelativeLayout
         android:id="@+id/clean_file"
         android:layout_marginLeft="@dimen/margin_15dp"
-        android:layout_marginTop="@dimen/margin_10dp"
+
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
@@ -85,6 +99,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </RelativeLayout>
+    <View
+
+        android:layout_marginLeft="15dp"
+        android:background="#e2e2e2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"></View>
     <TextView
         android:id="@+id/logout"
         android:layout_marginTop="120dp"

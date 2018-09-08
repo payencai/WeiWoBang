@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -30,7 +31,7 @@ public class OrderActivity extends AppCompatActivity implements Contract.MvpView
     RecyclerView mRecyclerView;
     OrderAdapter mOrderAdapter;
     @BindView(R.id.back)
-    ImageView back;
+    FrameLayout back;
     MvpPresenter<List<Order>> mMvpPresenter;
     private int page=1;
     private boolean isLoadMore=false;

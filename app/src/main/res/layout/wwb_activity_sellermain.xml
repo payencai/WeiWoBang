@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingTop="@dimen/margin_5dp"
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    android:background="@color/black"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.SellermainActivity">
+    <LinearLayout
+        android:paddingTop="@dimen/margin_10dp"
+        android:paddingBottom="@dimen/margin_10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="30dp">
+
+            <ImageView
+                android:layout_marginLeft="@dimen/margin_15dp"
+                android:id="@+id/back"
+                android:layout_alignParentLeft="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/margin_20dp"
+                android:src="@mipmap/back" />
+            <TextView
+                android:layout_toRightOf="@id/back"
+                android:id="@+id/tvNameOfSeller"
+                style="@style/form_item_title_font"
+                android:layout_marginLeft="0dp"
+                android:textSize="@dimen/text_size_15sp"
+                android:text="揭阳玉器商行" />
+
+            <ImageView
+                android:id="@+id/imgNotificationOfSeller"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/margin_20dp"
+                android:src="@mipmap/notification" />
+
+            <ImageView
+                android:id="@+id/imgSettingOfSeller"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/imgNotificationOfSeller"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/margin_20dp"
+                android:src="@mipmap/setting" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+
+                android:textColor="@color/yellow_1e"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvNumOfSeller"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="45dp"
+                android:layout_centerVertical="true"
+                android:textSize="@dimen/text_size_14sp"
+                android:text="余额：0.00" />
+
+            <FrameLayout
+                android:id="@+id/btnDispatch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/margin_15dp"
+                android:layout_alignParentRight="true">
+                <ImageView
+                    android:layout_width="@dimen/length_view_100dp"
+                    android:layout_height="@dimen/length_view_25dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/em_btn_yellow_selector"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="派单"
+                    android:textColor="@color/tv_1f"
+                    android:textSize="@dimen/text_size_15sp"/>
+            </FrameLayout>
+        </RelativeLayout>
+    </LinearLayout>
+    <FrameLayout
+        android:background="@color/color_666"
+        android:id="@+id/main_middle"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+    </FrameLayout>
+    <android.support.design.widget.TabLayout
+        android:id="@+id/bottom_tab_layout"
+        android:layout_width="match_parent"
+        app:tabIndicatorHeight="0dp"
+        android:background="@color/black"
+        android:elevation="@dimen/margin_5dp"
+        app:tabBackground="@color/black"
+        app:tabIndicatorColor="@color/black"
+        app:tabTextColor="@android:color/black"
+        android:layout_height="52dp">
+
+    </android.support.design.widget.TabLayout>
+</LinearLayout>

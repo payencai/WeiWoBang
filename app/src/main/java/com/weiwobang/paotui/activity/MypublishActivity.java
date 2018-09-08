@@ -80,7 +80,7 @@ public class MypublishActivity extends AppCompatActivity implements Contract.Mvp
     private void initNews() {
 
 
-        findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.sett_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();

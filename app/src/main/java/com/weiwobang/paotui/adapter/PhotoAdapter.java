@@ -3,6 +3,8 @@ package com.weiwobang.paotui.adapter;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.lqm.roundview.RoundImageView;
 import com.payencai.library.adapter.BaseAdapter;
 import com.payencai.library.adapter.BaseViewHolder;
 import com.weiwobang.paotui.R;
@@ -15,8 +17,13 @@ public class PhotoAdapter extends BaseAdapter<String> {
 
     @Override
     public void convert(BaseViewHolder holder, String data, int index) {
-        ImageView img=holder.findImage(R.id.img);
-        Glide.with(holder.itemView.getContext()).load(data).into(img);
+        RoundImageView img= (RoundImageView) holder.findImage(R.id.img);
+
+        RequestOptions requestOptions = new RequestOptions()
+
+                //.override(200,200)
+                .centerCrop() ;// 填充方式
+        Glide.with(holder.itemView.getContext()).load(data).apply(requestOptions).into(img);
     }
 
     @Override

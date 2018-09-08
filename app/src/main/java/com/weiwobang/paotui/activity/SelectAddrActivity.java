@@ -259,7 +259,7 @@ public class SelectAddrActivity extends AppCompatActivity {
                         aMapLocation.getAoiName();//获取当前定位点的AOI信息
                         LatLng marker1 = new LatLng(lat, lon);
                         aMap.moveCamera(CameraUpdateFactory.changeLatLng(marker1));
-                        aMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+                        aMap.moveCamera(CameraUpdateFactory.zoomTo(18));
                         Log.e("add", aMapLocation.getAddress()+"---"+aMapLocation.getStreet());
                     } else {
                         //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。

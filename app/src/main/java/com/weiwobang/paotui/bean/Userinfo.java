@@ -35,6 +35,24 @@ public class Userinfo implements Serializable{
     private String pushAlias;
     private String systemId;
     private String token;
+    private String isBusiness;
+    private String businessToken;
+    public String getIsBusiness() {
+        return isBusiness;
+    }
+
+    public void setIsBusiness(String isBusiness) {
+        this.isBusiness = isBusiness;
+    }
+
+    public String getBusinessToken() {
+        return businessToken;
+    }
+
+    public void setBusinessToken(String businessToken) {
+        this.businessToken = businessToken;
+    }
+
 
     public String getAccount() {
         return account;

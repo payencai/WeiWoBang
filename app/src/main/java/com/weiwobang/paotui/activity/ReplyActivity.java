@@ -101,6 +101,7 @@ public class ReplyActivity extends AppCompatActivity {
                         @Override
                         public void accept(RetrofitResponse retrofitResponse) throws Exception {
                             Toast.makeText(ReplyActivity.this, "回复成功", Toast.LENGTH_SHORT).show();
+
                             finish();
                         }
                     }, new Consumer<Throwable>() {

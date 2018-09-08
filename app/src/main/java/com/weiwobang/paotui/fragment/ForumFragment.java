@@ -181,8 +181,6 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
     }
 
     private void init() {
-
-
         confirm.setText("发布");
         confirm.setTextColor(getResources().getColor(R.color.black_33));
         search.setOnClickListener(new View.OnClickListener() {
@@ -310,96 +308,96 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent = new Intent(getActivity(), PublishActivity.class);
+                                Intent intent = new Intent(getContext(), PublishActivity.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putString("id", "1");
                                 bundle.putString("name", "寻人寻物");
                                 intent.putExtras(bundle);
-                                startActivity(intent);
+                                startActivityForResult(intent,1);
                             }
                         });
                         view.findViewById(R.id.second_layout).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent = new Intent(getActivity(), PublishActivity.class);
+                                Intent intent = new Intent(getContext(), PublishActivity.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putString("id", "2");
                                 bundle.putString("name", "二手物品");
                                 intent.putExtras(bundle);
-                                startActivity(intent);
+                                startActivityForResult(intent,1);
                             }
                         });
                         view.findViewById(R.id.work_layout).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent = new Intent(getActivity(), PublishActivity.class);
+                                Intent intent = new Intent(getContext(), PublishActivity.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putString("id", "3");
                                 bundle.putString("name", "工作兼职");
                                 intent.putExtras(bundle);
-                                startActivity(intent);
+                                startActivityForResult(intent,1);
                             }
                         });
                         view.findViewById(R.id.clean_layout).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent = new Intent(getActivity(), PublishActivity.class);
+                                Intent intent = new Intent(getContext(), PublishActivity.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putString("id", "4");
                                 bundle.putString("name", "家政保洁");
                                 intent.putExtras(bundle);
-                                startActivity(intent);
+                                startActivityForResult(intent,1);
                             }
                         });
                         view.findViewById(R.id.sell_layout).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent = new Intent(getActivity(), PublishActivity.class);
+                                Intent intent = new Intent(getContext(), PublishActivity.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putString("id", "5");
                                 bundle.putString("name", "房屋租售");
                                 intent.putExtras(bundle);
-                                startActivity(intent);
+                                startActivityForResult(intent,1);
                             }
                         });
                         view.findViewById(R.id.update_layout).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent = new Intent(getActivity(), PublishActivity.class);
+                                Intent intent = new Intent(getContext(), PublishActivity.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putString("id", "6");
                                 bundle.putString("name", "房屋装修");
                                 intent.putExtras(bundle);
-                                startActivity(intent);
+                                startActivityForResult(intent,1);
                             }
                         });
                         view.findViewById(R.id.shop_layout).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent = new Intent(getActivity(), PublishActivity.class);
+                                Intent intent = new Intent(getContext(), PublishActivity.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putString("id", "7");
                                 bundle.putString("name", "店铺租赁");
                                 intent.putExtras(bundle);
-                                startActivity(intent);
+                                startActivityForResult(intent,1);
                             }
                         });
                         view.findViewById(R.id.jieyang_layout).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 popupWindow.dismiss();
-                                Intent intent = new Intent(getActivity(), PublishActivity.class);
+                                Intent intent = new Intent(getContext(), PublishActivity.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putString("id", "8");
                                 bundle.putString("name", "揭阳杂谈");
                                 intent.putExtras(bundle);
-                                startActivity(intent);
+                                startActivityForResult(intent,1);
                             }
                         });
 
@@ -418,6 +416,16 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
         showDownPop(head);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1){
+            page = 1;
+            mNewsAdapter.setEnableLoadMore(true);
+            isLoadMore = false;
+            getData();
+        }
+    }
 
     @Override
     public void showLoading() {

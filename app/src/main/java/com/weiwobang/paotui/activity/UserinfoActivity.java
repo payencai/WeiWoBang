@@ -19,12 +19,14 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.payencai.library.http.retrofitAndrxjava.ApiException;
 import com.payencai.library.http.retrofitAndrxjava.CustomException;
 import com.payencai.library.http.retrofitAndrxjava.NetWorkManager;
@@ -70,6 +72,8 @@ public class UserinfoActivity extends AppCompatActivity {
     RelativeLayout nick;
     @BindView(R.id.iv_head)
     CircleImageView head;
+    @BindView(R.id.sett_back)
+    FrameLayout back;
     Uri photoUri;
     Uri photoOutputUri;
 
@@ -85,8 +89,13 @@ public class UserinfoActivity extends AppCompatActivity {
     private void initView() {
         try {
             tv_name.setText(PreferenceManager.getInstance().getUserinfo().getNickname());
-            if (PreferenceManager.getInstance().getUserinfo().getHeadingUri() != null)
-                Glide.with(this).load(PreferenceManager.getInstance().getUserinfo().getHeadingUri()).into(head);
+            if (PreferenceManager.getInstance().getUserinfo().getHeadingUri() != null){
+                RequestOptions requestOptions = new RequestOptions()
+                        .placeholder(R.mipmap.wwb_default_photo) //加载中图片
+                        .error(R.mipmap.wwb_default_photo) //加载失败图片
+                        .fallback(R.mipmap.wwb_default_photo) //url为空图片
+                        .centerCrop() ;// 填充方式
+                Glide.with(this).load(PreferenceManager.getInstance().getUserinfo().getHeadingUri()).apply(requestOptions).into(head);}
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -103,6 +112,12 @@ public class UserinfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showInputDialog();
+            }
+        });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }

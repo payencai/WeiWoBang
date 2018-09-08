@@ -47,6 +47,37 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/runner_layout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:id="@+id/wwb_runner"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/wwb_my_order"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"/>
+
+                <TextView
+                    android:textSize="16sp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/wwb_runner"
+                    android:text="我要跑腿"
+                    android:textColor="@color/color_333"/>
+                <ImageView
+                    android:layout_marginRight="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/wwb_enter"
+                    android:layout_width="10dp"
+                    android:layout_height="18dp"/>
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/order_layout"
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
@@ -55,8 +86,8 @@
                     android:id="@+id/wwb_order"
                     android:layout_centerVertical="true"
                     android:src="@mipmap/wwb_my_order"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"/>
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"/>
 
                 <TextView
                     android:textSize="16sp"
@@ -76,7 +107,7 @@
                     android:layout_height="18dp"/>
             </RelativeLayout>
             <View
-                android:layout_marginBottom="10dp"
+
 
                 android:layout_marginLeft="15dp"
                 android:background="#e2e2e2"
@@ -91,8 +122,8 @@
                     android:id="@+id/wwb_mes"
                     android:layout_centerVertical="true"
                     android:src="@mipmap/wwb_my_mes"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"/>
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"/>
 
                 <TextView
                     android:textSize="16sp"
@@ -112,7 +143,7 @@
                     android:layout_height="18dp"/>
             </RelativeLayout>
             <View
-                android:layout_marginBottom="10dp"
+
                 android:layout_marginLeft="15dp"
                 android:background="#e2e2e2"
                 android:layout_width="match_parent"
@@ -126,8 +157,8 @@
                     android:id="@+id/wwb_about"
                     android:layout_centerVertical="true"
                     android:src="@mipmap/wwb_my_about"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"/>
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"/>
 
                 <TextView
                     android:textSize="16sp"
@@ -147,7 +178,7 @@
                     android:layout_height="18dp"/>
             </RelativeLayout>
             <View
-                android:layout_marginBottom="10dp"
+
                 android:layout_marginLeft="15dp"
                 android:background="#e2e2e2"
                 android:layout_width="match_parent"
@@ -161,8 +192,8 @@
                     android:id="@+id/wwb_sugg"
                     android:layout_centerVertical="true"
                     android:src="@mipmap/wwb_my_sugg"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"/>
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"/>
 
                 <TextView
                     android:textSize="16sp"
@@ -182,7 +213,7 @@
                     android:layout_height="18dp"/>
             </RelativeLayout>
             <View
-                android:layout_marginBottom="10dp"
+
                 android:layout_marginLeft="15dp"
                 android:background="#e2e2e2"
                 android:layout_width="match_parent"

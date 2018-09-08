@@ -13,16 +13,19 @@ import com.lqm.roundview.RoundImageView;
 import com.payencai.library.adapter.BaseAdapter;
 import com.payencai.library.adapter.BaseViewHolder;
 import com.payencai.library.adapter.ViewCallback;
+import com.payencai.library.mediapicker.entity.Media;
 import com.weiwobang.paotui.R;
 
 import java.util.List;
 
-public class ImgAdapter extends BaseAdapter<String> {
+public class ImgAdapter extends BaseAdapter<Media> {
     onDelListener onDelListener;
-    public void setOnDelListener(onDelListener onDelListener){
-        this.onDelListener=onDelListener;
+
+    public void setOnDelListener(onDelListener onDelListener) {
+        this.onDelListener = onDelListener;
     }
-    public interface onDelListener{
+
+    public interface onDelListener {
         void onClick(int index);
     }
 
@@ -32,11 +35,16 @@ public class ImgAdapter extends BaseAdapter<String> {
     }
 
     @Override
-    public void convert(BaseViewHolder holder, String data, int index) {
+    public void convert(BaseViewHolder holder, Media data, int index) {
 
-        ImageView imageView=holder.findImage(R.id.photo);
-        ImageView del=holder.findImage(R.id.photo_del);
-        Glide.with(holder.itemView.getContext()).load(data).into(imageView);
+        ImageView imageView = holder.findImage(R.id.photo);
+        ImageView del = holder.findImage(R.id.photo_del);
+        ImageView video = holder.findImage(R.id.play_view);
+        if (data.mediaType != 1) {
+            video.setVisibility(View.VISIBLE);
+
+        }
+        Glide.with(holder.itemView.getContext()).load(data.path).into(imageView);
         del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

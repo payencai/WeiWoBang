@@ -1,74 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-              <ImageView
-                  android:id="@+id/item_icon"
-                  android:layout_marginRight="20dp"
-                  android:src="@mipmap/wwb_icon"
-                  android:layout_alignParentRight="true"
-                  android:layout_width="140dp"
-                  android:layout_height="130dp"/>
+                android:layout_width="match_parent"
+                android:paddingTop="10dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+    <com.lqm.roundview.RoundImageView
+        android:scaleType="centerCrop"
+        android:id="@+id/item_icon"
+        android:layout_width="140dp"
+        android:layout_height="130dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:src="@mipmap/wwb_icon"/>
+
     <TextView
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@id/item_icon"
         android:id="@+id/item_title"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="15dp"
-        android:textColor="@color/black_33"
-        android:textSize="18sp"
-        android:text="我还是标题"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_toLeftOf="@id/item_icon"
+        android:text="我还是标题"
+        android:textColor="@color/black_33"
+        android:textSize="18sp"/>
+
     <TextView
 
-        android:maxLines="3"
-        android:maxLength="40"
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@id/item_icon"
         android:id="@+id/item_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_below="@id/item_title"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="15dp"
-        android:textColor="@color/color_999"
-        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        android:layout_toLeftOf="@id/item_icon"
+        android:maxLength="40"
+        android:maxLines="3"
         android:text="sfd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:textColor="@color/color_999"
+        android:textSize="16sp"/>
+
     <LinearLayout
-        android:layout_marginRight="180dp"
-        android:layout_marginTop="110dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginRight="180dp"
+        android:layout_marginTop="110dp">
+
         <TextView
             android:id="@+id/type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@id/item_title"
             android:layout_marginLeft="15dp"
-            android:textColor="@color/color_999"
-            android:textSize="14sp"
             android:text="二手物品"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:textColor="@color/color_999"
+            android:textSize="14sp"/>
+
         <ImageView
-            android:layout_marginLeft="15dp"
-            android:src="@mipmap/wwb_comment"
             android:layout_width="@dimen/margin_20dp"
-            android:layout_height="20dp"/>
+            android:layout_height="20dp"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/wwb_comment"/>
+
         <TextView
             android:id="@+id/comment_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@id/item_title"
             android:layout_marginLeft="5dp"
-            android:textColor="@color/color_999"
-            android:textSize="14sp"
             android:text="14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:textColor="@color/color_999"
+            android:textSize="14sp"/>
+
         <ImageView
-            android:layout_marginLeft="15dp"
-            android:src="@mipmap/wwb_read"
             android:layout_width="@dimen/margin_20dp"
-            android:layout_height="20dp"/>
+            android:layout_height="20dp"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/wwb_read"/>
 
         <TextView
             android:id="@+id/read_num"
@@ -78,40 +88,43 @@
             android:layout_marginLeft="5dp"
             android:text="2000"
             android:textColor="@color/color_999"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
     </LinearLayout>
+
     <TextView
         android:id="@+id/item_edit"
-        android:layout_marginTop="@dimen/margin_30dp"
-        android:layout_marginRight="20dp"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_below="@id/item_icon"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:gravity="center"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="@dimen/margin_30dp"
         android:background="@drawable/wwb_shape_blue"
+        android:gravity="center"
         android:text="编辑"
-        android:layout_width="100dp"
-        android:layout_height="40dp"/>
+        android:textColor="@color/white"
+        android:textSize="16sp"/>
+
     <TextView
         android:id="@+id/item_del"
-        android:layout_marginTop="@dimen/margin_30dp"
-        android:layout_marginRight="20dp"
-        android:layout_below="@id/item_icon"
-        android:layout_toLeftOf="@id/item_edit"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:background="@drawable/wwb_shape_red"
-        android:text="删除"
         android:layout_width="100dp"
-        android:layout_height="40dp"/>
+        android:layout_height="40dp"
+        android:layout_below="@id/item_icon"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="@dimen/margin_30dp"
+        android:layout_toLeftOf="@id/item_edit"
+        android:background="@drawable/wwb_shape_red"
+        android:gravity="center"
+        android:text="删除"
+        android:textColor="@color/white"
+        android:textSize="16sp"/>
+
     <View
 
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/item_del"
         android:layout_marginLeft="@dimen/margin_15dp"
         android:layout_marginTop="20dp"
-        android:background="#e2e2e2"
-        android:layout_below="@id/item_del"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"></View>
+        android:background="#e2e2e2"></View>
 </RelativeLayout>

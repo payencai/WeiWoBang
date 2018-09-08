@@ -167,7 +167,7 @@ public class WwbFragment extends Fragment implements NetStateChangeObserver {
                         LatLng marker1 = new LatLng(lat, lon);
                         //设置中心点和缩放比例
                         aMap.moveCamera(CameraUpdateFactory.changeLatLng(marker1));
-                        aMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+                        aMap.moveCamera(CameraUpdateFactory.zoomTo(18));
 
                     } else {
                         //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
@@ -505,7 +505,7 @@ public class WwbFragment extends Fragment implements NetStateChangeObserver {
         mMapView.onCreate(savedInstanceState);// 此方法须覆写，虚拟机需要在很多情况下保存地图绘制的当前状态。
         aMap = mMapView.getMap();
         aMap.setMapType(AMap.MAP_TYPE_NORMAL);
-        aMap.getUiSettings().setScrollGesturesEnabled(false);
+        //aMap.getUiSettings().setScrollGesturesEnabled(false);
         aMap.getUiSettings().setZoomGesturesEnabled(false);
     }
 

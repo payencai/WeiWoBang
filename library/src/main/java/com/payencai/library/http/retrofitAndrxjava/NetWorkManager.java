@@ -25,7 +25,8 @@ public class NetWorkManager {
 
     private static NetWorkManager mInstance;
     private static Retrofit retrofit;
-    private static volatile Request request = null;
+    private static Retrofit mRetrofit;
+
     public static Class<?> analysusClazInfo(Object object) {
         Type genType = object.getClass().getGenericSuperclass();
         Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
@@ -72,5 +73,28 @@ public class NetWorkManager {
         return t;
     }
 
+    public static <T>  T getReq(Class <T> cls) {
+        T t=null;
+        if (t== null) {
+            synchronized (cls) {
+                t = (T)mRetrofit.create(cls);
+            }
+        }
+        return t;
+    }
+    public void initUrl(String base) {
+        //Class <T> entityClass = (Class <T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 
+        // 初始化okhttp
+        OkHttpClient client = new OkHttpClient.Builder()
+                .build();
+
+        // 初始化Retrofit
+        mRetrofit = new Retrofit.Builder()
+                .client(client)
+                .baseUrl(base)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(new Gson()))
+                .build();
+    }
 }

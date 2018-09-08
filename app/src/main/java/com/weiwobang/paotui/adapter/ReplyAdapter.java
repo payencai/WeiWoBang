@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.payencai.library.adapter.BaseAdapter;
 import com.payencai.library.adapter.BaseViewHolder;
 import com.weiwobang.paotui.R;
@@ -25,7 +26,12 @@ public class ReplyAdapter extends BaseAdapter<Reply> {
         holder.setText(R.id.nickname,data.getName());
         holder.setText(R.id.tv_reply,data.getReplyContent());
         holder.setText(R.id.comm_time,data.getReplyTime());
-        Glide.with(holder.itemView.getContext()).load(data.getUrl()).into(imageView);
+        RequestOptions requestOptions = new RequestOptions()
+                .placeholder(R.mipmap.wwb_default_photo) //加载中图片
+                .error(R.mipmap.wwb_default_photo) //加载失败图片
+                .fallback(R.mipmap.wwb_default_photo) //url为空图片
+                .centerCrop() ;// 填充方式
+        Glide.with(holder.itemView.getContext()).load(data.getUrl()).apply(requestOptions).into(imageView);
     }
 
     @Override

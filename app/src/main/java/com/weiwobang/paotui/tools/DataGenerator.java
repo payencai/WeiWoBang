@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.weiwobang.paotui.R;
 import com.weiwobang.paotui.fragment.ForumFragment;
+import com.weiwobang.paotui.fragment.HomeFragment;
 import com.weiwobang.paotui.fragment.MineFragment;
 import com.weiwobang.paotui.fragment.WwbFragment;
 
@@ -20,7 +21,7 @@ public class DataGenerator {
 
     public static Fragment[] getFragments(String from){
         Fragment fragments[] = new Fragment[3];
-        fragments[0] = WwbFragment.newInstance(from);
+        fragments[0] = HomeFragment.newInstance(from);
         fragments[1] = ForumFragment.newInstance(from);
         fragments[2] = MineFragment.newInstance(from);
         return fragments;

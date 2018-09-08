@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/CompChartItem_mLeftAndCenterLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/margin_10dp"
+        android:layout_marginBottom="@dimen/margin_10dp"
+        android:background="@drawable/shape_ll_corner"
+        android:orientation="vertical" >
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp">
+            <LinearLayout
+                android:layout_marginTop="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    style="@style/block_item_title_font"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="单号："/>
+                <TextView
+                    android:id="@+id/CompChartItem_tvOrderId"
+                    style="@style/block_item_title_font"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text=""/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginRight="@dimen/margin_10dp"
+                android:layout_gravity="right"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/CompChartItem_tvSpentTime"
+                    style="@style/form_item_text_font"
+                    android:layout_marginLeft="0dp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/tv_d7"
+                    android:textSize="@dimen/text_size_10sp"
+                    android:text="用时  分"/>
+                <TextView
+                    android:id="@+id/CompChartItem_tvTaskState"
+                    style="@style/block_item_title_font"
+                    android:layout_marginLeft="0dp"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/text_size_13sp"
+                    android:text="未知"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_5dp"
+            android:layout_marginLeft="@dimen/margin_10dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/CompChartItem_ivRunner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/man"/>
+            <TextView
+                android:id="@+id/CompChartItem_tvRunner"
+                style="@style/form_item_title_limit"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/CompChartItem_ivRunner"
+                android:layout_alignTop="@id/CompChartItem_ivRunner"
+                android:text="暂无" />
+            <TextView
+                android:id="@+id/CompChartItem_tvRunnerTel"
+                style="@style/form_item_text_limit"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/CompChartItem_tvRunner"
+                android:layout_toRightOf="@id/CompChartItem_ivRunner"
+                android:text="" />
+            <LinearLayout
+                android:layout_marginRight="@dimen/margin_10dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignBottom="@id/CompChartItem_tvPickUpAddr"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/CompChartItem_lblDistance"
+                    style="@style/form_item_text_font"
+                    android:layout_marginLeft="0dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="@dimen/text_size_10sp"
+                    android:text="跑腿距离" />
+                <TextView
+                    android:id="@+id/CompChartItem_tvDistance"
+                    style="@style/block_item_title_font"
+                    android:layout_marginLeft="0dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="@dimen/text_size_13sp"
+                    android:text="未知" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_5dp"
+            android:layout_marginLeft="@dimen/margin_10dp"
+            android:layout_marginBottom="@dimen/size_text_12dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/CompChartItem_ivDeliveryLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/location_s"/>
+            <TextView
+                android:id="@+id/CompChartItem_tvDeliveryTarget"
+                style="@style/form_item_title_limit"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/CompChartItem_ivDeliveryLocation"
+                android:layout_alignTop="@id/CompChartItem_ivDeliveryLocation"
+                android:text="待输入" />
+            <TextView
+                android:id="@+id/CompChartItem_tvDeliveryAddr"
+                style="@style/form_item_text_limit"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/CompChartItem_tvDeliveryTarget"
+                android:layout_toRightOf="@id/CompChartItem_ivDeliveryLocation"
+                android:text="" />
+            <LinearLayout
+                android:layout_marginRight="@dimen/margin_10dp"
+                android:orientation="vertical"
+                android:layout_alignParentRight="true"
+                android:layout_alignBottom="@id/CompChartItem_tvDeliveryAddr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/CompChartItem_lblCommission"
+                    style="@style/form_item_text_font"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="@dimen/text_size_10sp"
+                    android:text="佣金" />
+                <TextView
+                    android:id="@+id/CompChartItem_tvCommission"
+                    style="@style/block_item_title_font"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="@dimen/text_size_13sp"
+                    android:text="未知" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+
+            android:id="@+id/CompChartItem_mBtnLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingTop="@dimen/margin_3dp"
+            android:paddingBottom="@dimen/margin_15dp">
+
+            <FrameLayout
+                android:id="@+id/btnReject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/length_view_35dp"
+                android:layout_gravity="center">
+                <ImageView
+                    android:layout_width="@dimen/length_view_120dp"
+                    android:layout_height="@dimen/length_view_35dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/em_btn_yellow_stroke_selector"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="拒绝"
+                    android:textColor="@color/yellow_1e"
+                    android:textSize="@dimen/text_size_14sp"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/btnAccept"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+                <ImageView
+                    android:layout_width="@dimen/length_view_120dp"
+                    android:layout_height="@dimen/length_view_35dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/em_btn_yellow_selector"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="同意取消"
+                    android:textColor="@color/tv_1f"
+                    android:textSize="@dimen/text_size_14sp"/>
+            </FrameLayout>
+
+        </LinearLayout>
+            <TextView
+                android:id="@+id/CompChartItem_tvHandleState"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin_5dp"
+                android:layout_marginBottom="@dimen/margin_5dp"
+                android:paddingTop="@dimen/margin_3dp"
+                android:paddingBottom="@dimen/margin_3dp"
+                android:paddingLeft="@dimen/margin_7dp"
+                android:paddingRight="@dimen/margin_6dp"
+                android:background="@drawable/shape_ll_corner"
+                android:text="已接受"
+                android:textColor="@color/tv_999"
+                android:textSize="@dimen/text_size_10sp"/>
+        </FrameLayout>
+    </LinearLayout>
+
+</LinearLayout>

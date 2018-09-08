@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.payencai.library.http.retrofitAndrxjava.ApiException;
 import com.payencai.library.http.retrofitAndrxjava.CustomException;
 import com.payencai.library.http.retrofitAndrxjava.NetWorkManager;
@@ -20,9 +21,11 @@ import com.payencai.library.http.retrofitAndrxjava.RetrofitResponse;
 import com.payencai.library.http.retrofitAndrxjava.schedulers.SchedulerProvider;
 import com.weiwobang.paotui.R;
 import com.weiwobang.paotui.activity.AboutActivity;
+import com.weiwobang.paotui.activity.ContractActivity;
 import com.weiwobang.paotui.activity.MypublishActivity;
 import com.weiwobang.paotui.activity.OrderActivity;
 import com.weiwobang.paotui.activity.RebackActivity;
+import com.weiwobang.paotui.activity.SellermainActivity;
 import com.weiwobang.paotui.activity.SettingActivity;
 import com.weiwobang.paotui.activity.UserinfoActivity;
 import com.weiwobang.paotui.api.ApiService;
@@ -48,6 +51,8 @@ public class MineFragment extends Fragment implements Contract.MvpView<Userinfo>
     RelativeLayout order;
     @BindView(R.id.mupub_layout)
     RelativeLayout publish;
+    @BindView(R.id.runner_layout)
+    RelativeLayout runner;
     @BindView(R.id.about_layout)
     RelativeLayout about;
     @BindView(R.id.sugg_layout)
@@ -179,6 +184,22 @@ public class MineFragment extends Fragment implements Contract.MvpView<Userinfo>
                 startActivity(new Intent(getActivity(), AboutActivity.class));
             }
         });
+        runner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    if(PreferenceManager.getInstance().getUserinfo().getIsBusiness().equals("2"))
+                        startActivity(new Intent(getContext(), SellermainActivity.class));
+                    else{
+                        startActivity(new Intent(getContext(), ContractActivity.class));
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
@@ -206,12 +227,13 @@ public class MineFragment extends Fragment implements Contract.MvpView<Userinfo>
             if(data!=null){
                 account.setText(data.getAccount());
                 nickname.setText(data.getNickname());
-                if (data.getHeadingUri()!=null){
-                    Glide.with(getContext()).load(data.getHeadingUri()).into(iv_head);
-                }
-                else{
-
-                }
+                RequestOptions requestOptions = new RequestOptions()
+                        .placeholder(R.mipmap.wwb_default_photo) //加载中图片
+                        .error(R.mipmap.wwb_default_photo) //加载失败图片
+                        .fallback(R.mipmap.wwb_default_photo) //url为空图片
+                        .centerCrop() ;// 填充方式
+                //Log.e("ggg",image+name);
+                Glide.with(getContext()).load(data.getHeadingUri()).apply(requestOptions).into(iv_head);
             }
         } catch (IOException e) {
             e.printStackTrace();

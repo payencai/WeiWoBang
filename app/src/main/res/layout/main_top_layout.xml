@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/title_bar"
+    android:background="@color/black">
+
+    <FrameLayout
+        android:id="@+id/back"
+        android:layout_width="@dimen/title_bar"
+        android:layout_height="@dimen/title_bar">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/back" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/block_item_title_font"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="标题"
+        android:textColor="@color/yellow_1e"
+        android:textSize="@dimen/text_size_16sp" />
+    <FrameLayout
+        android:id="@+id/filterBtn"
+        android:layout_width="40dp"
+        android:visibility="gone"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp">
+
+        <TextView
+            android:id="@+id/filterText"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="筛选"
+            android:textColor="@color/black_33"
+            android:textSize="@dimen/size_text_16dp"/>
+    </FrameLayout>
+
+</RelativeLayout>

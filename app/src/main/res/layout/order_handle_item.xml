@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/alpha"
+    android:paddingTop="@dimen/margin_15dp"
+    android:paddingLeft="@dimen/margin_15dp"
+    android:paddingRight="@dimen/margin_15dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/title"
+            style="@style/form_item_title_font"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:text="8月19日 12:00:00"
+            />
+        <TextView
+            android:id="@+id/item1"
+            style="@style/form_item_title_font"
+            android:layout_marginLeft="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="[商家派单]"
+            />
+    </FrameLayout>
+    <TextView
+        android:id="@+id/item2"
+        style="@style/form_item_title_font"
+        android:layout_marginLeft="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="接单人  张三  12334521334"
+        android:visibility="invisible"
+        android:layout_marginTop="8dp"
+        />
+    <!--<TextView-->
+        <!--android:id="@+id/item3"-->
+        <!--style="@style/form_item_title_font"-->
+        <!--android:layout_marginLeft="0dp"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="投诉内容：他送货太慢了，我的顾客要求退款。"-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_marginTop="0dp"-->
+        <!--/>-->
+
+    <View
+        style="@style/follow_split_line"
+        android:layout_marginTop="@dimen/margin_15dp"/>
+</LinearLayout>

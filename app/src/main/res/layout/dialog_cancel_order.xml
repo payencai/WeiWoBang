@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:id="@+id/flMask"
+             android:background="@color/alpha"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_margin="@dimen/margin_40dp"
+        android:id="@+id/llRoot"
+        android:orientation="vertical"
+        android:background="@drawable/wwb_distance_shape"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@mipmap/wwb_tipoff"
+            android:layout_marginTop="@dimen/margin_10dp"
+            android:layout_gravity="center"
+            android:layout_width="40dp"
+            android:layout_height="@dimen/margin_40dp"/>
+
+
+
+
+
+        <LinearLayout
+            android:gravity="center"
+            android:padding="@dimen/margin_10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+
+                android:id="@+id/left"
+                android:textColor="@color/tv_666"
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:textSize="@dimen/text_size_14sp"
+                android:text="是否确定取消订单？"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/margin_50dp">
+
+            <TextView
+
+
+                android:gravity="center"
+                android:id="@+id/cancel"
+                android:layout_width="@dimen/length_view_60dp"
+                android:layout_height="@dimen/length_view_35dp"
+                android:background="@drawable/order_cancel"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:text="取消"/>
+            <TextView
+                android:layout_marginLeft="@dimen/margin_20dp"
+                android:layout_toRightOf="@id/cancel"
+                android:gravity="center"
+                android:id="@+id/confirm"
+                android:layout_width="@dimen/length_view_60dp"
+                android:layout_height="@dimen/length_view_35dp"
+                android:background="@drawable/order_confirm"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:text="确定"/>
+
+        </RelativeLayout>
+
+
+    </LinearLayout
+        >
+</FrameLayout>

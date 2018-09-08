@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.payencai.library.adapter.BaseAdapter;
 import com.payencai.library.adapter.BaseViewHolder;
@@ -47,7 +48,13 @@ public class CommentAdapter extends BaseQuickAdapter<Comment, com.chad.library.a
         helper.setText(R.id.nickname, item.getCommentUserNickname());
         helper.setText(R.id.tv_reply, item.getCommentContent());
         helper.setText(R.id.comm_time, item.getCommentTime());
-        Glide.with(helper.itemView.getContext()).load(item.getCommentUserHeadingUri()).into(imageView);
+        RequestOptions requestOptions = new RequestOptions()
+                .placeholder(R.mipmap.wwb_default_photo) //加载中图片
+                .error(R.mipmap.wwb_default_photo) //加载失败图片
+                .fallback(R.mipmap.wwb_default_photo) //url为空图片
+                .centerCrop() ;// 填充方式
+        //Log.e("ggg",image+name);
+        Glide.with(helper.itemView.getContext()).load(item.getCommentUserHeadingUri()).apply(requestOptions).into(imageView);
     }
 
     public interface onDelListener {

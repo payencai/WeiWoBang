@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           package="com.weiwobang.paotui">
 
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -140,12 +142,51 @@
             android:windowSoftInputMode="stateHidden|adjustPan">
         </activity>
         <activity
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:name=".activity.SearchActivity">
+            android:name=".activity.SearchActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize">
         </activity>
         <activity
+            android:name=".activity.SearchresActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize">
+        </activity>
+
+        <service
+            android:name="cn.jpush.android.service.PushService"
+            android:process=":multiprocess"
+            tools:node="replace">
+        </service>
+
+        <receiver
+            android:name=".JPush.JpushReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTRATION"/> <!-- Required  用户注册SDK的intent -->
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED"/> <!-- Required  用户接收SDK消息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED"/> <!-- Required  用户接收SDK通知栏信息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED"/> <!-- Required  用户打开自定义通知栏的intent -->
+                <action android:name="cn.jpush.android.intent.CONNECTION"/> <!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <category android:name="com.weiwobang.paotui"/>
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".activity.ContractActivity">
+        </activity>
+        <activity
+            android:name=".activity.SellcenterActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:name=".activity.SearchresActivity">
+            android:windowSoftInputMode="stateHidden|adjustPan">
+        </activity>
+        <activity
+            android:name=".activity.SellermainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="stateHidden|adjustPan">
+        </activity>
+        <activity android:name=".activity.NotifyActivity">
+        </activity>
+        <activity android:name=".activity.OrderdelActivity">
+        </activity>
+        <activity android:name=".activity.WebmapActivity">
         </activity>
     </application>
 

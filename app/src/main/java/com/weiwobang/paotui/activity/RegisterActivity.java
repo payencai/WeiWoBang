@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.payencai.library.http.retrofitAndrxjava.ApiException;
 import com.payencai.library.http.retrofitAndrxjava.CustomException;
 import com.payencai.library.http.retrofitAndrxjava.NetWorkManager;
+import com.payencai.library.http.retrofitAndrxjava.ResponseTransformer;
 import com.payencai.library.http.retrofitAndrxjava.RetrofitResponse;
 import com.payencai.library.http.retrofitAndrxjava.schedulers.SchedulerProvider;
 import com.weiwobang.paotui.R;
@@ -91,7 +92,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void register(String telephone, String code, String password) {
         Disposable disposable = NetWorkManager.getRequest(ApiService.class).postRegister(telephone, code, password)
-                //.compose(ResponseTransformer.handleResult())
+               // .compose(ResponseTransformer.handleResult())
                 .compose(SchedulerProvider.getInstance().applySchedulers())
                 .subscribe(new Consumer<RetrofitResponse>() {
                     @Override

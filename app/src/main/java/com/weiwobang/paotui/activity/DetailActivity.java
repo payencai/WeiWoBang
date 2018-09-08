@@ -3,6 +3,7 @@ package com.weiwobang.paotui.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.media.Image;
+import android.net.Uri;
 import android.os.DeadObjectException;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -32,6 +33,7 @@ import com.payencai.library.http.retrofitAndrxjava.CustomException;
 import com.payencai.library.http.retrofitAndrxjava.NetWorkManager;
 import com.payencai.library.http.retrofitAndrxjava.RetrofitResponse;
 import com.payencai.library.http.retrofitAndrxjava.schedulers.SchedulerProvider;
+import com.payencai.library.util.ToastUtil;
 import com.weiwobang.paotui.MyAPP;
 import com.weiwobang.paotui.R;
 import com.weiwobang.paotui.adapter.CommentAdapter;
@@ -54,6 +56,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -85,19 +89,22 @@ public class DetailActivity extends AppCompatActivity {
     TextView contact;
     @BindView(R.id.phone)
     TextView phone;
-    //    @BindView(R.id.image)
-//    ImageView image;
     @BindView(R.id.tv_inform)
     TextView tv_inform;
+    @BindView(R.id.rv_photo)
+    RecyclerView mRvPhoto;
     RecyclerView mRecyclerView;
+    String contentId = "";
+    List<String> selected = new ArrayList<>();
     CommentAdapter mCommentAdapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private int page = 1;
     boolean isLoadMore = false;
-    @BindView(R.id.rv_photo)
-    RecyclerView mRvPhoto;
     PhotoAdapter mPhotoAdapter;
-
+    List<Reply> mReplies = new ArrayList<>();
+    List<Comment> mComments = new ArrayList<>();
+    List<String> photoList = new ArrayList<>();
+    List<String> commentlist = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,8 +116,6 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-    String contentId = "";
-    List<String> selected = new ArrayList<>();
 
     private void initNews() {
         // mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_new);
@@ -171,9 +176,6 @@ public class DetailActivity extends AppCompatActivity {
         },mRecyclerView);
 
     }
-
-    List<String> photoList = new ArrayList<>();
-    List<String> commentlist = new ArrayList<>();
 
     private void submitCommentInform(List<String> content, String id) {
         Disposable disposable = null;
@@ -319,8 +321,29 @@ public class DetailActivity extends AppCompatActivity {
 
         dialog.show();
     }
+    public static boolean isMobileNO(String mobiles) {
+
+        // Pattern p =
+        // Pattern.compile("^((147)|(17[0-9])|(13[0-9])|(15[^4,\\D])|(18[0-9]))\\d{8}$");
+        Pattern p = Pattern.compile("^((13[0-9])|(15[^4])|(18[0-9])|(17[0-9])|(147))\\d{8}$");
+        Matcher m = p.matcher(mobiles);
+        return m.matches();
+    }
 
     private void initView() {
+        layout_contact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String tel=phone.getText().toString();
+                tel=tel.substring(tel.length()-11,tel.length());
+                if(isMobileNO(tel)){
+                    callPhone(tel);
+                }
+                else {
+                    ToastUtil.showToast(DetailActivity.this,"不符合格式的号码");
+                }
+            }
+        });
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -356,8 +379,12 @@ public class DetailActivity extends AppCompatActivity {
         //getComment(id,page);
     }
 
-    List<Reply> mReplies = new ArrayList<>();
-    List<Comment> mComments = new ArrayList<>();
+    private void callPhone(String phone) {
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+phone));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
 
     // List<Comment> mNewComments=new ArrayList<>();
     private void getComment(String id, int page) {
@@ -388,7 +415,6 @@ public class DetailActivity extends AppCompatActivity {
                         Log.e("m", mComments.get(0).getCommentContent());
 
                         if (isLoadMore) {
-
                             isLoadMore = false;
                             mCommentAdapter.addData(mComments);
                             mCommentAdapter.loadMoreComplete();
@@ -396,6 +422,7 @@ public class DetailActivity extends AppCompatActivity {
                         } else {
                             mCommentAdapter.setNewData(mComments);
                             mRecyclerView.setAdapter(mCommentAdapter);
+                            Log.e("ddd","hhhh");
                         }
                     }
 
@@ -451,8 +478,9 @@ public class DetailActivity extends AppCompatActivity {
                     .subscribe(new Consumer<RetrofitResponse>() {
                         @Override
                         public void accept(RetrofitResponse retrofitResponse) throws Exception {
-
+                            page=1;
                             Toast.makeText(DetailActivity.this, "留言成功", Toast.LENGTH_SHORT).show();
+                            isLoadMore=false;
                             getComment(id, page);
                         }
                     }, new Consumer<Throwable>() {

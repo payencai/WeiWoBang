@@ -15,6 +15,15 @@
          android:layout_alignParentRight="true"
          android:layout_width="20dp"
          android:layout_height="20dp"/>
+    <ImageView
+        android:alpha="0.5"
+        android:visibility="gone"
+        android:elevation="5dp"
+        android:id="@+id/play_view"
+        android:layout_width="@dimen/margin_50dp"
+        android:layout_height="@dimen/margin_50dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/video"/>
     <com.lqm.roundview.RoundImageView
         app:leftTop_corner_radius="@dimen/margin_10dp"
         app:leftBottom_corner_radius="@dimen/margin_10dp"

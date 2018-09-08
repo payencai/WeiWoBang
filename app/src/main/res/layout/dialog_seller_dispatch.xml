@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/flMask"
+    android:background="@color/tv_666"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout
+    android:layout_margin="@dimen/margin_30dp"
+    android:id="@+id/llRoot"
+    android:orientation="vertical"
+    android:background="@color/black"
+
+    android:layout_gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            style="@style/block_item_title_font"
+            android:padding="@dimen/margin_15dp"
+            android:layout_marginLeft="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="@dimen/text_size_16sp"
+            android:text="请输入取货人信息" />
+        <ImageView
+            android:id="@+id/imgClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="@dimen/margin_25dp"
+            android:src="@mipmap/close" />
+
+    </FrameLayout>
+    <View style="@style/follow_split_line" />
+
+    <LinearLayout
+        android:padding="@dimen/margin_20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            style="@style/form_item_title_font"
+            android:layout_marginLeft="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:textSize="@dimen/text_size_16sp"
+            android:text="收货人"/>
+        <EditText
+            android:id="@+id/edtReceiver"
+            style="@style/edit_item_text_font"
+            android:gravity="start"
+            android:hint="请输入"
+            android:maxLength="20" />
+    </LinearLayout>
+    <View style="@style/follow_split_line" />
+
+    <LinearLayout
+        android:padding="@dimen/margin_20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            style="@style/form_item_title_font"
+            android:layout_marginLeft="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:textSize="@dimen/text_size_16sp"
+            android:text="联系方式"/>
+        <EditText
+            android:id="@+id/edtTel"
+            style="@style/edit_item_text_font"
+            android:gravity="start"
+            android:hint="请输入手机号"
+            android:inputType="phone"
+            android:maxLength="11"/>
+    </LinearLayout>
+    <View style="@style/follow_split_line" />
+    <LinearLayout
+        android:padding="@dimen/margin_20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <TextView
+        style="@style/form_item_title_font"
+        android:layout_marginLeft="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:textSize="@dimen/text_size_16sp"
+        android:text="收货地址"/>
+    <FrameLayout
+        android:id="@+id/flReceiveAddr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvReceiveAddr"
+            style="@style/form_item_text_font"
+            android:layout_marginLeft="@dimen/margin_5dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="@dimen/length_view_20dp"
+            android:textSize="@dimen/text_size_16sp"
+            android:text="XXXX"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:scaleType="fitXY"
+            android:src="@mipmap/enter" />
+        <!--<EditText-->
+            <!--android:id="@+id/edtReceiveAddr"-->
+            <!--style="@style/edit_item_text_font"-->
+            <!--android:gravity="start"-->
+            <!--android:hint="请输入"-->
+            <!--android:maxLength="100" />-->
+    </FrameLayout>
+        </LinearLayout>
+    <TextView
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/length_view_50dp"
+        android:layout_marginLeft="@dimen/margin_10dp"
+        android:layout_marginRight="@dimen/margin_10dp"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:background="@color/yellow_1e"
+        android:textColor="@color/tv_1f"
+        android:textSize="18sp"
+        android:text="确认派单"/>
+    <TextView
+        android:id="@+id/oneKeyCall"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/length_view_50dp"
+        android:layout_marginLeft="@dimen/margin_10dp"
+        android:layout_marginRight="@dimen/margin_10dp"
+        android:layout_marginTop="@dimen/margin_10dp"
+        android:layout_marginBottom="@dimen/margin_10dp"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:background="@color/yellow_1e"
+        android:textColor="@color/tv_1f"
+        android:textSize="11sp"
+        android:text="一键呼叫
+        （收货信息由跑腿输入）"/>
+
+</LinearLayout>
+</FrameLayout>

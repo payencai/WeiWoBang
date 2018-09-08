@@ -3,8 +3,10 @@
                 android:orientation="vertical"
                 android:paddingTop="@dimen/margin_10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-    <ImageView
+                android:layout_height="160dp">
+    <com.lqm.roundview.RoundImageView
+        android:scaleType="centerCrop"
+        android:padding="5dp"
         android:layout_centerVertical="true"
         android:id="@+id/item_icon"
         android:layout_marginRight="20dp"
@@ -13,15 +15,18 @@
         android:layout_width="140dp"
         android:layout_height="130dp"/>
     <TextView
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="@dimen/margin_10dp"
+        android:maxLines="2"
         android:maxEms="18"
         android:ellipsize="end"
-        android:layout_marginRight="150dp"
+        android:layout_toLeftOf="@id/item_icon"
         android:id="@+id/item_title"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="15dp"
         android:textColor="@color/black_33"
         android:textSize="18sp"
-        android:text="我还是标题"
+        android:text="我还是我还是标题我还是标题标题我还是标题"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <TextView
@@ -90,10 +95,11 @@
     </RelativeLayout>
 
     <View
+
+        android:layout_marginRight="@dimen/margin_20dp"
         android:layout_marginLeft="@dimen/margin_15dp"
-        android:layout_marginTop="20dp"
         android:background="#e2e2e2"
-        android:layout_below="@id/item_icon"
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="1dp"></View>
 </RelativeLayout>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:background="@color/white"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true">
+
+        <View
+
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:background="#e2e2e2"></View>
+        <RelativeLayout
+            android:id="@+id/submit_layout"
+            android:visibility="gone"
+            android:layout_toLeftOf="@id/submit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tv_li"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin_15dp"
+                android:text="预计里程"
+                android:textSize="@dimen/text_size_16sp"/>
+
+            <TextView
+                android:id="@+id/distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@id/tv_li"
+                android:text="15km"
+                android:textColor="#518ffa"
+                android:textSize="@dimen/text_size_16sp"/>
+
+            <TextView
+                android:id="@+id/tv_km"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@id/distance"
+                android:text="费用"
+                android:textSize="@dimen/text_size_16sp"/>
+
+            <TextView
+
+                android:id="@+id/cash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@id/tv_km"
+                android:text="￥7.8"
+                android:textColor="#ffd335"
+                android:textSize="@dimen/text_size_16sp"/>
+        </RelativeLayout>
+
+
+        <TextView
+            android:enabled="true"
+            android:id="@+id/submit"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="#e2e2e2"
+            android:gravity="center"
+            android:text="确定派单"
+            android:textColor="#888888"
+            android:textSize="@dimen/text_size_16sp"/>
+    </RelativeLayout>
+</LinearLayout>

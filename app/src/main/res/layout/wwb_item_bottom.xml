@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:gravity="center"
+              android:background="@color/black"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <TextView
+        android:textSize="25sp"
+        android:textColor="@color/color_666"
+        android:text="0"
+        android:textStyle="bold"
+        android:id="@+id/tab_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        />
+    <TextView
+        android:text="当前派单"
+        android:layout_marginTop="@dimen/margin_5dp"
+        android:id="@+id/tab_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:textColor="@color/tv_666"
+        />
+</LinearLayout>
