@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.weiwobang.paotui"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -67,5 +67,8 @@ dependencies {
     implementation files('libs/universal-image-loader-1.9.5.jar')
     implementation files('libs/volley.jar')
     implementation 'com.iarcuschin:simpleratingbar:0.1.5'
-
+    //implementation 'cn.jzvd:jiaozivideoplayer:6.3.1'
+    implementation 'org.litepal.android:core:2.0.0'
+    implementation 'com.shuyu:GSYVideoPlayer:6.0.0-beta'
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
 }

@@ -87,20 +87,17 @@ public class UserinfoActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        try {
-            tv_name.setText(PreferenceManager.getInstance().getUserinfo().getNickname());
-            if (PreferenceManager.getInstance().getUserinfo().getHeadingUri() != null){
-                RequestOptions requestOptions = new RequestOptions()
-                        .placeholder(R.mipmap.wwb_default_photo) //加载中图片
-                        .error(R.mipmap.wwb_default_photo) //加载失败图片
-                        .fallback(R.mipmap.wwb_default_photo) //url为空图片
-                        .centerCrop() ;// 填充方式
-                Glide.with(this).load(PreferenceManager.getInstance().getUserinfo().getHeadingUri()).apply(requestOptions).into(head);}
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+
+        tv_name.setText(PreferenceManager.getInstance().getUserinfo().getNickname());
+        if (PreferenceManager.getInstance().getUserinfo().getHeadingUri() != null) {
+            RequestOptions requestOptions = new RequestOptions()
+                    .placeholder(R.mipmap.wwb_default_photo) //加载中图片
+                    .error(R.mipmap.wwb_default_photo) //加载失败图片
+                    .fallback(R.mipmap.wwb_default_photo) //url为空图片
+                    .centerCrop();// 填充方式
+            Glide.with(this).load(PreferenceManager.getInstance().getUserinfo().getHeadingUri()).apply(requestOptions).into(head);
         }
+
         //getUserinfo();
         head.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,8 +120,7 @@ public class UserinfoActivity extends AppCompatActivity {
     }
 
     private void getUserinfo() {
-        Disposable disposable = null;
-        try {
+        Disposable
             disposable = NetWorkManager.getRequest(ApiService.class).getUserinfo(PreferenceManager.getInstance().getUserinfo().getToken())
                     //.compose(ResponseTransformer.handleResult())
                     .compose(SchedulerProvider.getInstance().applySchedulers())
@@ -145,11 +141,7 @@ public class UserinfoActivity extends AppCompatActivity {
                             Toast.makeText(UserinfoActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+
         new CompositeDisposable().add(disposable);
     }
 
@@ -185,8 +177,7 @@ public class UserinfoActivity extends AppCompatActivity {
      * @param name
      */
     private void updateName(String name) {
-        Disposable disposable = null;
-        try {
+        Disposable
             disposable = NetWorkManager.getRequest(ApiService.class).postUpdateName(name, PreferenceManager.getInstance().getUserinfo().getToken())
                     //.compose(ResponseTransformer.handleResult())
                     .compose(SchedulerProvider.getInstance().applySchedulers())
@@ -202,11 +193,7 @@ public class UserinfoActivity extends AppCompatActivity {
                             Toast.makeText(UserinfoActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+
         new CompositeDisposable().add(disposable);
     }
 
@@ -239,11 +226,9 @@ public class UserinfoActivity extends AppCompatActivity {
     }
 
 
-
     //更新头像
     private void updateHead(String data) {
-        Disposable disposable = null;
-        try {
+        Disposable
             disposable = NetWorkManager.getRequest(ApiService.class).postUpdateHead(data, PreferenceManager.getInstance().getUserinfo().getToken())
                     //.compose(ResponseTransformer.handleResult())
                     .compose(SchedulerProvider.getInstance().applySchedulers())
@@ -261,11 +246,7 @@ public class UserinfoActivity extends AppCompatActivity {
                             // Toast.makeText(RegisterActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+
         new CompositeDisposable().add(disposable);
     }
 
@@ -399,7 +380,7 @@ public class UserinfoActivity extends AppCompatActivity {
                 File newFile = null;
                 try {
                     newFile = new Compressor(UserinfoActivity.this)
-                            .compressToFile(file,file.getName());
+                            .compressToFile(file, file.getName());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

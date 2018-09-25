@@ -1,10 +1,16 @@
 package com.weiwobang.paotui.activity;
 
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.Image;
+import android.media.MediaMetadataRetriever;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.Build;
 import android.os.DeadObjectException;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +40,8 @@ import com.payencai.library.http.retrofitAndrxjava.NetWorkManager;
 import com.payencai.library.http.retrofitAndrxjava.RetrofitResponse;
 import com.payencai.library.http.retrofitAndrxjava.schedulers.SchedulerProvider;
 import com.payencai.library.util.ToastUtil;
+
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.weiwobang.paotui.MyAPP;
 import com.weiwobang.paotui.R;
 import com.weiwobang.paotui.adapter.CommentAdapter;
@@ -45,22 +53,28 @@ import com.weiwobang.paotui.api.ApiService;
 import com.weiwobang.paotui.bean.Bean;
 import com.weiwobang.paotui.bean.Comment;
 import com.weiwobang.paotui.bean.Data;
+import com.weiwobang.paotui.bean.MediaUrl;
 import com.weiwobang.paotui.bean.News;
 import com.weiwobang.paotui.bean.Reply;
 import com.weiwobang.paotui.tools.ActManager;
 import com.weiwobang.paotui.tools.PreferenceManager;
+import com.weiwobang.paotui.tools.VideoUtil;
 import com.weiwobang.paotui.view.FullyLinearLayoutManager;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -103,8 +117,9 @@ public class DetailActivity extends AppCompatActivity {
     PhotoAdapter mPhotoAdapter;
     List<Reply> mReplies = new ArrayList<>();
     List<Comment> mComments = new ArrayList<>();
-    List<String> photoList = new ArrayList<>();
+
     List<String> commentlist = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,32 +133,18 @@ public class DetailActivity extends AppCompatActivity {
 
 
     private void initNews() {
-        // mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_new);
         mRecyclerView = findViewById(R.id.recycleview_new);
-        // mRecyclerView.s(true);
-        // mRecyclerView.setHasFixedSize(true);
         FullyLinearLayoutManager mLayoutManager = new FullyLinearLayoutManager(this);
         FullyLinearLayoutManager mLayoutManager2 = new FullyLinearLayoutManager(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRvPhoto.setLayoutManager(linearLayoutManager);
-        mPhotoAdapter = new PhotoAdapter();
+        //linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRecyclerView.setLayoutManager(mLayoutManager2);
+        mRvPhoto.setLayoutManager(mLayoutManager);
+        mPhotoAdapter = new PhotoAdapter(R.layout.wwb_item_img);
         //mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setNestedScrollingEnabled(false);
+        mRvPhoto.setNestedScrollingEnabled(false);
         mCommentAdapter = new CommentAdapter(R.layout.wwb_item_comment);
-        //mKnowAdapter.addHeadLayout(R.layout.header_know);
-        // mCommentAdapter.openAutoLoadMore(false);
-        mPhotoAdapter.openAutoLoadMore(false);
-        // mRecyclerView.setAdapter(mCommentAdapter);
-//        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                page = 1;
-//                //mNewsAdapter.openAutoLoadMore(true);
-//                getComment(id,page);
-//            }
-//        });
         mCommentAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -170,10 +171,10 @@ public class DetailActivity extends AppCompatActivity {
             public void onLoadMoreRequested() {
                 isLoadMore = true;
                 page++;
-                Log.e("comm",page+"");
+                Log.e("comm", page + "");
                 getComment(id, page);
             }
-        },mRecyclerView);
+        }, mRecyclerView);
 
     }
 
@@ -183,27 +184,23 @@ public class DetailActivity extends AppCompatActivity {
         for (String msg : content) {
             inform = inform + msg + ",";
         }
-        try {
-            disposable = NetWorkManager.getRequest(ApiService.class).postInformComment(id, inform, PreferenceManager.getInstance().getUserinfo().getToken())
-                    //.compose(ResponseTransformer.handleResult())
-                    .compose(SchedulerProvider.getInstance().applySchedulers())
-                    .subscribe(new Consumer<RetrofitResponse>() {
-                        @Override
-                        public void accept(RetrofitResponse retrofitResponse) throws Exception {
-                            Toast.makeText(DetailActivity.this, "举报成功", Toast.LENGTH_SHORT).show();
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-                            ApiException apiException = CustomException.handleException(throwable);
-                            //Toast.makeText(PublishActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+
+        disposable = NetWorkManager.getRequest(ApiService.class).postInformComment(id, inform, PreferenceManager.getInstance().getUserinfo().getToken())
+                //.compose(ResponseTransformer.handleResult())
+                .compose(SchedulerProvider.getInstance().applySchedulers())
+                .subscribe(new Consumer<RetrofitResponse>() {
+                    @Override
+                    public void accept(RetrofitResponse retrofitResponse) throws Exception {
+                        Toast.makeText(DetailActivity.this, "举报成功", Toast.LENGTH_SHORT).show();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        ApiException apiException = CustomException.handleException(throwable);
+                        //Toast.makeText(PublishActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
         new CompositeDisposable().add(disposable);
     }
 
@@ -321,6 +318,7 @@ public class DetailActivity extends AppCompatActivity {
 
         dialog.show();
     }
+
     public static boolean isMobileNO(String mobiles) {
 
         // Pattern p =
@@ -331,16 +329,17 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void initView() {
+
+
         layout_contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String tel=phone.getText().toString();
-                tel=tel.substring(tel.length()-11,tel.length());
-                if(isMobileNO(tel)){
+                String tel = phone.getText().toString();
+                tel = tel.substring(tel.length() - 11, tel.length());
+                if (isMobileNO(tel)) {
                     callPhone(tel);
-                }
-                else {
-                    ToastUtil.showToast(DetailActivity.this,"不符合格式的号码");
+                } else {
+                    ToastUtil.showToast(DetailActivity.this, "不符合格式的号码");
                 }
             }
         });
@@ -380,7 +379,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void callPhone(String phone) {
-        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+phone));
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
@@ -394,8 +393,8 @@ public class DetailActivity extends AppCompatActivity {
                 .subscribe(new Consumer<RetrofitResponse<Bean>>() {
                     @Override
                     public void accept(RetrofitResponse<Bean> bean) throws Exception {
-                        if(bean.getData().getComment().getComments().size()==0&&isLoadMore){
-                            mCommentAdapter.loadMoreEnd();
+                        if (bean.getData().getComment().getComments().size() == 0 && isLoadMore) {
+                            mCommentAdapter.loadMoreEnd(true);
                             return;
                         }
                         mComments = bean.getData().getComment().getComments();
@@ -422,7 +421,7 @@ public class DetailActivity extends AppCompatActivity {
                         } else {
                             mCommentAdapter.setNewData(mComments);
                             mRecyclerView.setAdapter(mCommentAdapter);
-                            Log.e("ddd","hhhh");
+                            Log.e("ddd", "hhhh");
                         }
                     }
 
@@ -441,63 +440,57 @@ public class DetailActivity extends AppCompatActivity {
         for (String str : data) {
             content = content + str + ",";
         }
-        Disposable disposable = null;
-        try {
-            disposable = NetWorkManager.getRequest(ApiService.class).postInformMsg(id, content, PreferenceManager.getInstance().getUserinfo().getToken())
-                    //.compose(ResponseTransformer.handleResult())
-                    .compose(SchedulerProvider.getInstance().applySchedulers())
-                    .subscribe(new Consumer<RetrofitResponse>() {
-                        @Override
-                        public void accept(RetrofitResponse retrofitResponse) throws Exception {
+        Disposable
+                disposable = NetWorkManager.getRequest(ApiService.class).postInformMsg(id, content, PreferenceManager.getInstance().getUserinfo().getToken())
+                //.compose(ResponseTransformer.handleResult())
+                .compose(SchedulerProvider.getInstance().applySchedulers())
+                .subscribe(new Consumer<RetrofitResponse>() {
+                    @Override
+                    public void accept(RetrofitResponse retrofitResponse) throws Exception {
 
-                            Toast.makeText(DetailActivity.this, "举报成功", Toast.LENGTH_SHORT).show();
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-                            ApiException apiException = CustomException.handleException(throwable);
-                            //Toast.makeText(DetailActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DetailActivity.this, "举报成功", Toast.LENGTH_SHORT).show();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        ApiException apiException = CustomException.handleException(throwable);
+                        //Toast.makeText(DetailActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
 
-                        }
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+                    }
+                });
+
         new CompositeDisposable().add(disposable);
         // Toast.makeText(DetailActivity.this, "举报成功"+data.size(), Toast.LENGTH_SHORT).show();
     }
 
     private void postComment(String content) {
-        Disposable disposable = null;
-        try {
-            disposable = NetWorkManager.getRequest(ApiService.class).postAddComment(id, content, PreferenceManager.getInstance().getUserinfo().getToken())
-                    //.compose(ResponseTransformer.handleResult())
-                    .compose(SchedulerProvider.getInstance().applySchedulers())
-                    .subscribe(new Consumer<RetrofitResponse>() {
-                        @Override
-                        public void accept(RetrofitResponse retrofitResponse) throws Exception {
-                            page=1;
-                            Toast.makeText(DetailActivity.this, "留言成功", Toast.LENGTH_SHORT).show();
-                            isLoadMore=false;
-                            getComment(id, page);
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-                            ApiException apiException = CustomException.handleException(throwable);
-                            //Toast.makeText(DetailActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
+        Disposable
+                disposable = NetWorkManager.getRequest(ApiService.class).postAddComment(id, content, PreferenceManager.getInstance().getUserinfo().getToken())
+                //.compose(ResponseTransformer.handleResult())
+                .compose(SchedulerProvider.getInstance().applySchedulers())
+                .subscribe(new Consumer<RetrofitResponse>() {
+                    @Override
+                    public void accept(RetrofitResponse retrofitResponse) throws Exception {
+                        page = 1;
+                        Toast.makeText(DetailActivity.this, "留言成功", Toast.LENGTH_SHORT).show();
+                        isLoadMore = false;
+                        getComment(id, page);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        ApiException apiException = CustomException.handleException(throwable);
+                        //Toast.makeText(DetailActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
 
-                        }
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+                    }
+                });
+
         new CompositeDisposable().add(disposable);
     }
+
+    List<MediaUrl> mMediaUrls = new ArrayList<>();
+    int flag = 0;
+    //private String testUrl = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
 
     private void getDetail(String id) {
 
@@ -507,6 +500,7 @@ public class DetailActivity extends AppCompatActivity {
                 .subscribe(new Consumer<RetrofitResponse<News>>() {
                     @Override
                     public void accept(RetrofitResponse<News> retrofitResponse) throws Exception {
+                        List<MediaUrl> photoList = new ArrayList<>();
                         News news = retrofitResponse.getData();
                         //2018-08-01 11
                         String t = news.getCreateTime().substring(5, 7)
@@ -524,19 +518,94 @@ public class DetailActivity extends AppCompatActivity {
                             layout_contact.setVisibility(View.GONE);
                         }
 
-                        photoList.add(news.getImage1Uri());
-                        photoList.add(news.getImage2Uri());
-                        photoList.add(news.getImage3Uri());
-                        photoList.add(news.getImage4Uri());
-                        photoList.add(news.getImage5Uri());
-                        photoList.add(news.getImage6Uri());
-                        for (int i = 0; i < photoList.size(); i++) {
-                            if (TextUtils.isEmpty(photoList.get(i))) {
-                                photoList.remove(i);
+                        if (!TextUtils.isEmpty(news.getImage1Type())) {
+                            if (news.getImage1Type().equals("1") || news.getImage1Type().equals("2"))
+                                photoList.add(new MediaUrl(news.getImage1Type(), news.getImage1Uri()));
+                        } else {
+                            if (!TextUtils.isEmpty(news.getImage1Uri())) {
+                                if (news.getImage1Uri().contains("bbs"))
+                                    photoList.add(new MediaUrl("1", news.getImage1Uri()));
                             }
                         }
-                        mPhotoAdapter.setData(photoList);
-                        mRvPhoto.setAdapter(mPhotoAdapter);
+                        if (!TextUtils.isEmpty(news.getImage2Type())) {
+                            if (news.getImage2Type().equals("1") || news.getImage2Type().equals("2"))
+                                photoList.add(new MediaUrl(news.getImage2Type(), news.getImage2Uri()));
+                        } else {
+                            if (!TextUtils.isEmpty(news.getImage2Uri())) {
+                                if (news.getImage2Uri().contains("bbs"))
+                                    photoList.add(new MediaUrl("1", news.getImage2Uri()));
+                            }
+                        }
+                        if (!TextUtils.isEmpty(news.getImage3Type())) {
+                            if (news.getImage3Type().equals("1") || news.getImage3Type().equals("2"))
+                                photoList.add(new MediaUrl(news.getImage3Type(), news.getImage3Uri()));
+                        } else {
+                            if (!TextUtils.isEmpty(news.getImage3Uri())) {
+                                if (news.getImage3Uri().contains("bbs"))
+                                    photoList.add(new MediaUrl("1", news.getImage3Uri()));
+                            }
+                        }
+                        if (!TextUtils.isEmpty(news.getImage4Type())) {
+                            if (news.getImage4Type().equals("1") || news.getImage4Type().equals("2"))
+                                photoList.add(new MediaUrl(news.getImage4Type(), news.getImage4Uri()));
+                        } else {
+                            if (!TextUtils.isEmpty(news.getImage4Uri())) {
+                                if (news.getImage4Uri().contains("bbs"))
+                                    photoList.add(new MediaUrl("1", news.getImage4Uri()));
+                            }
+                        }
+                        if (!TextUtils.isEmpty(news.getImage5Type())) {
+                            if (news.getImage5Type().equals("1") || news.getImage5Type().equals("2"))
+                                photoList.add(new MediaUrl(news.getImage5Type(), news.getImage5Uri()));
+                        } else {
+                            if (!TextUtils.isEmpty(news.getImage5Uri())) {
+                                if (news.getImage5Uri().contains("bbs"))
+                                    photoList.add(new MediaUrl("1", news.getImage5Uri()));
+                            }
+                        }
+                        if (!TextUtils.isEmpty(news.getImage6Type())) {
+                            if (news.getImage6Type().equals("1") || news.getImage6Type().equals("2"))
+                                photoList.add(new MediaUrl(news.getImage6Type(), news.getImage6Uri()));
+                        } else {
+                            if (!TextUtils.isEmpty(news.getImage6Uri())) {
+                                if (news.getImage6Uri().contains("bbs"))
+                                    photoList.add(new MediaUrl("1", news.getImage6Uri()));
+                            }
+                        }
+                        for (int i = 0; i < photoList.size(); i++) {
+                            MediaUrl mediaUrl = photoList.get(i);//如果是视频就调用子线程获取视频第一帧缩略图
+                            if (mediaUrl.getType().equals("1")) {
+
+                            }
+                        }
+                        Log.e("photo", photoList.size() + "");
+                        for (int i = 0; i < photoList.size(); i++) {
+                            MediaUrl mediaUrl = photoList.get(i);//如果是视频就调用子线程获取视频第一帧缩略图
+                            Log.e("media", mediaUrl.getUrl());
+                            if (mediaUrl.getType().equals("2")) {
+                                mMediaUrls.add(mediaUrl);
+                                flag++;
+                                if (flag == photoList.size()) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            mPhotoAdapter.setNewData(mMediaUrls);
+                                            mRvPhoto.setAdapter(mPhotoAdapter);
+                                        }
+                                    });
+                                }
+                            } else if (mediaUrl.getType().equals("1")) {
+                                mMediaUrls.add(mediaUrl);
+                                flag++;
+                                if (flag == photoList.size()) {
+                                    mPhotoAdapter.setNewData(mMediaUrls);
+                                    mRvPhoto.setAdapter(mPhotoAdapter);
+                                }
+                            }
+
+                        }
+
+
                         //Glide.with(DetailActivity.this).load(news.getImage1Uri()).into(image);
 
                     }
@@ -544,10 +613,37 @@ public class DetailActivity extends AppCompatActivity {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         ApiException apiException = CustomException.handleException(throwable);
-                        //Toast.makeText(DetailActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DetailActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_LONG).show();
 
                     }
                 });
         new CompositeDisposable().add(disposable);
     }
+
+    @Override
+    public void onBackPressed() {
+        if (GSYVideoManager.backFromWindowFull(this)) {
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        GSYVideoManager.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GSYVideoManager.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        GSYVideoManager.releaseAllVideos();
+    }
+
 }

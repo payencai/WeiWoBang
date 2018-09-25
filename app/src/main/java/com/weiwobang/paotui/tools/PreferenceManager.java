@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
+import android.util.Log;
 
+import com.weiwobang.paotui.bean.Account;
 import com.weiwobang.paotui.bean.Userinfo;
 
 import java.io.ByteArrayInputStream;
@@ -30,21 +32,59 @@ public class PreferenceManager {
             mPreferencemManager = new PreferenceManager(cxt);
         }
     }
-    public void setUserinfo(Userinfo userinfo) throws IOException {
+
+    /**
+     * 保存用户信息
+     * @param userinfo
+     */
+    public void setUserinfo(Userinfo userinfo)  {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutputStream os = new ObjectOutputStream(bos);
-        os.writeObject(userinfo);
+        ObjectOutputStream os = null;
+        try {
+            os = new ObjectOutputStream(bos);
+            os.writeObject(userinfo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         String user = new String(Base64.encode(bos.toByteArray(), Base64.DEFAULT));
         editor.putString("userinfo", user);
         editor.apply();
     }
-    public Userinfo getUserinfo() throws IOException, ClassNotFoundException {
+    public Userinfo getUserinfo()  {
         String user = mSharedPreferences.getString("userinfo", "");
         byte[] stringToBytes = Base64.decode(user, Base64.DEFAULT);
         ByteArrayInputStream bis=new ByteArrayInputStream(stringToBytes);
-        ObjectInputStream is = new ObjectInputStream(bis);
-        Userinfo userinfo = (Userinfo) is.readObject();
+        ObjectInputStream is = null;
+        Userinfo userinfo = null;
+        try {
+            is = new ObjectInputStream(bis);
+            userinfo = (Userinfo) is.readObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         return userinfo;
+    }
+
+    /**
+     * 保存账户，用于自动登录
+     * @param account
+     */
+    public void setAccount(Account account){
+        editor.putString("password", account.getPassword());
+        editor.putString("username",account.getUsername());
+        editor.putString("openid",account.getOpenid());
+        editor.apply();
+
+    }
+    public Account getAccount(){
+        String password=mSharedPreferences.getString("password", "");
+        String username=mSharedPreferences.getString("username", "");
+        String openid=mSharedPreferences.getString("openid", "");
+        Account account=new Account(username,password);
+        account.setOpenid(openid);
+        return account;
     }
     /**
      * get instance of PreferenceManager
@@ -56,7 +96,6 @@ public class PreferenceManager {
         if (mPreferencemManager == null) {
             throw new RuntimeException("please init first!");
         }
-
         return mPreferencemManager;
     }
 }

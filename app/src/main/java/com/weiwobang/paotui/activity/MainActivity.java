@@ -12,13 +12,15 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.payencai.library.util.ToastUtil;
 import com.weiwobang.paotui.MyAPP;
 import com.weiwobang.paotui.R;
+import com.weiwobang.paotui.bean.NetworkType;
 import com.weiwobang.paotui.tools.ActManager;
 import com.weiwobang.paotui.tools.DataGenerator;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private TabLayout mTabLayout;
     private Fragment[] mFragmensts;
@@ -150,4 +152,17 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().hide( mFragmensts[index]).commit();
     }
 
+
+
+    @Override
+    public void onNetDisconnected() {
+        super.onNetDisconnected();
+        ToastUtil.showToast(MainActivity.this,"网络已经断开");
+    }
+
+    @Override
+    public void onNetConnected(NetworkType networkType) {
+        super.onNetConnected(networkType);
+        ToastUtil.showToast(MainActivity.this,"网络已经从新连接上");
+    }
 }

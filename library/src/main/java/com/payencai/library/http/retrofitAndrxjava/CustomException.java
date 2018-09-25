@@ -14,7 +14,7 @@ import retrofit2.HttpException;
 
 public class CustomException {
     /**
-     * 未知错误
+     * 未知错误,retrofit参数不能传null
      */
     public static final int UNKNOWN = 9999;
 

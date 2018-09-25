@@ -4,6 +4,8 @@ package com.weiwobang.paotui.fragment;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -37,6 +40,7 @@ import com.payencai.library.http.retrofitAndrxjava.CustomException;
 import com.payencai.library.http.retrofitAndrxjava.NetWorkManager;
 import com.payencai.library.http.retrofitAndrxjava.RetrofitResponse;
 import com.payencai.library.http.retrofitAndrxjava.schedulers.SchedulerProvider;
+import com.payencai.library.util.NetworkUtil;
 import com.weiwobang.paotui.MyAPP;
 import com.weiwobang.paotui.R;
 import com.weiwobang.paotui.activity.DetailActivity;
@@ -50,12 +54,17 @@ import com.weiwobang.paotui.api.ApiService;
 import com.weiwobang.paotui.bean.Data;
 import com.weiwobang.paotui.bean.News;
 import com.weiwobang.paotui.bean.Order;
+import com.weiwobang.paotui.bean.litepal.NewsDb;
 import com.weiwobang.paotui.mvp.Contract;
 import com.weiwobang.paotui.mvp.presenter.MvpPresenter;
 import com.weiwobang.paotui.tools.PreferenceManager;
+import com.weiwobang.paotui.tools.VideoUtil;
 import com.weiwobang.paotui.view.CommonPopupWindow;
 import com.weiwobang.paotui.view.MyDialog;
 
+import org.litepal.LitePal;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -126,11 +135,49 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
         ButterKnife.bind(this, view);
         init();
         initNews(view);
-        getData();
-
+        //getData();
+        isConnect();
         return view;
     }
+    private void isConnect(){
 
+        if(NetworkUtil.isConnected(getContext())){
+            loadData();
+        }else{
+            List<News> data=new ArrayList<>();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    List<NewsDb> newsDbs = LitePal.findAll(NewsDb.class);
+                    if(newsDbs!=null)
+                    for(NewsDb newsDb:newsDbs){
+                        News news=new News();
+                        news.setId(newsDb.getNewsId());
+                        news.setTitle(newsDb.getTitle());
+                        news.setImage1Uri(newsDb.getUrl());
+                        news.setContent(newsDb.getContent());
+                        news.setCommentNum(newsDb.getCommentNum());
+                        news.setReadNum(newsDb.getReadNum());
+                        if(newsDb.getType()==1){
+                            Bitmap bitmap= BitmapFactory.decodeResource(getResources(),R.mipmap.app_icon);
+                            news.setVideo1Img(bitmap);
+                        }
+                        data.add(news);
+
+                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.e("db",newsDbs.toString());
+                            mNewsAdapter.setNewData(data);
+                            mRecyclerView.setAdapter(mNewsAdapter);
+                        }
+                    });
+                }
+            }).start();
+        }
+    }
     private void initNews(View view) {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_new);
         mRecyclerView = view.findViewById(R.id.recycleview_new);
@@ -141,8 +188,8 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
             @Override
             public void onRefresh() {
                 page = 1;
-                mNewsAdapter.setEnableLoadMore(true);
-                isLoadMore = false;
+                // mNewsAdapter.setEnableLoadMore(true);
+                //  isLoadMore = false;
                 getData();
             }
         });
@@ -276,9 +323,15 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
             @Override
             public void onClick(View view) {
                 if (MyAPP.isLogin) {
-                    showDialog();
-                    // startActivity(new Intent(getActivity(), PublishActivity.class));
+                    //showDialog();
+                    Intent intent = new Intent(getContext(), PublishActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("id", "8");
+                    bundle.putString("name", "揭阳杂谈");
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, 1);
                 } else {
+
                     startActivity(new Intent(getActivity(), LoginActivity.class));
                 }
             }
@@ -313,7 +366,7 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
                                 bundle.putString("id", "1");
                                 bundle.putString("name", "寻人寻物");
                                 intent.putExtras(bundle);
-                                startActivityForResult(intent,1);
+                                startActivityForResult(intent, 1);
                             }
                         });
                         view.findViewById(R.id.second_layout).setOnClickListener(new View.OnClickListener() {
@@ -325,7 +378,7 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
                                 bundle.putString("id", "2");
                                 bundle.putString("name", "二手物品");
                                 intent.putExtras(bundle);
-                                startActivityForResult(intent,1);
+                                startActivityForResult(intent, 1);
                             }
                         });
                         view.findViewById(R.id.work_layout).setOnClickListener(new View.OnClickListener() {
@@ -337,7 +390,7 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
                                 bundle.putString("id", "3");
                                 bundle.putString("name", "工作兼职");
                                 intent.putExtras(bundle);
-                                startActivityForResult(intent,1);
+                                startActivityForResult(intent, 1);
                             }
                         });
                         view.findViewById(R.id.clean_layout).setOnClickListener(new View.OnClickListener() {
@@ -349,7 +402,7 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
                                 bundle.putString("id", "4");
                                 bundle.putString("name", "家政保洁");
                                 intent.putExtras(bundle);
-                                startActivityForResult(intent,1);
+                                startActivityForResult(intent, 1);
                             }
                         });
                         view.findViewById(R.id.sell_layout).setOnClickListener(new View.OnClickListener() {
@@ -361,7 +414,7 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
                                 bundle.putString("id", "5");
                                 bundle.putString("name", "房屋租售");
                                 intent.putExtras(bundle);
-                                startActivityForResult(intent,1);
+                                startActivityForResult(intent, 1);
                             }
                         });
                         view.findViewById(R.id.update_layout).setOnClickListener(new View.OnClickListener() {
@@ -373,7 +426,7 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
                                 bundle.putString("id", "6");
                                 bundle.putString("name", "房屋装修");
                                 intent.putExtras(bundle);
-                                startActivityForResult(intent,1);
+                                startActivityForResult(intent, 1);
                             }
                         });
                         view.findViewById(R.id.shop_layout).setOnClickListener(new View.OnClickListener() {
@@ -385,7 +438,7 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
                                 bundle.putString("id", "7");
                                 bundle.putString("name", "店铺租赁");
                                 intent.putExtras(bundle);
-                                startActivityForResult(intent,1);
+                                startActivityForResult(intent, 1);
                             }
                         });
                         view.findViewById(R.id.jieyang_layout).setOnClickListener(new View.OnClickListener() {
@@ -397,7 +450,7 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
                                 bundle.putString("id", "8");
                                 bundle.putString("name", "揭阳杂谈");
                                 intent.putExtras(bundle);
-                                startActivityForResult(intent,1);
+                                startActivityForResult(intent, 1);
                             }
                         });
 
@@ -419,7 +472,7 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==1){
+        if (requestCode == 1) {
             page = 1;
             mNewsAdapter.setEnableLoadMore(true);
             isLoadMore = false;
@@ -439,15 +492,30 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
 
     @Override
     public void showData(List<News> data) {
+        List<News> newData = new ArrayList<>();
+        for(int i=0;i<data.size();i++){
+            News news=data.get(i);//如果不是1说明不是图片类型，可能为视频类型
+            if(!"1".equals(news.getImage1Type())){
+                if(!TextUtils.isEmpty(news.getImage1Uri())){
+                     if(news.getImage1Uri().contains("shipin")){
+
+                     }
+                }
+            }
+        }
         Log.e("time", page + "");
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
             mNewsAdapter.setEnableLoadMore(true);
         }
+
         if (data == null) {
             mNewsAdapter.loadMoreEnd();
             //mNewsAdapter.setEnableLoadMore(false);
+        } else {
+
         }
+
         if (isLoadMore) {
             isLoadMore = false;
             mNewsAdapter.loadMoreComplete();
@@ -458,6 +526,25 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
             mRecyclerView.setAdapter(mNewsAdapter);
         }
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //
+                List<NewsDb> newsDbs = LitePal.findAll(NewsDb.class);
+                if(newsDbs.size()==0)
+                for (News news : data) {
+                    NewsDb newsDb = new NewsDb();
+                    newsDb.setNewsId(news.getId());
+                    newsDb.setCommentNum(news.getCommentNum());
+                    newsDb.setReadNum(news.getReadNum());
+                    newsDb.setTitle(news.getTitle());
+                    newsDb.setContent(news.getContent());
+                    newsDb.setUrl(news.getImage1Uri());
+                    boolean issecc=newsDb.save();
+                    Log.e("succ",issecc+"");
+                }
+            }
+        }).start();
 
     }
 
@@ -485,8 +572,8 @@ public class ForumFragment extends Fragment implements Contract.MvpView<List<New
                             isLoadMore = false;
                             mNewsAdapter.loadMoreComplete();
                             mNewsAdapter.addData(retrofitResponse.getData().getBeanList());
-                            if(retrofitResponse.getData().getBeanList().size()==0){
-                                Log.e("empty","empty");
+                            if (retrofitResponse.getData().getBeanList().size() == 0) {
+                                Log.e("empty", "empty");
                                 mNewsAdapter.loadMoreEnd();
 
                             }

@@ -4,8 +4,8 @@ public class Api {
 
     public static final String webNewUrl="http://119.23.216.131:8085/";//新版唯我帮接口
     public static final String localNewUrl="http://192.168.3.29:8085/";//新版唯我帮接口
-    public static final String localSellerUrl="http://192.168.3.29:8087/";
-    public static final String rootUrl = "http://119.23.216.131:8087/";//商家
+    public static final String localSellerUrl="http://192.168.3.29:8087/";//商家本地接口
+    public static final String rootUrl = "http://119.23.216.131:8087/";//商家远程接口
     public static class Message{
         public static final String sPostEdit="message/edit/" ;
         public static final String sPostDel="message/delete/";
@@ -19,12 +19,16 @@ public class Api {
     }
 
     public static class User{
-        public static final String sGetCash="remove_valuation_rule/getCostByDistance";
+        public static final String sGetCash= "remove_valuation_rule/getCostByDistance";
         public static final String sGetVerifyCode = "bbs_user/getVerificationCode/";
         public static final String sGetUserInfo = "bbs_user/getInformation/";
         public static final String sPostLogin ="bbs_user/login/";
         public static final String sPostRegister="bbs_user/register/";
         public static final String sPostUpdateName="bbs_user/updateName/";
+        public static final String sWechatLogin ="bbs_user/loginByWechat/";
+        public static final String sBindWechat ="bbs_user/bindTelephone/";
+        public static final String sIsBindWechat ="bbs_user/isTelephoneBindWechat/";
+
         public static final String sPostResetPwd="bbs_user/resetPassword/";
         public static final String sPostUpdateHead="bbs_user/updateHeading/";
         public static final String sPostSugg="problem_report/add/";

@@ -155,7 +155,7 @@ public class RunnerFragment extends Fragment {
         new CompositeDisposable().add(disposable);
     }
     private void getMoney(double distance) {
-        Disposable disposable = NetWorkManager.getRequest(ApiService.class).getMoney(distance,MyAPP.token2)
+        Disposable disposable = NetWorkManager.getRequest(ApiService.class).getMoney(distance)
                 //.compose(ResponseTransformer.handleResult())
                 .compose(SchedulerProvider.getInstance().applySchedulers())
                 .subscribe(new Consumer<RetrofitResponse>() {
@@ -218,17 +218,13 @@ public class RunnerFragment extends Fragment {
                 if (!MyAPP.isLogin) {
                     startActivity(new Intent(getContext(), LoginActivity.class));
                 } else {
-                    try {
+
                         if (PreferenceManager.getInstance().getUserinfo().getIsBusiness().equals("2"))
                             startActivity(new Intent(getContext(), SellermainActivity.class));
                         else {
                             startActivity(new Intent(getContext(), ContractActivity.class));
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
+
                 }
             }
         });

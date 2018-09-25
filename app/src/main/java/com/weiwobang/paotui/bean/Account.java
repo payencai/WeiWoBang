@@ -3,10 +3,21 @@ package com.weiwobang.paotui.bean;
 public class Account {
     private String username;
     private String password;
-
+    private String openid;
     public Account(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public Account() {
+    }
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
     }
 
     public String getUsername() {

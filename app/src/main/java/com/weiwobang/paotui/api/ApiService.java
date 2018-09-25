@@ -42,10 +42,50 @@ public interface ApiService {
 //    Observable<RetrofitResponse> postLogin(
 //            @FieldMap Map<String, String> params);
 
+
+
+    @GET("access_token?")
+    Call<ResponseBody> getOpenId(
+            @Query("appid") String appid,
+            @Query("secret") String secret,
+            @Query("code") String code,
+            @Query("grant_type") String grant_type
+    );
+
+
+
     @GET(Api.User.sGetVerifyCode)
     Observable<RetrofitResponse> getCode(
             @Query("telephone") String telephone
     );
+
+
+
+    @GET(Api.User.sIsBindWechat)
+    Observable<ResponseBody> isBindWechat(
+            @Query("telephone") String telephone,
+            @Query("code") String code
+    );
+
+    @FormUrlEncoded
+    @POST(Api.User.sBindWechat)
+    Observable<ResponseBody> bindWechat(
+            @Field("telephone") String telephone,
+            @Field("code") String code ,
+            @Field("type") int type ,
+            @Field("openId") String openId
+
+    );
+
+    @FormUrlEncoded
+    @POST(Api.User.sWechatLogin)
+    Observable<ResponseBody> loginByWechat(
+
+            @Field("type") int type ,
+            @Field("openId") String openId
+
+    );
+
 
 
     @FormUrlEncoded
@@ -57,6 +97,7 @@ public interface ApiService {
             @Field("contactLocation") String contactLocation,
             @Header("token") String token
     );
+
     @GET(Api.Message.sGetToday)
     Observable<RetrofitResponse<Data<News>>> getToday(
             @Query("page") int page
@@ -90,6 +131,7 @@ public interface ApiService {
             @Query("page") int page,
             @Query("content") String content
     );
+
     @GET(Api.Comment.sGetComment)
     Observable<RetrofitResponse<Bean>> getComment(
             @Query("messageId") String messageId,
@@ -104,7 +146,7 @@ public interface ApiService {
 
     @GET(Api.Remove.sGetDistance)
     Observable<RetrofitResponse> getDistance(
-            @Query("longitudeFrom") double longitudeFrom ,
+            @Query("longitudeFrom") double longitudeFrom,
             @Query("latitudeFrom") double latitudeFrom,
             @Query("longitudeTo") double longitudeTo,
             @Query("latitudeTo") double latitudeTo
@@ -114,12 +156,9 @@ public interface ApiService {
     /****************************************************Seller*****************************************************/
 
 
-
-
     @GET(Api.Seller.getHomepage)
     Observable<ResponseBody> getHomePage(
             @Header("token") String token);
-
 
 
     @GET(Api.Seller.getInProcess)
@@ -154,6 +193,7 @@ public interface ApiService {
             @Field("name") String name,
             @Header("token") String token
     );
+
     @FormUrlEncoded
     @POST(Api.Seller.addTel)
     Observable<ResponseBody> addTel(
@@ -170,6 +210,7 @@ public interface ApiService {
             @Field("heading") String heading,
             @Header("token") String token
     );
+
     @FormUrlEncoded
     @POST(Api.Seller.add)
     Observable<ResponseBody> addOrder(
@@ -181,6 +222,7 @@ public interface ApiService {
             @Field("heading") String heading,
             @Header("token") String token
     );
+
     @FormUrlEncoded
     @POST(Api.Seller.cancel)
     Observable<ResponseBody> cancel(
@@ -223,41 +265,20 @@ public interface ApiService {
     );
 
 
-
-
-
-
-
     /****************************************************POST请求*****************************************************/
-
-
-
-
 
 
     @FormUrlEncoded
     @POST(Api.Message.sPostPublish)
     Observable<RetrofitResponse> postPublic(
-              @FieldMap Map<String,Object> params,
-//            @Field("title") String title,
-//            @Field("categoryId") String categoryId,
-//            @Field("categoryName") String categoryName,
-//            @Field("image1") String image1,
-//            @Field("image2") String image2,
-//            @Field("image3") String image3,
-//            @Field("image4") String image4,
-//            @Field("image5") String image5,
-//            @Field("image6") String image6,
-//            @Field("linkman") String linkman,
-//            @Field("contactInfomation") String contactInfomation,
-//            @Field("content") String content,
+            @FieldMap Map<String, Object> params,
             @Header("token") String token
     );
 
     @FormUrlEncoded
     @POST(Api.Message.sPostEdit)
     Observable<RetrofitResponse> postEdit(
-            @FieldMap Map<String,Object> params,
+            @FieldMap Map<String, Object> params,
 //            @Field("id") String id,
 //            @Field("image1") String image1,
 //            @Field("image2") String image2,
@@ -276,17 +297,20 @@ public interface ApiService {
     Observable<RetrofitResponse> postHeadImg(
             @Part() MultipartBody.Part image
     );
+
     @Multipart
     @POST(Api.User.sUpLoadVideo)
     Observable<RetrofitResponse> upLoadVideo(
             @Part() MultipartBody.Part file
     );
+
     @FormUrlEncoded
     @POST(Api.User.sPostRegister)
     Observable<RetrofitResponse> postRegister(
             @Field("telephone") String telephone,
             @Field("code") String code,
-            @Field("password") String password
+            @Field("password") String password,
+            @Field("openId") String openId
     );
 
     @FormUrlEncoded
@@ -382,22 +406,24 @@ public interface ApiService {
             @Field("addressToDetail") String addressToDetail,
             @Header("token") String token
     );
+
     @FormUrlEncoded
     @POST(Api.Remove.sPostAdd)
-    Observable<RetrofitResponse> removeAdd(
-            @FieldMap Map<String,Object>  params,
+    Observable<ResponseBody> removeAdd(
+            @FieldMap Map<String, Object> params,
             @Header("token") String token
     );
+
     @FormUrlEncoded
     @POST(Api.Remove.sAddCityOrder)
     Observable<RetrofitResponse> addCityOrder(
-            @FieldMap Map<String,Object> params,
+            @FieldMap Map<String, Object> params,
             @Header("token") String token
     );
+
     @FormUrlEncoded
     @POST(Api.User.sGetCash)
     Observable<RetrofitResponse> getMoney(
-            @Field("distance") double distance,
-            @Header("token") String token
+            @Field("distance") double distance
     );
 }

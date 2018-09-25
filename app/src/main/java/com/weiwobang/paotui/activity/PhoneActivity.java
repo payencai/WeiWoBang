@@ -3,6 +3,7 @@ package com.weiwobang.paotui.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -17,10 +18,12 @@ import com.payencai.library.http.retrofitAndrxjava.CustomException;
 import com.payencai.library.http.retrofitAndrxjava.NetWorkManager;
 import com.payencai.library.http.retrofitAndrxjava.RetrofitResponse;
 import com.payencai.library.http.retrofitAndrxjava.schedulers.SchedulerProvider;
+import com.payencai.library.util.ToastUtil;
 import com.weiwobang.paotui.JPush.JpushConfig;
 import com.weiwobang.paotui.MyAPP;
 import com.weiwobang.paotui.R;
 import com.weiwobang.paotui.api.ApiService;
+import com.weiwobang.paotui.bean.Account;
 import com.weiwobang.paotui.bean.Userinfo;
 import com.weiwobang.paotui.tools.ActManager;
 import com.weiwobang.paotui.tools.PreferenceManager;
@@ -57,14 +60,29 @@ public class PhoneActivity extends AppCompatActivity {
     }
 
     private void init() {
-        et_phone.setText("13202908144");
-        et_pwd.setText("123456");
-       // login(et_phone.getText().toString(), et_pwd.getText().toString());
+        Account account = PreferenceManager.getInstance().getAccount();
+        if (MyAPP.isDebug) {
+            et_phone.setText("13202908144");
+            et_pwd.setText("123456");
+            login(et_phone.getText().toString(), et_pwd.getText().toString());
+        }
+        if (account.getPassword() != null) {
+            et_pwd.setText(account.getPassword());
+            et_phone.setText(account.getUsername());
+        }
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String phone = et_phone.getEditableText().toString();
                 String pwd = et_pwd.getEditableText().toString();
+                if(TextUtils.isEmpty(phone)){
+                    ToastUtil.showToast(PhoneActivity.this,"请输入账号");
+                    return;
+                }
+                if(TextUtils.isEmpty(pwd)){
+                    ToastUtil.showToast(PhoneActivity.this,"请输入密码！");
+                    return;
+                }
                 login(phone, pwd);
             }
         });
@@ -96,16 +114,15 @@ public class PhoneActivity extends AppCompatActivity {
                         if (userinfoRetrofitResponse.getResultCode() == 0) {
                             Userinfo userinfo = userinfoRetrofitResponse.getData();
                             PreferenceManager.getInstance().setUserinfo(userinfo);
-                            MyAPP.isLogin=true;
-                            MyAPP.token=userinfo.getBusinessToken();
-                            MyAPP.token2=userinfo.getToken();
-                           // MyAPP.alias=userinfo.getPushAlias();
-                            //JpushConfig.getInstance().resumeJPush();
-                           // JpushConfig.getInstance().setAlias(userinfo.getPushAlias());
-                            //JpushConfig.getInstance().setTag("android");
+                            MyAPP.isLogin = true;
+                            MyAPP.token = userinfo.getBusinessToken();
+                            MyAPP.token2 = userinfo.getToken();
+                            PreferenceManager.getInstance().setAccount(new Account(account,password));
                             ActManager.getAppManager().finishAllActivity();
                             startActivity(new Intent(PhoneActivity.this, MainActivity.class));
 
+                        } else {
+                            ToastUtil.showToast(PhoneActivity.this, userinfoRetrofitResponse.getMessage());
                         }
 
                     }
@@ -117,49 +134,7 @@ public class PhoneActivity extends AppCompatActivity {
                         Toast.makeText(PhoneActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-//        Disposable disposable = NetWorkManager.getRequest(ApiService.class).postLogin(account, password)
-//                //.compose(ResponseTransformer.handleResult())
-//                .compose(SchedulerProvider.getInstance().applySchedulers())
-//                .subscribe(new Consumer<RetrofitResponse<Userinfo>>() {
-//                    @Override
-//                    public void accept(RetrofitResponse<Userinfo> retrofitResponse) throws Exception {
-//                        Log.e("result", retrofitResponse.getResultCode() + "");
-//                        if (retrofitResponse != null) {
-//
-//                            if (retrofitResponse.getResultCode() == 0) {
-//                                Userinfo userinfo = new Userinfo();
-////                                JSONObject jsonObject= (JSONObject) retrofitResponse.getData();
-//////                                Gson gson=new Gson();
-////                                //gson.fromJson(jsonObject.toString(),Userinfo.class);
-////                                userinfo.setAccount(jsonObject.getString("account"));
-////                                userinfo.setActiveTime(jsonObject.getString("activeTime"));
-////                                userinfo.setCreateTime(jsonObject.getString("createTime"));
-////                                userinfo.setHeading(jsonObject.getString("heading"));
-////                                userinfo.setHeadingUri(jsonObject.getString("headingUri"));
-////                                userinfo.setId(jsonObject.getString("id"));
-////                                userinfo.setIsBanned(jsonObject.getString("isBanned"));
-////                                userinfo.setIsDeleted(jsonObject.getString("isDeleted"));
-////                                userinfo.setLastPasswordResetDate(jsonObject.getString("lastPasswordResetDate"));
-////                                userinfo.setNickname(jsonObject.getString("nickname"));
-////                                userinfo.setOpenId(jsonObject.getString("openId"));
-////                                userinfo.setPushAlias(jsonObject.getString("pushAlias"));
-////                                userinfo.setSystemId(jsonObject.getString("systemId"));
-////                                userinfo.setToken(jsonObject.getString("token"));
-////                                PreferenceManager.getInstance().setUserinfo(userinfo);
-////                                startActivity(new Intent(PhoneActivity.this,MainActivity.class));
-//                            }
-//
-//                        }
-//                        //tv_test.setText(retrofitResponse.getExtend().toString());
-//                    }
-//                }, new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-//                        ApiException apiException = CustomException.handleException(throwable);
-//                        Log.e("error", apiException.getDisplayMessage());
-//                        Toast.makeText(PhoneActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+
         new CompositeDisposable().add(disposable);
 
 

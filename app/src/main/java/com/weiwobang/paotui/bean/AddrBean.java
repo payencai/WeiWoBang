@@ -3,10 +3,10 @@ package com.weiwobang.paotui.bean;
 import java.io.Serializable;
 
 public class AddrBean implements Serializable {
-    private String firaddr;
-    private String secaddr;
-    private double lat;
-    private String name;
+    private String firaddr="";
+    private String secaddr="";
+    private double lat=0.0;
+    private String name="";
 
     public String getName() {
         return name;
@@ -33,7 +33,7 @@ public class AddrBean implements Serializable {
         this.firaddr = firaddr;
     }
 
-    private double lon;
+    private double lon=0.0;
 
     public String getSecaddr() {
         return secaddr;

@@ -36,6 +36,29 @@ public class Userinfo implements Serializable{
     private String systemId;
     private String token;
     private String isBusiness;
+
+    @Override
+    public String toString() {
+        return "Userinfo{" +
+                "account='" + account + '\'' +
+                ", activeTime='" + activeTime + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", heading='" + heading + '\'' +
+                ", headingUri='" + headingUri + '\'' +
+                ", id='" + id + '\'' +
+                ", isBanned='" + isBanned + '\'' +
+                ", isDeleted='" + isDeleted + '\'' +
+                ", lastPasswordResetDate='" + lastPasswordResetDate + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", openId='" + openId + '\'' +
+                ", pushAlias='" + pushAlias + '\'' +
+                ", systemId='" + systemId + '\'' +
+                ", token='" + token + '\'' +
+                ", isBusiness='" + isBusiness + '\'' +
+                ", businessToken='" + businessToken + '\'' +
+                '}';
+    }
+
     private String businessToken;
     public String getIsBusiness() {
         return isBusiness;

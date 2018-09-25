@@ -31,7 +31,7 @@ public class HomeFragment extends Fragment {
     TabLayout mTabLayout;
     private Fragment[] mFragmensts;
 
-    public static final String[] mTabTitle = new String[]{"我要跑腿", "我要搬家", "同城速运"};
+    public static final String[] mTabTitle = new String[]{"我要跑腿", "我要搬家"};
 
     public HomeFragment() {
         // Required empty public constructor
@@ -58,10 +58,10 @@ public class HomeFragment extends Fragment {
     }
 
     public static Fragment[] getFragments(String from) {
-        Fragment fragments[] = new Fragment[3];
+        Fragment fragments[] = new Fragment[2];
         fragments[0] = RunnerFragment.newInstance(from);
         fragments[1] = RemoveFragment.newInstance(from);
-        fragments[2] = DeliveryFragment.newInstance(from);
+        //fragments[2] = DeliveryFragment.newInstance(from);
         return fragments;
     }
 
@@ -82,7 +82,7 @@ public class HomeFragment extends Fragment {
     private void addFragments() {
         getActivity().getSupportFragmentManager().beginTransaction().add(R.id.content, mFragmensts[0]).commit();
         getActivity().getSupportFragmentManager().beginTransaction().add(R.id.content, mFragmensts[1]).commit();
-        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.content, mFragmensts[2]).commit();
+        //getActivity().getSupportFragmentManager().beginTransaction().add(R.id.content, mFragmensts[2]).commit();
     }
 
     private void showFragment(int index) {
@@ -98,21 +98,21 @@ public class HomeFragment extends Fragment {
             case 0:
                 fragment = mFragmensts[0];
                 hideFragment(1);
-                hideFragment(2);
+                //hideFragment(2);
                 showFragment(0);
                 break;
             case 1:
                 fragment = mFragmensts[1];
                 hideFragment(0);
                 showFragment(1);
-                hideFragment(2);
+               // hideFragment(2);
                 break;
-            case 2:
-                fragment = mFragmensts[2];
-                hideFragment(0);
-                hideFragment(1);
-                showFragment(2);
-                break;
+//            case 2:
+//                fragment = mFragmensts[2];
+//                hideFragment(0);
+//                hideFragment(1);
+//                //showFragment(2);
+//                break;
 
         }
     }
@@ -150,7 +150,7 @@ public class HomeFragment extends Fragment {
             }
         });
         // 提供自定义的布局添加Tab
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 2; i++) {
             mTabLayout.addTab(mTabLayout.newTab().setCustomView(getTabView(getContext(), i)));
         }
 

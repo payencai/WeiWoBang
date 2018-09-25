@@ -19,20 +19,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amap.api.col.n3.io;
+import com.google.gson.JsonObject;
 import com.payencai.library.http.retrofitAndrxjava.ApiException;
 import com.payencai.library.http.retrofitAndrxjava.CustomException;
 import com.payencai.library.http.retrofitAndrxjava.NetWorkManager;
 import com.payencai.library.http.retrofitAndrxjava.RetrofitResponse;
 import com.payencai.library.http.retrofitAndrxjava.schedulers.SchedulerProvider;
+import com.payencai.library.util.IpGetUtil;
+import com.payencai.library.util.ToastUtil;
+import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.weiwobang.paotui.MyAPP;
 import com.weiwobang.paotui.R;
 import com.weiwobang.paotui.activity.ConfirmActivity;
+import com.weiwobang.paotui.activity.LoginActivity;
 import com.weiwobang.paotui.activity.OrderaddrActivity;
 import com.weiwobang.paotui.api.ApiService;
 import com.weiwobang.paotui.bean.NewAddr;
 import com.weiwobang.paotui.view.PickerView;
 
 import org.feezu.liuli.timeselector.TimeSelector;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +50,7 @@ import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import okhttp3.ResponseBody;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -80,11 +88,12 @@ public class RemoveFragment extends Fragment {
     TextView tv_distance;
     NewAddr addrQu = null;
     NewAddr addrSong = null;
-    String selectfloor="无电梯四层";
+    String selectfloor = "无电梯四层";
     String startFloor;
     String endFloor;
     //对话框
     PickerView pickerView;
+
     public RemoveFragment() {
         // Required empty public constructor
     }
@@ -92,7 +101,7 @@ public class RemoveFragment extends Fragment {
 
     public static RemoveFragment newInstance(String from) {
         Bundle args = new Bundle();
-        args.putString("from",from);
+        args.putString("from", from);
         RemoveFragment fragment = new RemoveFragment();
         fragment.setArguments(args);
         return fragment;
@@ -128,15 +137,15 @@ public class RemoveFragment extends Fragment {
 
 
     private void getCaldata(NewAddr addrQu, NewAddr addrSong) {
-        Disposable disposable = NetWorkManager.getRequest(ApiService.class).getDistance(addrQu.getLon(), addrQu.getLat(), addrSong.getLon(),addrSong.getLat())
+        Disposable disposable = NetWorkManager.getRequest(ApiService.class).getDistance(addrQu.getLon(), addrQu.getLat(), addrSong.getLon(), addrSong.getLat())
                 //.compose(ResponseTransformer.handleResult())
                 .compose(SchedulerProvider.getInstance().applySchedulers())
                 .subscribe(new Consumer<RetrofitResponse>() {
                     @Override
                     public void accept(RetrofitResponse retrofitResponse) throws Exception {
-                        double distance= (double) retrofitResponse.getData();
+                        double distance = (double) retrofitResponse.getData();
                         subLayout.setVisibility(View.VISIBLE);
-                        tv_distance.setText(distance+"km");
+                        tv_distance.setText(distance + "km");
                         getMoney(distance);
                     }
                 }, new Consumer<Throwable>() {
@@ -148,15 +157,17 @@ public class RemoveFragment extends Fragment {
                 });
         new CompositeDisposable().add(disposable);
     }
+
     private void getMoney(double distance) {
-        Disposable disposable = NetWorkManager.getRequest(ApiService.class).getMoney(distance,MyAPP.token2)
+        Disposable disposable = NetWorkManager.getRequest(ApiService.class).getMoney(distance)
                 //.compose(ResponseTransformer.handleResult())
                 .compose(SchedulerProvider.getInstance().applySchedulers())
                 .subscribe(new Consumer<RetrofitResponse>() {
                     @Override
                     public void accept(RetrofitResponse retrofitResponse) throws Exception {
-                        Double money= (double) retrofitResponse.getData();
-                        cash.setText("￥"+money);
+                        Double money = (Double) retrofitResponse.getData();
+                        Log.e("distance", money + "km" + distance);
+                        cash.setText("￥" + money);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -167,15 +178,17 @@ public class RemoveFragment extends Fragment {
                 });
         new CompositeDisposable().add(disposable);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.wwb_fragment_remove, container, false);
-        ButterKnife.bind(this,view);
+        View view = inflater.inflate(R.layout.wwb_fragment_remove, container, false);
+        ButterKnife.bind(this, view);
         initView();
         return view;
     }
-    private void initView(){
+
+    private void initView() {
         time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -197,62 +210,104 @@ public class RemoveFragment extends Fragment {
         reAddr1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getContext(), OrderaddrActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putInt("type",2);
-                bundle.putInt("flag",1);
+                Intent intent = new Intent(getContext(), OrderaddrActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("type", 2);
+                bundle.putInt("flag", 1);
                 intent.putExtras(bundle);
-                startActivityForResult(intent,1);
+                startActivityForResult(intent, 1);
             }
         });
         reAddr2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getContext(), OrderaddrActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putInt("type",2);
-                bundle.putInt("flag",2);
+                Intent intent = new Intent(getContext(), OrderaddrActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("type", 2);
+                bundle.putInt("flag", 2);
                 intent.putExtras(bundle);
-                startActivityForResult(intent,2);
+                startActivityForResult(intent, 2);
             }
         });
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                submit();
+                if (MyAPP.isLogin)
+                    submit();
+                else {
+                    startActivity(new Intent(getContext(), LoginActivity.class));
+                }
             }
         });
     }
-    private void submit(){
-        String contact=etContact.getEditableText().toString();
-        String phone=etPhone.getEditableText().toString();
-        String t=tv_time.getText().toString();
-        String desc=etDesc.getEditableText().toString();
-        Map<String,Object> params=new HashMap<>();
-        params.put("longitudeFrom",addrQu.getLon());
-        params.put("latitudeFrom",addrQu.getLat());
-        params.put("addressFrom",addrQu.getAddress());
-        params.put("addressFromDetail",addrQu.getDetail());
-        params.put("floorFrom",ceng.getText().toString());
-        params.put("longitudeTo",addrSong.getLon());
-        params.put("latitudeTo",addrSong.getLat());
-        params.put("addressTo",addrSong.getAddress());
-        params.put("addressToDetail",addrSong.getDetail());
-        params.put("floorTo",ceng2.getText().toString());
-        params.put("contactName",contact);
-        params.put("telephoneNum",phone);
-        params.put("removeTime",t.substring(0,11));
-        params.put("note",desc);
+
+    private void submit() {
+        String contact = etContact.getEditableText().toString();
+        String phone = etPhone.getEditableText().toString();
+        String t = tv_time.getText().toString();
+        String desc = etDesc.getEditableText().toString();
+        String floorFrom = ceng.getText().toString();
+        String floorTo = ceng2.getText().toString();
+        Map<String, Object> params = new HashMap<>();
+        if (TextUtils.isEmpty(contact)) {
+            ToastUtil.showToast(getContext(), "联系人不能为空");
+            return;
+        }
+        if (TextUtils.isEmpty(phone)) {
+            ToastUtil.showToast(getContext(), "联系电话不能为空");
+            return;
+        }
+        if (TextUtils.equals(t, "点击选择计划搬家时间")) {
+            ToastUtil.showToast(getContext(), "请选择搬家时间");
+            return;
+        }
+        if (TextUtils.isEmpty(floorFrom)) {
+            ToastUtil.showToast(getContext(), "请选择楼层！");
+            return;
+        }
+        if (TextUtils.isEmpty(floorFrom)) {
+            ToastUtil.showToast(getContext(), "请选择楼层！");
+            return;
+        }
+        params.put("longitudeFrom", addrQu.getLon());
+        params.put("latitudeFrom", addrQu.getLat());
+        params.put("addressFrom", addrQu.getAddress());
+        params.put("addressFromDetail", addrQu.getDetail());
+        params.put("floorFrom", floorFrom);
+        params.put("longitudeTo", addrSong.getLon());
+        params.put("latitudeTo", addrSong.getLat());
+        params.put("addressTo", addrSong.getAddress());
+        params.put("addressToDetail", addrSong.getDetail());
+        params.put("floorTo", floorTo);
+        params.put("contactName", contact);
+        params.put("telephoneNum", phone);
+        params.put("removeTime", t.substring(0, 11));
+        params.put("note", desc);
+        params.put("spbillCreatIp", IpGetUtil.getIPAddress(getContext()));
+        Log.e("remove", params.toString());
         Disposable disposable = NetWorkManager.getRequest(ApiService.class).removeAdd(params, MyAPP.token2)
                 // .compose(ResponseTransformer.handleResult())
                 .compose(SchedulerProvider.getInstance().applySchedulers())
-                .subscribe(new Consumer<RetrofitResponse>() {
+                .subscribe(new Consumer<ResponseBody>() {
                     @Override
-                    public void accept(RetrofitResponse retrofitResponse) throws Exception {
-                        if(retrofitResponse.getResultCode()==0){
-                            Toast.makeText(getContext(), "下单成功", Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(getContext(), retrofitResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    public void accept(ResponseBody retrofitResponse) throws Exception {
+                        JSONObject jsonObject = new JSONObject(retrofitResponse.string());
+                        String msg = jsonObject.getString("message");
+                        int code = jsonObject.getInt("resultCode");
+                        JSONObject data = jsonObject.getJSONObject("data");
+                        Log.e("data", data.toString());
+                        if (code == 0) {
+                            PayReq payReq = new PayReq();
+                            payReq.appId = data.getString("appid");
+                            payReq.partnerId = data.getString("partnerid");
+                            payReq.prepayId = data.getString("prepayid");
+                            payReq.packageValue = data.getString("package");
+                            payReq.nonceStr = data.getString("noncestr");
+                            payReq.timeStamp = data.getString("timestamp");
+                            payReq.sign = data.getString("sign");
+                            MyAPP.mWxApi.sendReq(payReq);
+                        } else {
+                            Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, new Consumer<Throwable>() {
@@ -264,21 +319,22 @@ public class RemoveFragment extends Fragment {
                 });
         new CompositeDisposable().add(disposable);
     }
+
     private void dialogShow2(int type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View v = inflater.inflate(R.layout.wwb_picker_floor, null);
 
-        TextView confirm=v.findViewById(R.id.confirm);
-        TextView cancel=v.findViewById(R.id.cancel);
-        pickerView = (PickerView)v.findViewById(R.id.picker);
+        TextView confirm = v.findViewById(R.id.confirm);
+        TextView cancel = v.findViewById(R.id.cancel);
+        pickerView = (PickerView) v.findViewById(R.id.picker);
         //builer.setView(v);//这里如果使用builer.setView(v)，自定义布局只会覆盖title和button之间的那部分
         pickerView.setData(createArrays());
         pickerView.setOnSelectListener(new PickerView.onSelectListener() {
             @Override
             public void onSelect(String text) {
-                if(!TextUtils.isEmpty(text))
-                    selectfloor=text;
+                if (!TextUtils.isEmpty(text))
+                    selectfloor = text;
             }
         });
         final Dialog dialog = builder.create();
@@ -290,12 +346,12 @@ public class RemoveFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                if(type==1){
+                if (type == 1) {
                     ceng.setText(selectfloor);
-                    startFloor=selectfloor;
-                }else{
+                    startFloor = selectfloor;
+                } else {
                     ceng2.setText(selectfloor);
-                    endFloor=selectfloor;
+                    endFloor = selectfloor;
                 }
             }
         });
@@ -323,16 +379,17 @@ public class RemoveFragment extends Fragment {
         timeSelector.show();
 
     }
-    public void dialog(){
+
+    public void dialog() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         //初始化自定义布局参数
         LayoutInflater layoutInflater = getLayoutInflater();
-        final View customLayout = layoutInflater.inflate(R.layout.wwb_picker_floor, (ViewGroup)getActivity().findViewById(R.id.customDialog));
+        final View customLayout = layoutInflater.inflate(R.layout.wwb_picker_floor, (ViewGroup) getActivity().findViewById(R.id.customDialog));
         //为对话框设置视图
         builder.setView(customLayout);
-        pickerView = (PickerView)customLayout.findViewById(R.id.picker);
-        TextView confirm=customLayout.findViewById(R.id.confirm);
-        TextView cancel=customLayout.findViewById(R.id.cancel);
+        pickerView = (PickerView) customLayout.findViewById(R.id.picker);
+        TextView confirm = customLayout.findViewById(R.id.confirm);
+        TextView cancel = customLayout.findViewById(R.id.cancel);
         //定义滚动选择器的数据项
         ArrayList<String> grade = createArrays();
         final Dialog dialog = builder.create();
@@ -341,7 +398,7 @@ public class RemoveFragment extends Fragment {
         pickerView.setOnSelectListener(new PickerView.onSelectListener() {
             @Override
             public void onSelect(String text) {
-                Log.i("tag","选择了"+text);
+                Log.i("tag", "选择了" + text);
 
             }
         });
@@ -355,6 +412,7 @@ public class RemoveFragment extends Fragment {
         builder.show();
 
     }
+
     private ArrayList<String> createArrays() {
         ArrayList<String> list = new ArrayList<String>();
         list.add("有电梯");

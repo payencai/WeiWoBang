@@ -1,105 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="vertical"
-                android:paddingTop="@dimen/margin_10dp"
                 android:layout_width="match_parent"
-                android:layout_height="160dp">
-    <com.lqm.roundview.RoundImageView
-        android:scaleType="centerCrop"
-        android:padding="5dp"
-        android:layout_centerVertical="true"
-        android:id="@+id/item_icon"
-        android:layout_marginRight="20dp"
-        android:src="@mipmap/wwb_icon"
-        android:layout_alignParentRight="true"
-        android:layout_width="140dp"
-        android:layout_height="130dp"/>
-    <TextView
-        android:layout_alignParentLeft="true"
-        android:layout_marginRight="@dimen/margin_10dp"
-        android:maxLines="2"
-        android:maxEms="18"
-        android:ellipsize="end"
-        android:layout_toLeftOf="@id/item_icon"
-        android:id="@+id/item_title"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="15dp"
-        android:textColor="@color/black_33"
-        android:textSize="18sp"
-        android:text="我还是我还是标题我还是标题标题我还是标题"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <TextView
+                android:layout_height="160dp"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/margin_10dp">
 
-        android:layout_marginRight="@dimen/margin_20dp"
-        android:layout_toLeftOf="@id/item_icon"
-        android:maxEms="18"
-        android:ellipsize="end"
-        android:maxLines="3"
-        android:id="@+id/item_detail"
-        android:layout_below="@id/item_title"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="15dp"
-        android:textColor="@color/color_999"
-        android:textSize="16sp"
-        android:text="信息详情缩率"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
     <RelativeLayout
-        android:paddingRight="@dimen/margin_5dp"
+
+        android:id="@+id/img_layout"
+        android:layout_width="150dp"
+        android:layout_height="140dp"
+        android:layout_alignParentRight="true">
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/btn_play"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/margin_50dp"
+            android:elevation="5dp"
+            android:src="@drawable/video"/>
+
+        <com.lqm.roundview.RoundImageView
+            android:elevation="5dp"
+            android:id="@+id/item_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/wwb_icon"/>
+        <com.weiwobang.paotui.view.SampleCoverVideo
+            android:id="@+id/video_item"
+            android:visibility="gone"
+            android:layout_marginRight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.weiwobang.paotui.view.SampleCoverVideo>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="15dp"
         android:layout_marginRight="@dimen/margin_10dp"
-        android:layout_toLeftOf="@id/item_icon"
-        android:layout_marginTop="115dp"
+        android:layout_marginTop="5dp"
+        android:layout_toLeftOf="@id/img_layout"
+        android:ellipsize="end"
+        android:maxEms="18"
+        android:maxLines="2"
+        android:text="我还是我还是标题"
+        android:textColor="@color/black_33"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/item_detail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_title"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="@dimen/margin_20dp"
+        android:layout_marginTop="10dp"
+        android:layout_toLeftOf="@id/img_layout"
+        android:ellipsize="end"
+        android:maxEms="18"
+        android:maxLines="3"
+        android:text="信息详情缩率"
+        android:textColor="@color/color_999"
+        android:textSize="16sp"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/margin_10dp"
+        android:layout_marginTop="115dp"
+        android:paddingRight="@dimen/margin_5dp">
+
         <TextView
             android:id="@+id/type"
-           android:layout_alignParentLeft="true"
-            android:layout_marginLeft="15dp"
-            android:textColor="@color/color_999"
-            android:textSize="14sp"
-            android:text="二手物品"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dp"
+            android:text="二手物品"
+            android:textColor="@color/color_999"
+            android:textSize="14sp"/>
+
         <ImageView
-            android:layout_toLeftOf="@id/comment_num"
+            android:layout_marginLeft="@dimen/margin_10dp"
             android:id="@+id/iv_comm"
-            android:src="@mipmap/wwb_comment"
             android:layout_width="@dimen/margin_20dp"
-            android:layout_height="20dp"/>
+            android:layout_height="20dp"
+            android:layout_toRightOf="@id/type"
+            android:src="@mipmap/wwb_comment"/>
+
         <TextView
             android:id="@+id/comment_num"
-            android:layout_toLeftOf="@+id/iv_read"
-            android:layout_marginLeft="5dp"
-            android:textColor="@color/color_999"
-            android:textSize="14sp"
-            android:text="14"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/iv_comm"
+            android:text="14"
+            android:textColor="@color/color_999"
+            android:textSize="14sp"/>
+
         <ImageView
             android:id="@+id/iv_read"
-            android:layout_toLeftOf="@id/read_num"
-            android:layout_marginLeft="15dp"
-            android:src="@mipmap/wwb_read"
             android:layout_width="@dimen/margin_20dp"
-            android:layout_height="20dp"/>
+            android:layout_height="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/comment_num"
+            android:src="@mipmap/wwb_read"/>
+
         <TextView
             android:id="@+id/read_num"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="5dp"
-            android:textColor="@color/color_999"
-            android:textSize="14sp"
-            android:text="2000"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/iv_read"
+            android:layout_marginLeft="5dp"
+            android:text="2000"
+            android:textColor="@color/color_999"
+            android:textSize="14sp"/>
     </RelativeLayout>
 
     <View
 
-        android:layout_marginRight="@dimen/margin_20dp"
-        android:layout_marginLeft="@dimen/margin_15dp"
-        android:background="#e2e2e2"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="1dp"></View>
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/margin_15dp"
+        android:layout_marginRight="@dimen/margin_20dp"
+        android:background="#e2e2e2"></View>
 </RelativeLayout>

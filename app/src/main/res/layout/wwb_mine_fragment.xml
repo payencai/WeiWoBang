@@ -218,7 +218,36 @@
                 android:background="#e2e2e2"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"></View>
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/tele_layout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:id="@+id/wwb_tele"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/wwb_my_sugg"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"/>
 
+                <TextView
+                    android:textSize="16sp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/wwb_tele"
+                    android:text="我的望远镜"
+                    android:textColor="@color/color_333"/>
+                <ImageView
+                    android:layout_marginRight="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/wwb_enter"
+                    android:layout_width="10dp"
+                    android:layout_height="18dp"/>
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 

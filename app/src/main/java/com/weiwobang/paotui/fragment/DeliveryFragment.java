@@ -410,7 +410,7 @@ public class DeliveryFragment extends Fragment {
     }
 
     private void getMoney(double distance) {
-        Disposable disposable = NetWorkManager.getRequest(ApiService.class).getMoney(distance,MyAPP.token2)
+        Disposable disposable = NetWorkManager.getRequest(ApiService.class).getMoney(distance)
                 //.compose(ResponseTransformer.handleResult())
                 .compose(SchedulerProvider.getInstance().applySchedulers())
                 .subscribe(new Consumer<RetrofitResponse>() {

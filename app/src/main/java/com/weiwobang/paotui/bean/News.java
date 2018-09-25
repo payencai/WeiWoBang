@@ -1,8 +1,12 @@
 package com.weiwobang.paotui.bean;
 
+import android.graphics.Bitmap;
+
+import org.litepal.crud.LitePalSupport;
+
 import java.io.Serializable;
 
-public class News implements Serializable{
+public class News extends LitePalSupport implements Serializable{
     /**
      * bbsUserId : string
      * categoryId : string
@@ -30,7 +34,12 @@ public class News implements Serializable{
      * title : string
      * updateTime : 2018-07-31T10:01:03.254Z
      */
-
+    private String image1Type;
+    private String image2Type;
+    private String image3Type;
+    private String image4Type;
+    private String image5Type;
+    private String image6Type;
     private String bbsUserId;
     private String categoryId;
     private String categoryName;
@@ -56,6 +65,109 @@ public class News implements Serializable{
     private int readNum;
     private String title;
     private String updateTime;
+    private Bitmap video1Img;
+    private Bitmap video2Img;
+    private Bitmap video3Img;
+    private Bitmap video4Img;
+
+    public Bitmap getVideo1Img() {
+        return video1Img;
+    }
+
+    public void setVideo1Img(Bitmap video1Img) {
+        this.video1Img = video1Img;
+    }
+
+    public Bitmap getVideo2Img() {
+        return video2Img;
+    }
+
+    public void setVideo2Img(Bitmap video2Img) {
+        this.video2Img = video2Img;
+    }
+
+    public Bitmap getVideo3Img() {
+        return video3Img;
+    }
+
+    public void setVideo3Img(Bitmap video3Img) {
+        this.video3Img = video3Img;
+    }
+
+    public Bitmap getVideo4Img() {
+        return video4Img;
+    }
+
+    public void setVideo4Img(Bitmap video4Img) {
+        this.video4Img = video4Img;
+    }
+
+    public Bitmap getVideo5Img() {
+        return video5Img;
+    }
+
+    public void setVideo5Img(Bitmap video5Img) {
+        this.video5Img = video5Img;
+    }
+
+    public Bitmap getVideo6Img() {
+        return video6Img;
+    }
+
+    public void setVideo6Img(Bitmap video6Img) {
+        this.video6Img = video6Img;
+    }
+
+    private Bitmap video5Img;
+    private Bitmap video6Img;
+    public String getImage1Type() {
+        return image1Type;
+    }
+
+    public void setImage1Type(String image1Type) {
+        this.image1Type = image1Type;
+    }
+
+    public String getImage2Type() {
+        return image2Type;
+    }
+
+    public void setImage2Type(String image2Type) {
+        this.image2Type = image2Type;
+    }
+
+    public String getImage3Type() {
+        return image3Type;
+    }
+
+    public void setImage3Type(String image3Type) {
+        this.image3Type = image3Type;
+    }
+
+    public String getImage4Type() {
+        return image4Type;
+    }
+
+    public void setImage4Type(String image4Type) {
+        this.image4Type = image4Type;
+    }
+
+    public String getImage5Type() {
+        return image5Type;
+    }
+
+    public void setImage5Type(String image5Type) {
+        this.image5Type = image5Type;
+    }
+
+    public String getImage6Type() {
+        return image6Type;
+    }
+
+    public void setImage6Type(String image6Type) {
+        this.image6Type = image6Type;
+    }
+
 
     public String getBbsUserId() {
         return bbsUserId;

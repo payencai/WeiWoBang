@@ -67,14 +67,10 @@ public class MypublishActivity extends AppCompatActivity implements Contract.Mvp
     }
 
     private void getData() {
-        try {
-            mMvpPresenter = new MvpPresenter(this, PreferenceManager.getInstance().getUserinfo().getToken(), page);
-            mMvpPresenter.getMyPublish();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+
+        mMvpPresenter = new MvpPresenter(this, PreferenceManager.getInstance().getUserinfo().getToken(), page);
+        mMvpPresenter.getMyPublish();
+
     }
 
     private void initNews() {
@@ -257,29 +253,24 @@ public class MypublishActivity extends AppCompatActivity implements Contract.Mvp
     }
 
     private void delMsg(String id) {
-        Disposable disposable = null;
-        try {
-            disposable = NetWorkManager.getRequest(ApiService.class).postDelMsg(id, PreferenceManager.getInstance().getUserinfo().getToken())
-                    //.compose(ResponseTransformer.handleResult())
-                    .compose(SchedulerProvider.getInstance().applySchedulers())
-                    .subscribe(new Consumer<RetrofitResponse>() {
-                        @Override
-                        public void accept(RetrofitResponse retrofitResponse) throws Exception {
-                            Toast.makeText(MypublishActivity.this, "删除成功", Toast.LENGTH_LONG).show();
-                            getData();
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-                            ApiException apiException = CustomException.handleException(throwable);
+        Disposable
+                disposable = NetWorkManager.getRequest(ApiService.class).postDelMsg(id, PreferenceManager.getInstance().getUserinfo().getToken())
+                //.compose(ResponseTransformer.handleResult())
+                .compose(SchedulerProvider.getInstance().applySchedulers())
+                .subscribe(new Consumer<RetrofitResponse>() {
+                    @Override
+                    public void accept(RetrofitResponse retrofitResponse) throws Exception {
+                        Toast.makeText(MypublishActivity.this, "删除成功", Toast.LENGTH_LONG).show();
+                        getData();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        ApiException apiException = CustomException.handleException(throwable);
 
-                        }
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+                    }
+                });
+
         new CompositeDisposable().add(disposable);
     }
 
@@ -347,10 +338,10 @@ public class MypublishActivity extends AppCompatActivity implements Contract.Mvp
         }
         if (data.size() == 0) {
             if (isLoadMore) {
-               // Log.e("load", "type");
+                // Log.e("load", "type");
                 //没有更多数据
                 mNewsAdapter.loadMoreEnd();
-            }else{
+            } else {
                 mNewsAdapter.setNewData(data);
                 mRecyclerView.setAdapter(mNewsAdapter);
             }
@@ -365,7 +356,6 @@ public class MypublishActivity extends AppCompatActivity implements Contract.Mvp
 
             }
         }
-
 
 
     }

@@ -76,46 +76,36 @@ public class ReplyActivity extends AppCompatActivity {
         reply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    if (!mComment.getCommentUserId().equals(PreferenceManager.getInstance().getUserinfo().getId())) {
-                        Toast.makeText(ReplyActivity.this, "抱歉！，只支持回复自己发布的消息的评论。", Toast.LENGTH_LONG).show();
-                    } else {
-                        postReply();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+
+                if (!mComment.getCommentUserId().equals(PreferenceManager.getInstance().getUserinfo().getId())) {
+                    Toast.makeText(ReplyActivity.this, "抱歉！，只支持回复自己发布的消息的评论。", Toast.LENGTH_LONG).show();
+                } else {
+                    postReply();
                 }
+
             }
         });
     }
 
     private void postReply() {
-        Disposable disposable = null;
-        try {
-            disposable = NetWorkManager.getRequest(ApiService.class).postReplyComment(mComment.getId(), input.getEditableText().toString(), PreferenceManager.getInstance().getUserinfo().getToken())
-                    //.compose(ResponseTransformer.handleResult())
-                    .compose(SchedulerProvider.getInstance().applySchedulers())
-                    .subscribe(new Consumer<RetrofitResponse>() {
-                        @Override
-                        public void accept(RetrofitResponse retrofitResponse) throws Exception {
-                            Toast.makeText(ReplyActivity.this, "回复成功", Toast.LENGTH_SHORT).show();
+        Disposable disposable = NetWorkManager.getRequest(ApiService.class).postReplyComment(mComment.getId(), input.getEditableText().toString(), PreferenceManager.getInstance().getUserinfo().getToken())
+                //.compose(ResponseTransformer.handleResult())
+                .compose(SchedulerProvider.getInstance().applySchedulers())
+                .subscribe(new Consumer<RetrofitResponse>() {
+                    @Override
+                    public void accept(RetrofitResponse retrofitResponse) throws Exception {
+                        Toast.makeText(ReplyActivity.this, "回复成功", Toast.LENGTH_SHORT).show();
 
-                            finish();
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-                            ApiException apiException = CustomException.handleException(throwable);
-                            //Toast.makeText(RegisterActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+                        finish();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        ApiException apiException = CustomException.handleException(throwable);
+                        //Toast.makeText(RegisterActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
         new CompositeDisposable().add(disposable);
     }
 

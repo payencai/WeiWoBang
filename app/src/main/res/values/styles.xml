@@ -49,7 +49,10 @@
         <item name="android:windowExitAnimation">@anim/push_buttom_out</item>
         <!-- 指定消失的动画xml -->
     </style>
-    <style name="AnimDown" parent="@android:style/Animation">
+    <style name="AnimDown" parent="dialog">
+
+
+        <!--模糊-->
         <item name="android:windowEnterAnimation">@anim/push_scale_in</item>
         <item name="android:windowExitAnimation">@anim/push_scale_out</item>
     </style>
@@ -153,7 +156,15 @@
         <item name="android:layout_height">1px</item>
     </style>
 
-
+    <!-- Navigation Header -->
+    <style name="NavPage">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center_horizontal</item>
+        <!-- <item name="android:background">@drawable/nav_page</item> -->
+        <item name="android:background">@color/navpage</item>
+    </style>
 
 
 

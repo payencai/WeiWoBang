@@ -8,7 +8,7 @@
     <color name="alpha">#00000000</color>
     <color name="white">#FFFFFF</color>
     <color name="alpha_black">#99000000</color>
-
+    <color name="navpage">#FFE1E8EB</color>
     <color name="tv_blue">#0092ff</color>
     <color name="bg_red">#D81E06</color>
     <color name="text_red">#ff4343</color>

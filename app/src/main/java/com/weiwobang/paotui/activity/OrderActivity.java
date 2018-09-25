@@ -24,7 +24,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class OrderActivity extends AppCompatActivity implements Contract.MvpView<List<Order>>{
+public class OrderActivity extends AppCompatActivity implements Contract.MvpView<List<Order>> {
     @BindView(R.id.sr_order)
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.rv_order)
@@ -33,8 +33,8 @@ public class OrderActivity extends AppCompatActivity implements Contract.MvpView
     @BindView(R.id.back)
     FrameLayout back;
     MvpPresenter<List<Order>> mMvpPresenter;
-    private int page=1;
-    private boolean isLoadMore=false;
+    private int page = 1;
+    private boolean isLoadMore = false;
 
 
     @Override
@@ -47,14 +47,15 @@ public class OrderActivity extends AppCompatActivity implements Contract.MvpView
         getData();
         //loadData();
     }
-    private void  initAdapter(){
+
+    private void initAdapter() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mOrderAdapter = new OrderAdapter(R.layout.wwb_item_order);
         mOrderAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
                 isLoadMore = true;
-              //  mOrderAdapter.setEnableLoadMore(true);
+                //  mOrderAdapter.setEnableLoadMore(true);
                 page++;
                 getData();
             }
@@ -63,9 +64,9 @@ public class OrderActivity extends AppCompatActivity implements Contract.MvpView
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                 page = 1;
-                 isLoadMore=false;
-                 getData();
+                page = 1;
+                isLoadMore = false;
+                getData();
                 //loadData();
             }
         });
@@ -85,6 +86,7 @@ public class OrderActivity extends AppCompatActivity implements Contract.MvpView
 //        });
 
     }
+
     private void initView() {
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -96,14 +98,10 @@ public class OrderActivity extends AppCompatActivity implements Contract.MvpView
     }
 
     private void getData() {
-        try {
-            mMvpPresenter = new MvpPresenter(this, PreferenceManager.getInstance().getUserinfo().getToken(),page);
-            mMvpPresenter.getMyOrder();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+
+        mMvpPresenter = new MvpPresenter(this, PreferenceManager.getInstance().getUserinfo().getToken(), page);
+        mMvpPresenter.getMyOrder();
+
 
     }
 
@@ -116,7 +114,8 @@ public class OrderActivity extends AppCompatActivity implements Contract.MvpView
     public void hideLoading() {
 
     }
-    private void loadData(){
+
+    private void loadData() {
 //        Log.e("laod","dfdgfg");
 //        Disposable disposable = null;
 //        try {
@@ -157,7 +156,8 @@ public class OrderActivity extends AppCompatActivity implements Contract.MvpView
 //            e.printStackTrace();
 //        }
 //        new CompositeDisposable().add(disposable);
-   }
+    }
+
     @Override
     public void showData(List<Order> data) {
         Log.e("page", page + "");
@@ -170,7 +170,7 @@ public class OrderActivity extends AppCompatActivity implements Contract.MvpView
                 Log.e("load", "type");
                 //没有更多数据
                 mOrderAdapter.loadMoreEnd();
-            }else{
+            } else {
                 mOrderAdapter.setNewData(data);
                 mRecyclerView.setAdapter(mOrderAdapter);
             }

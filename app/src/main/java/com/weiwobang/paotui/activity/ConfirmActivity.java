@@ -346,9 +346,7 @@ public class ConfirmActivity extends AppCompatActivity {
             ToastUtil.showToast(this, "备注不能为空");
             return;
         }
-        String token;
-        try {
-            token = PreferenceManager.getInstance().getUserinfo().getToken();
+        String token = PreferenceManager.getInstance().getUserinfo().getToken();
             Disposable disposable = NetWorkManager.getRequest(ApiService.class).postAdd(longitudeFrom,
                     latitudeFrom, addressFrom, addressFromDetail, floorFrom, longitudeTo, latitudeTo,
                     addressTo, floorTo, telephoneNum, removeTime, note, addressToDetail, token)
@@ -367,11 +365,7 @@ public class ConfirmActivity extends AppCompatActivity {
                         }
                     });
             new CompositeDisposable().add(disposable);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+
 
 
 

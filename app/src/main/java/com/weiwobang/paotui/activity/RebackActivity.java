@@ -63,29 +63,25 @@ public class RebackActivity extends AppCompatActivity {
 
     private void submit(String str) {
         Disposable disposable = null;
-        try {
-            disposable = NetWorkManager.getRequest(ApiService.class).postSugg(str, PreferenceManager.getInstance().getUserinfo().getToken())
-                    //.compose(ResponseTransformer.handleResult())
-                    .compose(SchedulerProvider.getInstance().applySchedulers())
-                    .subscribe(new Consumer<RetrofitResponse>() {
-                        @Override
-                        public void accept(RetrofitResponse retrofitResponse) throws Exception {
-                            Toast.makeText(RebackActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
-                            finish();
-                            startActivity(new Intent(RebackActivity.this,SuccActivity.class));
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-                            ApiException apiException = CustomException.handleException(throwable);
-                            Toast.makeText(RebackActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+
+        disposable = NetWorkManager.getRequest(ApiService.class).postSugg(str, PreferenceManager.getInstance().getUserinfo().getToken())
+                //.compose(ResponseTransformer.handleResult())
+                .compose(SchedulerProvider.getInstance().applySchedulers())
+                .subscribe(new Consumer<RetrofitResponse>() {
+                    @Override
+                    public void accept(RetrofitResponse retrofitResponse) throws Exception {
+                        Toast.makeText(RebackActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
+                        finish();
+                        startActivity(new Intent(RebackActivity.this, SuccActivity.class));
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        ApiException apiException = CustomException.handleException(throwable);
+                        Toast.makeText(RebackActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
         new CompositeDisposable().add(disposable);
     }
 }

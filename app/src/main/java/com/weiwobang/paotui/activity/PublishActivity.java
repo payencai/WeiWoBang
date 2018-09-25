@@ -29,6 +29,7 @@ import com.payencai.library.mediapicker.PickerConfig;
 import com.payencai.library.mediapicker.entity.Media;
 import com.payencai.library.util.ToastUtil;
 import com.payencai.library.util.image.Compressor;
+import com.weiwobang.paotui.MyAPP;
 import com.weiwobang.paotui.R;
 import com.weiwobang.paotui.adapter.ImgAdapter;
 import com.weiwobang.paotui.api.Api;
@@ -137,6 +138,7 @@ public class PublishActivity extends AppCompatActivity {
     }
 
     private void initView() {
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -204,6 +206,7 @@ public class PublishActivity extends AppCompatActivity {
                         for (int i = 0; i < defaultSelect.size(); i++) {
                             Media media = defaultSelect.get(i);
                             File file = new File(media.path);
+                            int j=i+1;
                             if (media.mediaType == 1) {
                                 File newFile = null;
                                 try {
@@ -212,9 +215,9 @@ public class PublishActivity extends AppCompatActivity {
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
-                                upLoadImg(newFile, 1, ++i);
+                                upLoadImg(newFile, "1", j);
                             } else {
-                                uploadVideo(file, 2, ++i);
+                                uploadVideo(file, "2", j);
                             }
 
                         }
@@ -227,6 +230,7 @@ public class PublishActivity extends AppCompatActivity {
                         for (int i = 0; i < defaultSelect.size(); i++) {
                             Media media = defaultSelect.get(i);
                             File file = new File(media.path);
+                            int j=i+1;
                             if (media.mediaType == 1) {
                                 File newFile = null;
                                 try {
@@ -235,9 +239,9 @@ public class PublishActivity extends AppCompatActivity {
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
-                                upLoadImg(newFile, 1, ++i);
+                                upLoadImg(newFile, "1", j);
                             } else {
-                                uploadVideo(file, 2, ++i);
+                                uploadVideo(file, "2", j);
                             }
 
                         }
@@ -249,7 +253,7 @@ public class PublishActivity extends AppCompatActivity {
         });
     }
 
-    private void uploadVideo(File file, int type, int position) {
+    private void uploadVideo(File file, String type, int position) {
         RequestBody requestFile =
                 RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part body =
@@ -263,7 +267,7 @@ public class PublishActivity extends AppCompatActivity {
                         if (retrofitResponse.getResultCode() == 0)
                         {
                             String data = retrofitResponse.getData().toString();
-                            Log.e("video", retrofitResponse.getResultCode()+"");
+                            Log.e("video", "video"+data + position);
                             flag++;
                             switch (position) {
                                 case 1:
@@ -324,7 +328,7 @@ public class PublishActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(comm)) {
             return;
         }
-        params.put("id", categoryId);
+        params.put("id", mNews.getId());
         params.put("image1", image1.getData());
         params.put("image1Type", image1.getType() + "");
         params.put("image2", image2.getData());
@@ -332,43 +336,41 @@ public class PublishActivity extends AppCompatActivity {
         params.put("image3", image3.getData());
         params.put("image3Type", image3.getType() + "");
         params.put("image4", image4.getData());
-        params.put("imageType", image4.getType());
+        params.put("image4Type", image4.getType() + "");
         params.put("image5", image5.getData());
         params.put("image5Type", image5.getType() + "");
         params.put("image6", image6.getData());
-        params.put("image6Type", image6 + "");
+        params.put("image6Type", image6.getType() + "");
         params.put("linkman", linkman);
         params.put("contactInfomation", tel);
         params.put("content", comm);
-        Disposable disposable = null;
-        try {
-            disposable = NetWorkManager.getRequest(ApiService.class).postEdit(params
-                    , PreferenceManager.getInstance().getUserinfo().getToken())
-                    //.compose(ResponseTransformer.handleResult())
-                    .compose(SchedulerProvider.getInstance().applySchedulers())
-                    .subscribe(new Consumer<RetrofitResponse>() {
-                        @Override
-                        public void accept(RetrofitResponse retrofitResponse) throws Exception {
-                            dialog.dismiss();
+        Log.e("st",params.toString());
+        Disposable disposable = NetWorkManager.getRequest(ApiService.class).postEdit(params
+                , PreferenceManager.getInstance().getUserinfo().getToken())
+                //.compose(ResponseTransformer.handleResult())
+                .compose(SchedulerProvider.getInstance().applySchedulers())
+                .subscribe(new Consumer<RetrofitResponse>() {
+                    @Override
+                    public void accept(RetrofitResponse retrofitResponse) throws Exception {
+                        if (retrofitResponse.getResultCode() == 0) {
                             Toast.makeText(PublishActivity.this, "更新成功", Toast.LENGTH_SHORT).show();
                             finish();
+                        }else{
+                            Toast.makeText(PublishActivity.this, retrofitResponse.getMessage(), Toast.LENGTH_SHORT).show();
                         }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-                            ApiException apiException = CustomException.handleException(throwable);
-                            Toast.makeText(PublishActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        ApiException apiException = CustomException.handleException(throwable);
+                        Toast.makeText(PublishActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
         new CompositeDisposable().add(disposable);
     }
 
-    private void upLoadImg(File file, int type, int position) {
+    private void upLoadImg(File file, String type, int position) {
 
         RequestBody requestFile =
                 RequestBody.create(MediaType.parse("image/png"), file);
@@ -381,8 +383,7 @@ public class PublishActivity extends AppCompatActivity {
                 .subscribe(new Consumer<RetrofitResponse>() {
                     @Override
                     public void accept(RetrofitResponse retrofitResponse) throws Exception {
-                        if (retrofitResponse.getResultCode() == 0)
-                        {
+                        if (retrofitResponse.getResultCode() == 0) {
                             String data = retrofitResponse.getData().toString();
                             Log.e("img", data);
                             flag++;
@@ -419,7 +420,7 @@ public class PublishActivity extends AppCompatActivity {
                                     publishUpdate();
                                 }
                             }
-                        }else{
+                        } else {
                             Log.e("img", retrofitResponse.getMessage());
                         }
 
@@ -429,7 +430,7 @@ public class PublishActivity extends AppCompatActivity {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         ApiException apiException = CustomException.handleException(throwable);
-                        // Toast.makeText(RegisterActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PublishActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
         new CompositeDisposable().add(disposable);
@@ -448,9 +449,6 @@ public class PublishActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(comm)) {
             return;
         }
-        if (TextUtils.isEmpty(title)) {
-            return;
-        }
         params.put("title", title);
         params.put("categoryId", categoryId);
         params.put("categoryName", categoryName);
@@ -461,47 +459,102 @@ public class PublishActivity extends AppCompatActivity {
         params.put("image3", image3.getData());
         params.put("image3Type", image3.getType() + "");
         params.put("image4", image4.getData());
-        params.put("imageType", image4.getType());
+        params.put("image4Type", image4.getType() + "");
         params.put("image5", image5.getData());
         params.put("image5Type", image5.getType() + "");
         params.put("image6", image6.getData());
-        params.put("image6Type", image6 + "");
+        params.put("image6Type", image6.getType() + "");
         params.put("linkman", linkman);
-        params.put("lng", mAddrBean.getLon());
-        params.put("lat", mAddrBean.getLat());
+        params.put("lng", mAddrBean.getLon()+"");
+        params.put("lat", mAddrBean.getLat()+"");
         params.put("address", mAddrBean.getFiraddr());
         params.put("addressDetail", mAddrBean.getSecaddr());
         params.put("contactInfomation", tel);
         params.put("content", comm);
 
-        Disposable disposable = null;
-        try {
-            disposable = NetWorkManager.getRequest(ApiService.class).postPublic(params, PreferenceManager.getInstance().getUserinfo().getToken())
-                    //.compose(ResponseTransformer.handleResult())
-                    .compose(SchedulerProvider.getInstance().applySchedulers())
-                    .subscribe(new Consumer<RetrofitResponse>() {
-                        @Override
-                        public void accept(RetrofitResponse retrofitResponse) throws Exception {
-                            dialog.dismiss();
+        //remove(params,defaultSelect.size());
+        Log.e("params",params.toString());
+        Disposable disposable = NetWorkManager.getRequest(ApiService.class).postPublic(params, MyAPP.token2)
+                //.compose(ResponseTransformer.handleResult())
+                .compose(SchedulerProvider.getInstance().applySchedulers())
+                .subscribe(new Consumer<RetrofitResponse>() {
+                    @Override
+                    public void accept(RetrofitResponse retrofitResponse) throws Exception {
+                        //   dialog.dismiss();
+                        if (retrofitResponse.getResultCode() == 0) {
                             Toast.makeText(PublishActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
                             finish();
+                        }else{
+                            Log.e("msg",retrofitResponse.getMessage());
+                            Toast.makeText(PublishActivity.this, retrofitResponse.getMessage(), Toast.LENGTH_LONG).show();
                         }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-                            ApiException apiException = CustomException.handleException(throwable);
-                            Toast.makeText(PublishActivity.this, apiException.getDisplayMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        ApiException apiException = CustomException.handleException(throwable);
+                        Toast.makeText(PublishActivity.this, apiException.getDisplayMessage()+"", Toast.LENGTH_LONG).show();
+                    }
+                });
+
         new CompositeDisposable().add(disposable);
     }
-
-    ArrayList<Media> defaultSelect;
+    private void remove(Map<String,Object> params,int code){
+        if(code==5){
+            params.remove("image6");
+            params.remove("image6Type");
+        }
+        if(code==4){
+            params.remove("image5");
+            params.remove("image5Type");
+            params.remove("image6");
+            params.remove("image6Type");
+        }
+        if(code==3){
+            params.remove("image4");
+            params.remove("image4Type");
+            params.remove("image5");
+            params.remove("image5Type");
+            params.remove("image6");
+            params.remove("image6Type");
+        }if(code==2){
+            params.remove("image3");
+            params.remove("image3Type");
+            params.remove("image4");
+            params.remove("image4Type");
+            params.remove("image5");
+            params.remove("image5Type");
+            params.remove("image6");
+            params.remove("image6Type");
+        }
+        if(code==1){
+            params.remove("image2");
+            params.remove("image2Type");
+            params.remove("image3");
+            params.remove("image3Type");
+            params.remove("image4");
+            params.remove("image4Type");
+            params.remove("image5");
+            params.remove("image5Type");
+            params.remove("image6");
+            params.remove("image6Type");
+        }
+        if(code==0){
+            params.remove("image1");
+            params.remove("image1Type");
+            params.remove("image2");
+            params.remove("image2Type");
+            params.remove("image3");
+            params.remove("image3Type");
+            params.remove("image4");
+            params.remove("image4Type");
+            params.remove("image5");
+            params.remove("image5Type");
+            params.remove("image6");
+            params.remove("image6Type");
+        }
+    }
+    ArrayList<Media> defaultSelect=new ArrayList<>();
 
     void go() {
         Intent intent = new Intent(PublishActivity.this, PickerActivity.class);
@@ -513,7 +566,7 @@ public class PublishActivity extends AppCompatActivity {
         startActivityForResult(intent, 200);
     }
 
-    AddrBean mAddrBean;
+    AddrBean mAddrBean=new AddrBean();
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

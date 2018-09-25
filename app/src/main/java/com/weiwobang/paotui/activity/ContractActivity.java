@@ -72,30 +72,24 @@ public class ContractActivity extends AppCompatActivity {
         String tel = phone.getEditableText().toString();
         String addr = address.getEditableText().toString();
         if (TextUtils.isEmpty(shopname)) {
-            ToastUtil.showToast(ContractActivity.this,"名称不能为空！");
+            ToastUtil.showToast(ContractActivity.this, "名称不能为空！");
             return;
         }
         if (TextUtils.isEmpty(contact)) {
-            ToastUtil.showToast(ContractActivity.this,"联系人不能为空！");
+            ToastUtil.showToast(ContractActivity.this, "联系人不能为空！");
             return;
         }
         if (TextUtils.isEmpty(tel)) {
-            ToastUtil.showToast(ContractActivity.this,"电话不能为空！");
+            ToastUtil.showToast(ContractActivity.this, "电话不能为空！");
             return;
         }
         if (TextUtils.isEmpty(addr)) {
-            ToastUtil.showToast(ContractActivity.this,"地址不能为空！");
+            ToastUtil.showToast(ContractActivity.this, "地址不能为空！");
             return;
         }
 
-        String token = "";
-        try {
-            token = PreferenceManager.getInstance().getUserinfo().getToken();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        String token = PreferenceManager.getInstance().getUserinfo().getToken();
+
         Disposable disposable = NetWorkManager.getRequest(ApiService.class).postAddSeller(shopname, contact, tel, addr, token)
                 //.compose(ResponseTransformer.handleResult())
                 .compose(SchedulerProvider.getInstance().applySchedulers())
@@ -104,7 +98,7 @@ public class ContractActivity extends AppCompatActivity {
                     public void accept(RetrofitResponse retrofitResponse) throws Exception {
                         if (retrofitResponse.getResultCode() == 0) {
                             Toast.makeText(ContractActivity.this, "申请成功", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(ContractActivity.this,SuccActivity.class));
+                            startActivity(new Intent(ContractActivity.this, SuccActivity.class));
                             finish();
                         }
                     }

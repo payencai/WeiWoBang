@@ -8,21 +8,23 @@ import com.weiwobang.paotui.callback.NetStateChangeObserver;
 import com.weiwobang.paotui.receiver.NetStateChangeReceiver;
 
 
-public class BaseActivity extends AppCompatActivity implements NetStateChangeObserver {
+public   class BaseActivity extends AppCompatActivity implements NetStateChangeObserver {
     @Override
     protected void onResume() {
-        super.onResume();
+
         if (needRegisterNetworkChangeObserver()) {
             NetStateChangeReceiver.registerObserver(this);
         }
+        super.onResume();
     }
 
     @Override
     protected void onStop() {
-        super.onStop();
+
         if (needRegisterNetworkChangeObserver()) {
             NetStateChangeReceiver.unregisterObserver(this);
         }
+        super.onStop();
     }
 
     /**
@@ -37,6 +39,9 @@ public class BaseActivity extends AppCompatActivity implements NetStateChangeObs
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * 网络断开时候触发
+     */
     @Override
     public void onNetDisconnected() {
 

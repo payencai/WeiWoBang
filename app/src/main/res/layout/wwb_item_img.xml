@@ -1,12 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="150dp"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
                 android:layout_marginRight="10dp"
-                android:layout_height="150dp">
-                 <com.lqm.roundview.RoundImageView
-                     android:id="@+id/img"
-                     android:scaleType="centerCrop"
-                     android:src="@mipmap/wwb_icon"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"/>
+                android:layout_marginTop="@dimen/margin_10dp"
+        >
+
+    <RelativeLayout
+        android:background="@drawable/solid_img_shape"
+        android:paddingBottom="1dp"
+        android:paddingLeft="1dp"
+        android:paddingRight="1dp"
+        android:paddingTop="1dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.lqm.roundview.RoundImageView
+            android:id="@+id/img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/wwb_icon"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.weiwobang.paotui.view.SampleCoverVideo
+            android:id="@+id/detail_video"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+
+    <!--<cn.jzvd.JzvdStd-->
+    <!---->
+    <!---->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"/>-->
+    <!--<com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer-->
+    <!--android:id="@+id/detail_player"-->
+    <!--android:visibility="gone"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent" />-->
 </RelativeLayout>

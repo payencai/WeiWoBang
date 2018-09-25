@@ -46,6 +46,10 @@ public class JpushPresenter implements JpushContract {
     public void doProcessPusNotify(Bundle bundle) {
         showNotify(bundle);
     }
+    /**
+     * 使用Jpush内置的样式构建通知
+     */
+
     public void showNotify(Bundle bundle){
         BasicPushNotificationBuilder builder = new BasicPushNotificationBuilder(mContext);
         builder.statusBarDrawable = R.mipmap.app_icon;
@@ -63,8 +67,10 @@ public class JpushPresenter implements JpushContract {
      */
     @Override
     public void doOpenPusNotify(Bundle bundle) {
+
         LogUtil.e(TAG,"=====doOpenPusNotify=======");
     }
+
 
 
 }

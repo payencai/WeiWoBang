@@ -1,14 +1,14 @@
 package com.weiwobang.paotui.bean;
 
 public class FileType {
-    private String data;
-    private int type;
+    private String data="";
+    private String type="";
 
     public String getData() {
         return data;
     }
 
-    public FileType(String data, int type) {
+    public FileType(String data, String type) {
         this.data = data;
         this.type = type;
     }
@@ -20,11 +20,11 @@ public class FileType {
         this.data = data;
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
     }
 }
