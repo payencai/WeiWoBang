@@ -4,13 +4,13 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context=".fragment.OrderFragment">
-    <com.weiwobang.paotui.view.slideshowview.SlideShowPageView
+    <com.wwb.paotui.view.slideshowview.SlideShowPageView
         android:id="@+id/slideshowView"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:background="@color/tv_666"
+        android:background="@color/f8"
         android:visibility="visible" />
 
 </FrameLayout>

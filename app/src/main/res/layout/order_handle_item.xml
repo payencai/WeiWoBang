@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="@color/alpha"
+    android:background="@color/f8"
     android:paddingTop="@dimen/margin_15dp"
     android:paddingLeft="@dimen/margin_15dp"
     android:paddingRight="@dimen/margin_15dp"
@@ -17,9 +17,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="0dp"
+            android:textColor="@color/black"
             android:text="8月19日 12:00:00"
             />
         <TextView
+            android:textColor="@color/black"
             android:id="@+id/item1"
             style="@style/form_item_title_font"
             android:layout_marginLeft="0dp"
@@ -35,6 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="接单人  张三  12334521334"
+        android:textColor="@color/yellow_1e"
         android:visibility="invisible"
         android:layout_marginTop="8dp"
         />

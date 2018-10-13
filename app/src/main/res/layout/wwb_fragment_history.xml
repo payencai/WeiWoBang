@@ -3,7 +3,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             android:background="@color/tv_666"
+             android:background="@color/f8"
              tools:context=".fragment.HistoryFragment">
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/rf_history"

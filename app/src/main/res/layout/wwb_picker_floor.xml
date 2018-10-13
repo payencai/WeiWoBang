@@ -28,10 +28,10 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
-            <com.weiwobang.paotui.view.PickerView
+            <com.wwb.paotui.view.PickerView
                 android:id="@+id/picker"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"></com.weiwobang.paotui.view.PickerView>
+                android:layout_height="120dp"></com.wwb.paotui.view.PickerView>
 
         </LinearLayout>
         <RelativeLayout

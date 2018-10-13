@@ -3,10 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:paddingTop="@dimen/margin_5dp"
+
     android:orientation="vertical"
-    android:paddingBottom="5dp"
-    android:background="@color/black"
+
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.SellermainActivity">
@@ -16,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
+        android:background="@color/yellow"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -27,13 +28,14 @@
                 android:layout_marginLeft="@dimen/margin_15dp"
                 android:id="@+id/back"
                 android:layout_alignParentLeft="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="18dp"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/margin_20dp"
-                android:src="@mipmap/back" />
+                android:src="@mipmap/wwb_black_back" />
             <TextView
                 android:layout_toRightOf="@id/back"
+                android:textColor="@color/color_333"
                 android:id="@+id/tvNameOfSeller"
                 style="@style/form_item_title_font"
                 android:layout_marginLeft="0dp"
@@ -42,21 +44,21 @@
 
             <ImageView
                 android:id="@+id/imgNotificationOfSeller"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="25dp"
+                android:layout_height="20dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/margin_20dp"
-                android:src="@mipmap/notification" />
+                android:src="@mipmap/black_no" />
 
             <ImageView
                 android:id="@+id/imgSettingOfSeller"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="25dp"
+                android:layout_height="20dp"
                 android:layout_toLeftOf="@id/imgNotificationOfSeller"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/margin_20dp"
-                android:src="@mipmap/setting" />
+                android:src="@mipmap/black_menu" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -64,8 +66,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-
-                android:textColor="@color/yellow_1e"
+                android:textColor="@color/color_333"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvNumOfSeller"
                 android:layout_width="wrap_content"
@@ -86,12 +87,12 @@
                     android:layout_height="@dimen/length_view_25dp"
                     android:layout_marginTop="0dp"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/em_btn_yellow_selector"/>
+                    android:src="@drawable/solid_img_shape"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="派单"
+                    android:text="一键呼叫"
                     android:textColor="@color/tv_1f"
                     android:textSize="@dimen/text_size_15sp"/>
             </FrameLayout>
@@ -105,16 +106,94 @@
         android:layout_weight="1"
         >
     </FrameLayout>
-    <android.support.design.widget.TabLayout
+    <RelativeLayout
         android:id="@+id/bottom_tab_layout"
         android:layout_width="match_parent"
-        app:tabIndicatorHeight="0dp"
-        android:background="@color/black"
-        android:elevation="@dimen/margin_5dp"
-        app:tabBackground="@color/black"
-        app:tabIndicatorColor="@color/black"
-        app:tabTextColor="@android:color/black"
+        android:background="@color/white"
         android:layout_height="52dp">
+        <LinearLayout
+            android:id="@+id/tab_curr"
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="50dp"
+            android:paddingRight="@dimen/margin_30dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <TextView
+                android:textSize="25sp"
+                android:textColor="@color/color_666"
+                android:text="0"
+                android:textStyle="bold"
+                android:id="@+id/tab_curr_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                />
+            <TextView
+                android:text="当前派单"
+                android:id="@+id/tab_curr_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:textColor="@color/tv_666"
+                />
+        </LinearLayout>
 
-    </android.support.design.widget.TabLayout>
+        <RelativeLayout
+            android:id="@+id/rightnow"
+            android:layout_marginTop="@dimen/margin_10dp"
+            android:background="@drawable/wwb_order_shape"
+            android:layout_centerInParent="true"
+            android:paddingRight="@dimen/margin_15dp"
+            android:paddingLeft="@dimen/margin_15dp"
+            android:paddingBottom="3dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_marginTop="5dp"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/paidan"
+                android:layout_width="30dp"
+                android:layout_height="20dp"/>
+            <TextView
+
+                android:layout_alignParentBottom="true"
+                android:text="立即派单"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:textColor="@color/tv_666"
+                />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/tab_finish"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:paddingLeft="30dp"
+            android:paddingRight="@dimen/margin_50dp"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <TextView
+                android:textSize="25sp"
+                android:textColor="@color/color_666"
+                android:text="0"
+                android:textStyle="bold"
+                android:id="@+id/tab_finish_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                />
+            <TextView
+                android:text="派单记录"
+                android:id="@+id/tab_finish_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:textColor="@color/tv_666"
+                />
+        </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

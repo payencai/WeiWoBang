@@ -16,7 +16,7 @@
     	</list>
     -->
     <list>
-        <mapping class="com.weiwobang.paotui.bean.litepal.NewsDb" />
+        <mapping class="com.wwb.paotui.bean.litepal.NewsDb" />
     </list>
 
     <!--

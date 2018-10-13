@@ -23,21 +23,13 @@
             android:src="@drawable/video"/>
 
         <com.lqm.roundview.RoundImageView
-            android:elevation="5dp"
             android:id="@+id/item_icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginRight="10dp"
             android:scaleType="centerCrop"
             android:src="@mipmap/wwb_icon"/>
-        <com.weiwobang.paotui.view.SampleCoverVideo
-            android:id="@+id/video_item"
-            android:visibility="gone"
-            android:layout_marginRight="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
-        </com.weiwobang.paotui.view.SampleCoverVideo>
     </RelativeLayout>
 
     <TextView

@@ -5,11 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
+
     android:layout_height="match_parent"
     tools:context=".activity.OrderActivity">
     <RelativeLayout
         android:id="@+id/back_layout"
-        android:background="@color/press_yellow"
+        android:background="@color/yellow"
         android:layout_width="match_parent"
         android:layout_height="@dimen/margin_50dp">
         <FrameLayout
@@ -47,22 +48,43 @@
         android:id="@+id/myorder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_50dp">
+        <TextView
+            android:id="@+id/runner"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="@color/yellow_1e"
+            android:text="我要跑腿"
+            android:layout_weight="1"
+            android:textSize="@dimen/text_size_16sp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:gravity="center"
+            android:layout_weight="1"
+            android:id="@+id/remove"
+            android:textStyle="bold"
+            android:textColor="@color/black_33"
+            android:text="我要搬家"
+            android:textSize="@dimen/text_size_16sp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+    <View
+        android:background="@color/gray_e2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"></View>
     <FrameLayout
+        android:background="@color/f8"
+        android:id="@+id/orderFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/sr_order"
-            android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/margin_10dp"
-            android:layout_height="wrap_content">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_order"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </android.support.v7.widget.RecyclerView>
-        </android.support.v4.widget.SwipeRefreshLayout>
 
     </FrameLayout>
+
 
 
 </LinearLayout>

@@ -151,7 +151,7 @@
     </style>
 
     <style name="follow_split_line">
-        <item name="android:background">@color/gray_f0</item>
+        <item name="android:background">@color/gray_e2</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1px</item>
     </style>

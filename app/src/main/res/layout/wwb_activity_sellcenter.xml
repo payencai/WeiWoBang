@@ -6,7 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/color_333"
+        android:background="@color/f8"
         android:orientation="vertical">
 
 
@@ -19,7 +19,7 @@
             android:layout_marginLeft="@dimen/margin_10dp"
             android:layout_marginRight="@dimen/margin_10dp"
             android:layout_marginTop="@dimen/margin_15dp"
-            android:background="@color/black"
+            android:background="@color/white"
             android:orientation="vertical"
             android:paddingBottom="@dimen/margin_20dp"
             android:paddingRight="@dimen/margin_10dp"
@@ -31,12 +31,14 @@
 
                 <TextView
                     style="@style/form_item_title_font"
+                    android:textColor="@color/black"
                     android:layout_height="wrap_content"
                     android:text="店铺名称" />
 
                 <TextView
                     android:id="@+id/tvShop"
                     style="@style/form_item_title_font"
+                    android:textColor="@color/black"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:text="XXXX大学城南店" />
@@ -51,12 +53,14 @@
                 <TextView
                     style="@style/form_item_title_font"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="店铺ID" />
 
                 <TextView
                     android:id="@+id/tvShopId"
                     style="@style/form_item_title_font"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:layout_gravity="right"
                     android:text="0001" />
 
@@ -70,7 +74,7 @@
             android:layout_marginLeft="@dimen/margin_10dp"
             android:layout_marginRight="@dimen/margin_10dp"
             android:layout_marginTop="@dimen/margin_15dp"
-            android:background="@color/black"
+            android:background="@color/white"
             android:orientation="vertical"
             android:paddingBottom="@dimen/margin_15dp"
             android:paddingRight="@dimen/margin_10dp"
@@ -78,6 +82,7 @@
 
             <TextView
                 style="@style/block_item_title_font"
+                android:textColor="@color/yellow_1e"
                 android:layout_height="wrap_content"
                 android:text="取货信息" />
 
@@ -91,12 +96,14 @@
                 <TextView
                     style="@style/form_item_title_font"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="联系人"
                     android:textSize="@dimen/text_size_15sp" />
 
                 <TextView
                     android:id="@+id/tvContact"
                     style="@style/form_item_text_font"
+                    android:textColor="@color/black"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:layout_marginLeft="0dp"
@@ -120,12 +127,14 @@
                 android:layout_marginTop="@dimen/margin_15dp">
 
                 <TextView
+                    android:textColor="@color/black"
                     style="@style/form_item_title_font"
                     android:layout_height="wrap_content"
                     android:text="联系方式"
                     android:textSize="@dimen/text_size_15sp" />
 
                 <TextView
+                    android:textColor="@color/black"
                     android:id="@+id/tvContactTel"
                     style="@style/form_item_text_font"
                     android:layout_height="wrap_content"
@@ -151,6 +160,7 @@
                 android:gravity="center_vertical">
 
                 <TextView
+                    android:textColor="@color/black"
                     style="@style/form_item_title_font"
                     android:layout_height="wrap_content"
                     android:text="店铺地址"
@@ -168,6 +178,7 @@
 
 
                     <TextView
+                        android:textColor="@color/black"
                         android:id="@+id/tvSellerAddr"
                         style="@style/form_item_text_font"
                         android:layout_height="wrap_content"
@@ -196,11 +207,12 @@
             android:layout_marginLeft="@dimen/margin_10dp"
             android:layout_marginRight="@dimen/margin_10dp"
             android:layout_marginTop="@dimen/margin_15dp"
-            android:background="@color/black"
+            android:background="@color/white"
             android:paddingBottom="@dimen/margin_10dp"
             android:paddingTop="@dimen/margin_10dp">
 
             <TextView
+                android:textColor="@color/black"
                 style="@style/form_item_title_font"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -208,7 +220,6 @@
                 android:textSize="@dimen/text_size_14sp" />
 
             <TextView
-
                 android:id="@+id/tvBalance"
                 style="@style/block_item_title_font"
                 android:layout_height="wrap_content"

@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:app="http://schemas.android.com/apk/res-auto"
              android:orientation="vertical"
-             android:background="@color/tv_666"
+             android:background="@color/f8"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:paddingTop="@dimen/margin_15dp"
@@ -98,6 +98,7 @@
                             android:layout_height="wrap_content"
                             style="@style/form_item_text_font"
                             android:layout_marginLeft="0dp"
+                            android:textColor="@color/yellow_1e"
                             android:layout_marginTop="10dp"
                             android:layout_gravity="center"
                             android:text="取货"/>
@@ -114,6 +115,7 @@
                             android:layout_height="wrap_content"
                             android:src="@mipmap/send"/>
                         <TextView
+                            android:textColor="@color/tv_666"
                             android:id="@+id/tvDelivery"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -145,14 +147,14 @@
 
                 </LinearLayout>
 
-                <com.weiwobang.paotui.view.CompCourierCell
+                <com.wwb.paotui.view.CompCourierCell
                     android:id="@+id/compCourier"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:layout_marginLeft="@dimen/margin_20dp"
                     app:chartCellModle="limited"/>
-                <com.weiwobang.paotui.view.CompChartCell
+                <com.wwb.paotui.view.CompChartCell
                     android:id="@+id/compDelivery"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -178,6 +180,7 @@
                         <TextView
                             style="@style/form_item_text_font"
                             android:layout_marginLeft="0dp"
+                            android:textColor="@color/black"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:textSize="@dimen/text_size_10sp"
@@ -198,6 +201,7 @@
                         android:orientation="vertical"
                         android:gravity="center">
                         <TextView
+                            android:textColor="@color/black"
                             style="@style/form_item_text_font"
                             android:layout_marginLeft="0dp"
                             android:layout_height="wrap_content"

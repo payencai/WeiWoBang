@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/size_text_10dp"
-        android:background="@color/black"
+        android:background="@color/white"
         android:orientation="horizontal" >
 
         <LinearLayout
@@ -24,6 +24,7 @@
             <TextView
                 style="@style/form_item_text_font"
                 android:layout_marginLeft="0dp"
+                android:textColor="@color/black"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_7dp"
                 android:layout_gravity="center_horizontal"
@@ -39,6 +40,7 @@
 
             <TextView
                 android:layout_marginLeft="@dimen/margin_10dp"
+                android:textColor="@color/black"
                 android:id="@+id/CompChartCell_mTextName"
                 style="@style/form_item_title_font"
                 android:text="暂无" />

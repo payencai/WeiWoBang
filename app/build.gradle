@@ -1,9 +1,17 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'weiwobangkey'
+            keyPassword 'yckj123'
+            storeFile file('D:/lt/sign/weiwobang.jks')
+            storePassword 'yckj123'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.weiwobang.paotui"
+        applicationId "com.wwb.paotui"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
@@ -11,14 +19,20 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         ndk {
+            moduleName "clib"
             //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
             abiFilters "armeabi"
         }
         manifestPlaceholders = [
                 JPUSH_PKGNAME: applicationId,
-                JPUSH_APPKEY : "130b5f6b8b2015cb0d3f166a", //JPush上注册的包名对应的appkey.
+                JPUSH_APPKEY : "8cb2dfa7c10b947f5b064c1d", //JPush上注册的包名对应的appkey.
                 JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
         ]
+    }
+    sourceSets {
+        main {
+            jni.srcDirs = []
+        }
     }
     buildTypes {
         release {
@@ -71,4 +85,5 @@ dependencies {
     implementation 'org.litepal.android:core:2.0.0'
     implementation 'com.shuyu:GSYVideoPlayer:6.0.0-beta'
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+    implementation 'net.java.dev.jna:jna:4.4.0@aar'
 }

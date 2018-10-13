@@ -9,37 +9,40 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <include layout="@layout/wwb_header"></include>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="140dp">
 
             <TextView
                 android:id="@+id/wwb_nickname"
-                android:layout_marginLeft="@dimen/margin_15dp"
-                android:textColor="@color/color_333"
-                android:textSize="60px"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
+                android:layout_marginLeft="@dimen/margin_15dp"
                 android:layout_marginTop="41dp"
-                android:text="用户昵称"/>
+                android:text="用户昵称"
+                android:textColor="@color/color_333"
+                android:textSize="60px"/>
+
             <TextView
                 android:id="@+id/account"
-                android:layout_marginTop="@dimen/margin_10dp"
-                android:layout_below="@id/wwb_nickname"
-                android:layout_marginLeft="@dimen/margin_15dp"
-                android:textColor="@color/color_333"
-                android:textSize="14sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1320gfd8144"/>
+                android:layout_below="@id/wwb_nickname"
+                android:layout_marginLeft="@dimen/margin_15dp"
+                android:layout_marginTop="@dimen/margin_10dp"
+                android:text="1320gfd8144"
+                android:textColor="@color/color_333"
+                android:textSize="14sp"/>
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_head"
-                android:layout_marginTop="20dp"
-                android:layout_alignParentRight="true"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/margin_20dp"
+                android:layout_marginTop="20dp"
                 android:src="@mipmap/wwb_default_photo"/>
         </RelativeLayout>
         <LinearLayout

@@ -12,7 +12,7 @@
                      android:id="@+id/head"
                      android:paddingTop="10dp"
                      android:paddingBottom="8dp"
-                     android:background="@color/press_yellow"
+                     android:background="@color/yellow"
                      android:layout_width="match_parent"
                      android:layout_height="@dimen/margin_50dp">
                      <LinearLayout

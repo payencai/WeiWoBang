@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          package="com.weiwobang.paotui">
+          package="com.wwb.paotui">
 
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
@@ -35,7 +35,7 @@
     <application
         android:name=".MyAPP"
         android:allowBackup="true"
-        android:icon="@mipmap/app_icon"
+        android:icon="@mipmap/app_icon_wwb"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
@@ -112,7 +112,9 @@
         <activity android:name=".activity.ReplyActivity"/>
         <activity android:name=".activity.OrderActivity">
         </activity>
-        <activity android:name=".activity.OrderaddrActivity">
+        <activity android:name=".activity.OrderaddrActivity"
+                  android:windowSoftInputMode="stateHidden|adjustPan"
+                  android:configChanges="orientation|keyboardHidden|screenSize">
         </activity>
         <activity
             android:name=".activity.ConfirmActivity"
@@ -143,7 +145,7 @@
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED"/> <!-- Required  用户接收SDK通知栏信息的intent -->
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED"/> <!-- Required  用户打开自定义通知栏的intent -->
                 <action android:name="cn.jpush.android.intent.CONNECTION"/> <!-- 接收网络变化 连接/断开 since 1.6.3 -->
-                <category android:name="com.weiwobang.paotui"/>
+                <category android:name="com.wwb.paotui"/>
             </intent-filter>
         </receiver>
 
@@ -177,10 +179,16 @@
         <activity android:name=".activity.WechatregActivity">
         </activity>
         <activity
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:name=".activity.TestActivity">
+        </activity>
+        <activity android:name=".activity.TakeOrderActivity">
+        </activity>
+        <activity android:name=".activity.RunnerDetailActivity">
+        </activity>
     </application>
 
 </manifest>
