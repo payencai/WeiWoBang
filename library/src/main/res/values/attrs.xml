@@ -80,4 +80,11 @@
     <declare-styleable name="CircleImageView">
         <attr name="my_radius" format="integer" />
     </declare-styleable>
+    
+    
+    <!--自定义bottombar 属性-->
+    
+    <declare-styleable name="BottomNaviView">
+        <attr name="tab_msg_count" format="dimension|reference"></attr>
+    </declare-styleable>
 </resources>
