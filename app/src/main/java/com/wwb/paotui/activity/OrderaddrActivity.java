@@ -174,7 +174,7 @@ public class OrderaddrActivity extends AppCompatActivity {
         getMostLocate();
     }
     private void getMostLocate(){
-        Log.e("ordertoken",MyAPP.token2);
+        //Log.e("ordertoken",MyAPP.token2);
         Disposable disposable = NetWorkManager.getRequest(ApiService.class).getMostLocate(MyAPP.token2)
                 .compose(SchedulerProvider.getInstance().applySchedulers())
                 .subscribe(new Consumer<ResponseBody>() {

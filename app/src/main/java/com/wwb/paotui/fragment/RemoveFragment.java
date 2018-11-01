@@ -210,23 +210,31 @@ public class RemoveFragment extends Fragment {
         reAddr1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), OrderaddrActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("type", 2);
-                bundle.putInt("flag", 1);
-                intent.putExtras(bundle);
-                startActivityForResult(intent, 1);
+                if (MyAPP.isLogin) {
+                    Intent intent = new Intent(getContext(), OrderaddrActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("type", 2);
+                    bundle.putInt("flag", 1);
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, 1);
+                } else {
+                    startActivity(new Intent(getContext(), LoginActivity.class));
+                }
             }
         });
         reAddr2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), OrderaddrActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("type", 2);
-                bundle.putInt("flag", 2);
-                intent.putExtras(bundle);
-                startActivityForResult(intent, 2);
+                if (MyAPP.isLogin) {
+                    Intent intent = new Intent(getContext(), OrderaddrActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("type", 2);
+                    bundle.putInt("flag", 2);
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, 2);
+                } else {
+                    startActivity(new Intent(getContext(), LoginActivity.class));
+                }
             }
         });
         submit.setOnClickListener(new View.OnClickListener() {
@@ -276,8 +284,8 @@ public class RemoveFragment extends Fragment {
         params.put("floorFrom", floorFrom);
         params.put("longitudeTo", addrSong.getLon());
         params.put("latitudeTo", addrSong.getLat());
-        params.put("addressTo", addrSong.getName()+"");
-        params.put("addressToDetail", addrSong.getAddress()+"");
+        params.put("addressTo", addrSong.getName() + "");
+        params.put("addressToDetail", addrSong.getAddress() + "");
         params.put("floorTo", floorTo);
         params.put("contactName", contact);
         params.put("telephoneNum", phone);
@@ -307,7 +315,7 @@ public class RemoveFragment extends Fragment {
                             payReq.sign = data.getString("sign");
                             MyAPP.mWxApi.sendReq(payReq);
                         } else {
-                            Toast.makeText(getContext(), code+"code", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), code + "code", Toast.LENGTH_LONG).show();
                         }
                     }
                 }, new Consumer<Throwable>() {
